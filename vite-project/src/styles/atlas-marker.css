@@ -1,0 +1,86 @@
+/* Replace the previous .atlas-marker styles with this block. */
+.atlas-marker-shell {
+  background: transparent;
+  border: 0;
+}
+
+.atlas-marker {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  color: var(--marker-color, #647b68);
+  background: color-mix(in srgb, var(--marker-color, #647b68) 16%, #fff);
+  box-shadow:
+    0 1px 5px rgb(29 41 40 / 24%),
+    0 0 0 1px color-mix(in srgb, var(--marker-color, #647b68) 58%, #fff);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.atlas-marker-symbol {
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+}
+
+.atlas-marker-symbol svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.atlas-marker:hover,
+.atlas-marker.is-selected {
+  z-index: 8;
+  transform: scale(1.12);
+  box-shadow:
+    0 0 0 3px rgb(255 255 255 / 82%),
+    0 2px 8px rgb(29 41 40 / 30%);
+}
+
+.atlas-marker.is-selected {
+  outline: 2px solid #344a42;
+  outline-offset: 2px;
+}
+
+/* Preserve category colors when completed; add a tiny green check instead. */
+.atlas-marker.is-complete::after {
+  content: "✓";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  display: grid;
+  place-items: center;
+  width: 13px;
+  height: 13px;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  color: #fff;
+  background: #438365;
+  font: 700 9px/1 Arial, sans-serif;
+  box-shadow: 0 1px 3px rgb(29 41 40 / 28%);
+}
+
+.atlas-marker.is-new::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 1.5px solid var(--marker-color, #647b68);
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: atlas-marker-pulse 2.6s ease-out infinite;
+}
+
+@keyframes atlas-marker-pulse {
+  to {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}

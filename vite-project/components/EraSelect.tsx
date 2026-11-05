@@ -1,0 +1,9 @@
+import AccordionGallery from "./reactbits/AccordionGallery";
+import LightTunnel from "./reactbits/LightTunnel";
+interface Props { onBack: () => void; onSelectEra: (id: string) => void; }
+const eras = [
+ {id:"era-1",image:"/spiral/route-1.svg",label:"Dari Majapahit ke Perdagangan Global",description:"1200—1617 M · Kesultanan, pelabuhan, jalur rempah, dan kedatangan kekuatan Eropa.",available:true},
+ {id:"era-2",image:"/spiral/route-4.svg",label:"Perdagangan dan Kekuasaan Kolonial",description:"1600—1800 M · VOC, persaingan pelabuhan, dan perlawanan kerajaan.",available:false},
+ {id:"era-3",image:"/spiral/route-6.svg",label:"Kolonialisme dan Zaman Modern",description:"1800—2000 M · Kebangkitan nasional, kemerdekaan, dan Indonesia modern.",available:false}
+];
+export function EraSelect({onBack,onSelectEra}:Props){return <main className="era-select-screen era-select-screen--tunnel"><LightTunnel/><div className="landing-grain" aria-hidden="true"/><header className="era-select-nav"><button className="back-link" onClick={onBack}><span>←</span> Menu utama</button><div className="landing-brand-copy"><strong>NUSANTARA</strong><span>ATLAS SEJARAH INTERAKTIF</span></div><span className="era-nav-label">PILIH PERJALANAN</span></header><section className="era-select-content era-select-content--gallery"><div className="era-select-intro"><p className="landing-eyebrow"><span/> PILIH BABAK SEJARAH</p><h1>Lintasi waktu.<br/><em>Pilih kisahmu.</em></h1><p>Setiap era membuka peta, peristiwa, dan keputusan yang berbeda. Arahkan ke panel untuk melihat kisahnya, lalu pilih era yang tersedia.</p></div><AccordionGallery items={eras.map((era)=>({...era,onSelect:()=>{if(era.available)onSelectEra(era.id)}}))} defaultIndex={0}/><p className="era-select-note">Era berikutnya akan terbuka setelah peta dan rangkaian peristiwanya selesai disiapkan.</p></section></main>}

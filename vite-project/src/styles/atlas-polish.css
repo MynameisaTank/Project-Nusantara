@@ -1,0 +1,32 @@
+/* ===== Tahun di tengah atas peta ===== */
+.year-badge { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); z-index: 1200; display: flex; align-items: baseline; gap: 6px; padding: 6px 20px 8px; background: rgba(255,255,255,.92); border: 1px solid var(--line, #e1e7e3); border-radius: 8px; pointer-events: none; }
+.year-badge .shuffle-parent.year-shuffle, .year-plain { font: 500 40px/1 var(--serif, "Newsreader", Georgia, serif); letter-spacing: -.03em; text-transform: none; color: var(--ink, #1d2928); font-variant-numeric: tabular-nums; }
+.year-badge-suffix { font: 500 13px var(--sans, system-ui, sans-serif); color: var(--muted, #74817e); }
+
+/* ===== Linimasa: terang, serasi dengan header dan peta ===== */
+.timebar { background: var(--surface, #fff) !important; color: var(--ink, #1d2928) !important; border-color: var(--line, #e1e7e3) !important;
+  grid-template-columns: auto minmax(0, 1fr) !important; grid-template-areas: none !important; gap: 6px 24px !important; }
+.timebar > * { grid-area: auto !important; }
+.timebar-transport { grid-column: 1; grid-row: 1; justify-content: flex-start; }
+.slider-wrap { grid-column: 2; grid-row: 1; }
+.timebar button { background: #fff !important; color: var(--ink, #1d2928) !important; border-color: var(--line-strong, #cbd5cf) !important; }
+.timebar button:hover { background: var(--surface-soft, #f1f4f2) !important; }
+.timebar .play { background: var(--ink, #1d2928) !important; color: #fff !important; border-color: var(--ink, #1d2928) !important; }
+.timebar .play:hover { background: var(--ink-soft, #40514f) !important; }
+.timebar input[type=range] { accent-color: #b45f43; }
+.timebar .range-ends, .timebar .progress, .timebar small { color: var(--muted, #74817e) !important; }
+.timebar .mark, .timebar .mark::before { background: #a9b5b1 !important; border-color: #a9b5b1 !important; }
+.timebar .mark.on, .timebar .mark.on::before { background: #b45f43 !important; border-color: #b45f43 !important; }
+
+/* ===== Panel peristiwa penting: border cahaya ===== */
+.panel.panel--penting { border-color: #d9a566; box-shadow: 0 0 0 1px #d9a566, 0 0 16px 2px rgba(217,165,102,.55), 0 0 44px rgba(217,165,102,.28); }
+.penting-tag { display: inline-block; margin-left: 8px; font: 600 11px var(--sans, system-ui, sans-serif); color: #a96f36; }
+
+@media (max-width: 860px) {
+  .timebar { grid-template-columns: 1fr !important; }
+  .timebar-transport { grid-column: 1; grid-row: 1; justify-content: center; }
+  .slider-wrap { grid-column: 1; grid-row: 2; }
+  .year-badge { top: 8px; padding: 4px 14px 6px; }
+  .year-badge .shuffle-parent.year-shuffle, .year-plain { font-size: 30px; }
+  .event-explorer { top: 62px !important; }
+}

@@ -1,0 +1,34 @@
+/* Transisi awan: kabut krem lembut, isi di baliknya tampak kabur, lalu bubar ke kiri-kanan */
+.cloud-veil {
+  position: fixed; inset: 0; z-index: 5000; overflow: hidden;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(255, 251, 240, .94) 0%, rgba(250, 247, 240, .9) 42%, rgba(232, 237, 241, .92) 100%);
+  -webkit-backdrop-filter: blur(22px) saturate(.75);
+  backdrop-filter: blur(22px) saturate(.75);
+  transition: opacity 1.3s ease .5s, backdrop-filter 1.5s ease .3s, -webkit-backdrop-filter 1.5s ease .3s;
+}
+.cloud-veil.is-open { opacity: 0; -webkit-backdrop-filter: blur(0) saturate(1); backdrop-filter: blur(0) saturate(1); pointer-events: none; }
+
+/* gumpalan kabut besar dan sangat lembut (tanpa tepi tegas) */
+.cloud-puff {
+  position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2); border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 253, 246, .9) 0%, rgba(252, 250, 244, .62) 38%, rgba(246, 244, 238, 0) 74%);
+  transform: translate3d(0, 0, 0) scale(1); opacity: 1; will-change: transform, opacity;
+  transition: transform 1.8s cubic-bezier(.55, .05, .35, 1) var(--d), opacity 1.2s ease calc(var(--d) + .5s);
+}
+.cloud-puff.is-back { background: radial-gradient(circle, rgba(222, 230, 238, .8) 0%, rgba(228, 235, 241, .5) 40%, rgba(232, 237, 241, 0) 74%); }
+.cloud-veil.is-open .cloud-puff { transform: translate3d(var(--dx), var(--dy), 0) scale(1.3); opacity: 0; }
+
+.cloud-label {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); margin: 0;
+  font: 500 15px var(--sans, system-ui, sans-serif); letter-spacing: .02em; color: #6a5a45;
+  text-shadow: 0 0 14px rgba(255, 252, 244, .95), 0 0 4px rgba(255, 252, 244, .9);
+  transition: opacity .4s ease;
+}
+.cloud-veil.is-open .cloud-label { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud-puff { transition: none; }
+  .cloud-veil { transition: opacity .4s ease; }
+}

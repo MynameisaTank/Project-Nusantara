@@ -1,0 +1,21 @@
+/* Transisi awan sebelum peta: menutup layar, lalu terbelah ke kiri dan kanan */
+.cloud-veil { position: fixed; inset: 0; z-index: 5000; overflow: hidden; background: #e4edf5; transition: background-color 1.3s ease .5s; }
+.cloud-veil.is-open { background-color: transparent; pointer-events: none; }
+
+.cloud-puff {
+  position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2); border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.98) 0%, rgba(250,252,255,.93) 40%, rgba(240,246,252,0) 70%);
+  transform: translate3d(0, 0, 0) scale(1); opacity: 1; will-change: transform, opacity;
+  transition: transform 1.7s cubic-bezier(.55, .05, .35, 1) var(--d), opacity 1.1s ease calc(var(--d) + .55s);
+}
+.cloud-puff.is-back { background: radial-gradient(circle, rgba(214,227,239,.96) 0%, rgba(222,233,243,.9) 42%, rgba(228,237,245,0) 70%); }
+.cloud-veil.is-open .cloud-puff { transform: translate3d(var(--dx), var(--dy), 0) scale(1.25); opacity: 0; }
+
+.cloud-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); margin: 0; font: 500 14px var(--sans, system-ui, sans-serif); color: #5a6b78; letter-spacing: .02em; transition: opacity .4s ease; }
+.cloud-veil.is-open .cloud-label { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud-puff { transition: none; }
+  .cloud-veil.is-open { opacity: 0; transition: opacity .4s ease; }
+}
