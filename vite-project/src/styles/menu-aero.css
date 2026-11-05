@@ -8,8 +8,8 @@
 .menu-aero-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 880px; pointer-events: none; }
 .menu-aero-content .jelly-button, .menu-aero-content a { pointer-events: auto; }
 .menu-aero-content .landing-eyebrow { justify-content: center; margin-bottom: 8px; }
-.menu-aero-title { margin: 0; font: 600 clamp(3.4rem, 11vw, 10rem)/.95 var(--serif, "Newsreader", Georgia, serif); letter-spacing: -.045em; color: #f4eddd; text-shadow: 0 6px 40px rgba(0,0,0,.55); }
-.menu-aero-content h2 { margin: 18px 0 14px; font: 400 clamp(1.5rem, 3vw, 2.4rem)/1.1 var(--serif, "Newsreader", Georgia, serif); color: #f4eddd; letter-spacing: -.02em; }
+.menu-aero-title { margin: 0; font: 400 clamp(3.4rem, 11vw, 10rem)/.95 var(--serif, Georgia, serif); letter-spacing: -.02em; color: #f4eddd; text-shadow: 0 6px 40px rgba(0,0,0,.55); }
+.menu-aero-content h2 { margin: 22px 0 30px; font: 400 clamp(1.5rem, 3vw, 2.4rem)/1.1 var(--serif, "Newsreader", Georgia, serif); color: #f4eddd; letter-spacing: -.02em; }
 .menu-aero-content h2 em { color: #d8b78c; font-weight: 400; }
 .menu-aero-desc { max-width: 34rem; margin: 0 0 22px; font-size: .9rem; line-height: 1.8; color: #cfc8ba; }
 .menu-aero-hint { position: absolute; z-index: 2; left: 50%; bottom: 26px; transform: translateX(-50%); font-size: .75rem; letter-spacing: .04em; color: #a59b89; text-decoration: none; transition: color .2s; }
@@ -18,3 +18,19 @@
   .menu-aero { padding: 36px 22px 84px; }
   .menu-aero-desc { font-size: .82rem; }
 }
+
+/* Tipografi menu utama: huruf cetak lama (IM Fell) menggantikan Newsreader + Instrument Sans */
+.landing-scroll-page {
+  --serif: "IM Fell English", "Iowan Old Style", Georgia, serif;
+  --menu-label: "IM Fell English SC", "IM Fell English", Georgia, serif;
+  font-family: var(--serif);
+}
+.landing-scroll-page .jelly-button,
+.landing-scroll-page .landing-nav-note,
+.landing-scroll-page .menu-aero-hint,
+.landing-scroll-page .landing-eyebrow,
+.landing-scroll-page .landing-footer span { font-family: var(--menu-label); font-weight: 400; letter-spacing: .09em; }
+.landing-scroll-page .jelly-button { font-size: 15px; }
+.landing-scroll-page .landing-nav-note { font-size: 12px; }
+.menu-aero-content h2 { font-style: normal; }
+.menu-aero-content h2 em { font-style: italic; }

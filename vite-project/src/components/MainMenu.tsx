@@ -38,12 +38,9 @@ export function MainMenu({onStart,onChooseEra}:Props){const [shardsOk, setShards
         )}
       </div>
       <div className="menu-aero-content">
-        <p className="landing-eyebrow"><span/> SEBUAH PERJALANAN MELINTASI WAKTU <span/></p>
         <h1 className="menu-aero-title">NUSANTARA</h1>
         <h2>Jelajahi <em>lintas zaman.</em></h2>
-        <p className="menu-aero-desc">Kerajaan, pelabuhan, jalur rempah, dan keputusan yang membentuk sejarah kepulauan. Masuki peta interaktif dan temukan bagaimana setiap pilihan mengubah perjalanan.</p>
-        <div className="landing-actions landing-actions--center"><button className="jelly-button jelly-button--primary" onClick={onStart}>Mulai menjelajah <span>↗</span></button><button className="jelly-button" onClick={onChooseEra}>Pilih era <span>⌁</span></button></div>
-        <div className="landing-era-note"><i/> ERA PERTAMA TERSEDIA <b>1200—1617 M</b></div>
+        <div className="landing-actions landing-actions--center"><button className="jelly-button jelly-button--primary" onClick={onStart}>Click to start <span>↗</span></button><button className="jelly-button" onClick={onChooseEra}>Pilih era <span>⌁</span></button></div>
       </div>
       <a className="menu-aero-hint" href="#jejak">Gulir untuk membuka perjalanan ↓</a>
     </section><section id="jejak" className="landing-below-fold landing-history-section"><div className="landing-history-heading"><div className="landing-below-copy"><p className="landing-eyebrow"><span/> ATLAS SEJARAH INTERAKTIF</p><h2>Jejak panjang <em>Nusantara.</em></h2><p>Dari kerajaan maritim dan pusat perdagangan hingga lahirnya republik. Geser galeri untuk melintasi zaman, lalu pilih era untuk memainkan kembali keputusan-keputusan yang membentuk sejarah.</p></div><button className="jelly-button jelly-button--primary" onClick={onChooseEra}>Pilih era <span>↗</span></button></div><FlexCarousel items={historicalItems} intro="rise" cardHeight={0.72} gap={18} radius={3} squeeze={0.18} focusOnClick captions /></section><footer className="landing-footer"><span>SEJARAH NUSANTARA, DILIHAT DARI BANYAK ARAH</span><span>GULIR WAKTU · BUKA PERISTIWA · AMBIL KEPUTUSAN</span></footer></main>}

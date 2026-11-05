@@ -726,7 +726,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .era-select-screen--tunnel .era-select-intro h1 em{color:#d8b78c}
 .era-select-screen--tunnel .era-select-intro>p:last-child{color:#c6c2b8}
 .era-select-screen--tunnel .era-select-note{color:#969188}
-.accordion-gallery .ag-panel{background:#111!important;border:1px solid #bda77b35}
+.accordion-gallery .ag-panel{background-color:#111;border:1px solid #bda77b35}
 .accordion-gallery .ag-panel__overlay{--ag-overlay:#050505}
 /* Keep the playable era in the same black-and-brass visual language. */
 .stage{background:#0b0b0a!important;color:#f4eddd}
@@ -835,3 +835,10 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   font: 600 10px var(--sans, system-ui, sans-serif);
   letter-spacing: .04em;
 }
+
+/* GradientASCII (React Bits) sebagai latar layar Pilih Era (pola sama dengan .menu-aero-bg) */
+.era-select-screen--tunnel > .era-ascii-bg { position: absolute; inset: 0; z-index: -2; overflow: hidden; background: #050606; pointer-events: none; }
+.era-ascii-bg .gradient-ascii-container { position: absolute; inset: 0; }
+
+/* Kartu era: hanya nomor, judul, rentang tahun */
+.accordion-gallery .ag-panel__label>span { opacity: 1; max-height: none; font-size: 12px; letter-spacing: .1em; color: #d8b78c; }
