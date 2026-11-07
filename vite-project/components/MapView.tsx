@@ -2,17 +2,17 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { KATEGORI } from "../data/era";
-import { EVENTS } from "../data/events";
 import type { SejarahEvent } from "../types";
+import { isUtama } from "../lib/jenis";
+import "../styles/jenis-event.css";
 
 interface Props {
+  events: SejarahEvent[];
   active: SejarahEvent[];
   year: number;
   done: Record<string, true>;
   selectedId: string | null;
   onSelect: (id: string) => void;
-  /** dipanggil sekali ketika ubin peta pertama selesai dimuat */
-  onReady?: () => void;
 }
 
 /**
@@ -24,16 +24,18 @@ const EVENT_SYMBOLS: Record<string, string> = {
   politik: `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 13 16 6l11 7H5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 26h18M9 14v10m5-10v10m4-10v10m5-10v10M6 27h20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
   perang: `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="m8 5 3 1 13 17-2 3L6 9l2-4Zm16 0-3 1L8 23l2 3L26 9l-2-4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m5 7 3-3 3 3M21 25l3 3 3-3M24 7l3-3 3 3M5 25l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
   perdagangan: `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4v19M16 6 7 20h9M18 10l8 10h-8M5 23c3 3 6 3 11 3s8 0 11-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 28h24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  agama: `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4v24M7 11h18M9 11c0 7 3 11 7 11s7-4 7-11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  diplomasi: `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 9h22v14H5zM9 14h14M9 18h9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="m12 5 4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   budaya: `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 8c5-2 9-1 12 2v17c-3-3-7-4-12-2V8Zm24 0c-5-2-9-1-12 2v17c3-3 7-4 12-2V8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 13c2-.4 4 0 5 1m-5 3c2-.4 4 0 5 1m6-4c2-1 3-1 5-1m-5 5c2-1 3-1 5-1" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`
 };
 
-function makeEventIcon(categoryId: string, color: string) {
+function makeEventIcon(categoryId: string, color: string, kind: "utama" | "sampingan") {
   const symbol = EVENT_SYMBOLS[categoryId] ?? EVENT_SYMBOLS.politik;
 
   return L.divIcon({
     className: "atlas-marker-shell",
     html: `
-      <span class="atlas-marker atlas-marker--${categoryId}" style="--marker-color:${color}" role="img">
+      <span class="atlas-marker atlas-marker--${categoryId} atlas-marker--${kind}" style="--marker-color:${color}" role="img">
         <span class="atlas-marker-symbol">${symbol}</span>
       </span>
     `,
@@ -42,15 +44,13 @@ function makeEventIcon(categoryId: string, color: string) {
   });
 }
 
-export function MapView({ active, year, done, selectedId, onSelect, onReady }: Props) {
+export function MapView({ events, active, year, done, selectedId, onSelect }: Props) {
   const elRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const layerRef = useRef<L.LayerGroup | null>(null);
   const markersRef = useRef<Map<string, L.Marker>>(new Map());
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
-  const onReadyRef = useRef(onReady);
-  onReadyRef.current = onReady;
 
   useEffect(() => {
     const el = elRef.current;
@@ -74,7 +74,7 @@ export function MapView({ active, year, done, selectedId, onSelect, onReady }: P
 
     // A single labeled, full-color basemap. Do not stack a separate
     // Reference/World_Reference_Overlay: World_Topo_Map already has labels.
-    const base = L.tileLayer(
+    L.tileLayer(
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
       {
         maxZoom: 13,
@@ -83,7 +83,6 @@ export function MapView({ active, year, done, selectedId, onSelect, onReady }: P
           "Tiles &copy; Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, and the GIS user community"
       }
     ).addTo(map);
-    base.once("load", () => onReadyRef.current?.());
 
     // Subtle hillshade gives mountain relief while preserving land colors.
     L.tileLayer(
@@ -98,10 +97,10 @@ export function MapView({ active, year, done, selectedId, onSelect, onReady }: P
     const layer = L.layerGroup().addTo(map);
     const markers = new Map<string, L.Marker>();
 
-    for (const ev of EVENTS) {
+    for (const ev of events) {
       // Fallback for an event whose category is not defined in KATEGORI.
       const category = KATEGORI[ev.kategori] ?? KATEGORI.politik;
-      const icon = makeEventIcon(String(ev.kategori), category.warna);
+      const icon = makeEventIcon(String(ev.kategori), category.warna, isUtama(ev) ? "utama" : "sampingan");
 
       const marker = L.marker([ev.lokasi.lat, ev.lokasi.lng], {
         icon,
@@ -136,7 +135,7 @@ export function MapView({ active, year, done, selectedId, onSelect, onReady }: P
       layerRef.current = null;
       markersRef.current.clear();
     };
-  }, []);
+  }, [events]);
 
   useEffect(() => {
     const layer = layerRef.current;
@@ -144,7 +143,7 @@ export function MapView({ active, year, done, selectedId, onSelect, onReady }: P
 
     const activeIds = new Set(active.map((event) => event.id));
 
-    for (const event of EVENTS) {
+    for (const event of events) {
       const marker = markersRef.current.get(event.id);
       if (!marker) continue;
 
@@ -167,11 +166,11 @@ export function MapView({ active, year, done, selectedId, onSelect, onReady }: P
         layer.removeLayer(marker);
       }
     }
-  }, [active, year, done, selectedId]);
+  }, [events, active, year, done, selectedId]);
 
   useEffect(() => {
     const map = mapRef.current;
-    const event = EVENTS.find((item) => item.id === selectedId);
+    const event = events.find((item) => item.id === selectedId);
     if (!map || !event) return;
 
     const zoom = Math.max(
@@ -191,7 +190,7 @@ export function MapView({ active, year, done, selectedId, onSelect, onReady }: P
       duration: 0.65,
       easeLinearity: 0.25
     });
-  }, [selectedId]);
+  }, [selectedId, events]);
 
   return (
     <div

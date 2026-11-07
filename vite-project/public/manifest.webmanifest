@@ -1,0 +1,20 @@
+{
+  "name": "Project: Nusantara",
+  "short_name": "Nusantara",
+  "description": "Peta sejarah Nusantara yang interaktif: jelajahi peristiwa, kerajaan, dan keputusan dari tahun 1200 sampai 2026.",
+  "lang": "id",
+  "dir": "ltr",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#050606",
+  "theme_color": "#050606",
+  "categories": ["education"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,25 @@
+.wilayah-label-shell {
+  background: none;
+  border: none;
+}
+
+.wilayah-label {
+  display: inline-block;
+  transform: translate(-50%, -50%);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(23, 30, 28, 0.7);
+  border: 1px solid var(--label-color, #d8b78c);
+  color: #f4eddd;
+  font: 600 10px var(--sans, system-ui, sans-serif);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.wilayah-label:hover {
+  background: rgba(23, 30, 28, 0.92);
+  transform: translate(-50%, -50%) scale(1.06);
+}

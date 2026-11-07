@@ -1,0 +1,121 @@
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  gap: 14px;
+  padding: 32px;
+  background: #0f1715;
+  color: #f4eddd;
+  text-align: center;
+  overflow: hidden;
+}
+
+.loading-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.loading-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 65% 58% at 50% 54%, rgba(15,23,21,.58), rgba(15,23,21,.9) 100%);
+}
+
+.loading-voyage,
+.loading-label,
+.loading-fact,
+.loading-progress {
+  position: relative;
+  z-index: 2;
+}
+
+.loading-voyage {
+  width: clamp(220px, 40vw, 320px);
+  height: 46px;
+  overflow: hidden;
+}
+
+.loading-horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d8b78c80 15%, #d8b78c80 85%, transparent);
+}
+
+.loading-ship {
+  position: absolute;
+  bottom: 6px;
+  left: -10%;
+  width: 30px;
+  height: 30px;
+  color: #d8b78c;
+  animation: loading-sail 3.6s ease-in-out infinite;
+}
+
+@keyframes loading-sail {
+  0% { left: -10%; transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+  100% { left: 104%; transform: translateY(0); }
+}
+
+.loading-label {
+  margin: 4px 0 0;
+  font-size: 13px;
+  letter-spacing: .06em;
+  color: #cfc8ba;
+}
+
+.loading-fact {
+  max-width: 34rem;
+  margin: 0;
+  font: 400 15px/1.7 var(--serif, Georgia, serif);
+  color: #f4eddd;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity .32s ease, transform .32s ease;
+  min-height: 3.4em;
+}
+
+.loading-fact.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.loading-progress {
+  width: clamp(220px, 40vw, 320px);
+  height: 3px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: #ffffff1a;
+  overflow: hidden;
+}
+
+.loading-progress-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: #d8b78c;
+  animation-name: loading-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes loading-progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-ship { animation: none; left: 50%; transform: translateX(-50%); }
+  .loading-fact { opacity: 1; transform: none; transition: none; }
+  .loading-progress-fill { animation: none; width: 100%; }
+}

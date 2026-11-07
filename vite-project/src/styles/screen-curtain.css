@@ -1,0 +1,25 @@
+.screen-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  background: #0f1715;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 320ms ease-in;
+}
+
+.screen-curtain.is-covering {
+  opacity: 1;
+}
+
+.screen-curtain.is-revealing {
+  opacity: 0;
+  transition: opacity 480ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen-curtain,
+  .screen-curtain.is-revealing {
+    transition: none;
+  }
+}

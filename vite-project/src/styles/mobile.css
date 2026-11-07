@@ -1,0 +1,152 @@
+/*
+ * Penyesuaian tampilan untuk ponsel dan layar sentuh. Dimuat paling akhir di main.tsx.
+ *
+ * Selektor memakai :root:root (kekhususan 0,2,0) supaya menang atas aturan satu kelas di CSS yang dimuat
+ * malas (peta, pemilihan era, materi) tanpa perlu !important. Titik pindah 860px sama dengan tata letak
+ * peta di style.css; 700px dipakai menu utama.
+ */
+
+/* ——— Dasar layar sentuh ——— */
+:root {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* menggeser peta ke bawah tidak boleh memuat ulang halaman (tarik-untuk-segarkan) */
+  overscroll-behavior-y: none;
+}
+
+body {
+  overscroll-behavior-y: none;
+}
+
+:root:root :is(button, a, summary, label, input, select, [role="button"]) {
+  /* hilangkan jeda ketuk ganda dan zoom ketuk-ganda pada kontrol */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root:root .stage {
+  overscroll-behavior: contain;
+}
+
+/* ——— Area aman (takik dan bilah gestur) ——— */
+@media (max-width: 860px) {
+  :root:root {
+    --timeline-height: calc(104px + env(safe-area-inset-bottom, 0px));
+  }
+
+  :root:root .timebar {
+    padding-bottom: calc(9px + env(safe-area-inset-bottom, 0px));
+    padding-left: max(12px, env(safe-area-inset-left, 0px));
+    padding-right: max(12px, env(safe-area-inset-right, 0px));
+  }
+
+  :root:root .topbar {
+    top: max(10px, env(safe-area-inset-top, 0px));
+    right: max(10px, env(safe-area-inset-right, 0px));
+  }
+}
+
+/* ——— Teks terlalu kecil untuk dibaca di layar sempit ——— */
+@media (max-width: 860px) {
+  :root:root .event-meta {
+    font-size: 11px;
+  }
+
+  :root:root .explorer-kicker {
+    font-size: 10px;
+  }
+
+  :root:root .timebar .progress,
+  :root:root .timebar small,
+  :root:root .timebar .range-ends {
+    font-size: 10px;
+  }
+
+  :root:root .timeline-drawer-handle {
+    font-size: 12px;
+  }
+
+  :root:root .timeline-drawer-count,
+  :root:root .timeline-drawer-year {
+    font-size: 11px;
+  }
+
+  :root:root .panel .chip,
+  :root:root .panel .no,
+  :root:root .lvl-note,
+  :root:root .penting-tag {
+    font-size: 11px;
+  }
+
+  :root:root .wilayah-label {
+    font-size: 11px;
+  }
+
+  :root:root .event-list-meta span {
+    font-size: 10px;
+  }
+
+  :root:root .tag,
+  :root:root .hasil h4 {
+    font-size: 11px;
+  }
+}
+
+/* ——— Target sentuh dan input di perangkat sentuh ——— */
+@media (pointer: coarse) {
+  :root:root .close {
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    right: 10px;
+  }
+
+  :root:root .panel h2 {
+    margin-right: 46px;
+  }
+
+  :root:root .menu-settings-toggle {
+    min-height: 40px;
+    padding: 8px 16px;
+  }
+
+  :root:root .menu-settings-head button {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  :root:root .menu-return,
+  :root:root .qc-link,
+  :root:root .qz-back {
+    min-height: 40px;
+    padding-block: 10px;
+  }
+
+  :root:root .timebar input[type="range"] {
+    height: 32px;
+  }
+
+  /* iOS memperbesar halaman saat input berukuran di bawah 16px mendapat fokus */
+  :root:root :is(input, select, textarea) {
+    font-size: 16px;
+  }
+
+  /* peta digeser dan dicubit dengan jari; tombol zoom hanya memenuhi layar */
+  :root:root .leaflet-control-zoom {
+    display: none !important;
+  }
+}
+
+/* ——— Menu utama di layar sempit ——— */
+@media (max-width: 700px) {
+  /* judul sebelumnya lebih lebar dari kolomnya sehingga huruf terakhir terpotong */
+  :root:root .menu-aero-title {
+    width: 100%;
+  }
+
+  /* teks galeri tidak lagi bertumpuk dengan penghitung dan tombol panah */
+  :root:root .flex-carousel__caption > div:first-child {
+    padding-right: 0;
+    padding-bottom: 46px;
+  }
+}

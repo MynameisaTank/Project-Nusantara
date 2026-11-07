@@ -7,40 +7,42 @@ import { NowList } from "./components/NowList";
 import { StoryPanel } from "./components/StoryPanel";
 import { Timebar } from "./components/Timebar";
 import { YearBadge } from "./components/YearBadge";
-import { CloudTransition } from "./components/CloudTransition";
 import { Icon } from "./components/Icon";
 import { ERA } from "./data/era";
+import { ERA2, EVENTS2 } from "./data/events2";
 import { EVENTS } from "./data/events";
 import { useAutoplay } from "./hooks/useAutoplay";
 import { useProgress } from "./hooks/useProgress";
-import { eventById, isActive } from "./lib/events";
+import { isActive } from "./lib/events";
 
 export default function App() {
   const [screen, setScreen] = useState<"menu" | "eras" | "game">("menu");
-  const { level, setLevel, done, choices, markQuizDone, choose, resetChoice } = useProgress();
+  const [eraId, setEraId] = useState("era-1");
+  const era = eraId === "era-2" ? ERA2 : ERA;
+  const events = eraId === "era-2" ? EVENTS2 : EVENTS;
+  const allEvents = useMemo(() => [...EVENTS, ...EVENTS2], []);
+  const { level, setLevel, done, choices, markQuizDone, choose, resetChoice } = useProgress(allEvents);
   const [year, setYear] = useState(ERA.tahunAwal);
   const [playing, setPlaying] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [wrong, setWrong] = useState<Record<string, number[]>>({});
   const [bannerOpen, setBannerOpen] = useState(false);
-  const [cloud, setCloud] = useState(false);
-  const [mapReady, setMapReady] = useState(false);
 
-  const active = useMemo(() => EVENTS.filter((ev) => isActive(ev, year)), [year]);
+  const active = useMemo(() => events.filter((ev) => isActive(ev, year)), [events, year]);
 
   /* Sebuah event selesai jika kuisnya benar DAN keputusan sudah dipilih */
   const selesai = useMemo(() => {
     const r: Record<string, true> = {};
-    for (const ev of EVENTS) if (done[ev.id] && choices[ev.id]) r[ev.id] = true;
+    for (const ev of events) if (done[ev.id] && choices[ev.id]) r[ev.id] = true;
     return r;
-  }, [done, choices]);
+  }, [done, choices, events]);
   const selesaiCount = Object.keys(selesai).length;
-  const sejalanCount = EVENTS.filter(
+  const sejalanCount = events.filter(
     (ev) => ev.keputusan.pilihan.find((p) => p.id === choices[ev.id])?.historis
   ).length;
 
   // Event yang dibuka tapi tidak lagi aktif di tahun ini -> tutup panel
-  const selected = selectedId ? eventById[selectedId] : undefined;
+  const selected = selectedId ? events.find((ev) => ev.id === selectedId) : undefined;
   const panelEvent = selected && isActive(selected, year) ? selected : undefined;
   const panelId = panelEvent?.id ?? null;
 
@@ -49,27 +51,27 @@ export default function App() {
     const { lat, lng } = panelEvent.lokasi;
     const k = Math.cos((lat * Math.PI) / 180);
     const d = (e: (typeof EVENTS)[number]) => Math.hypot(e.lokasi.lat - lat, (e.lokasi.lng - lng) * k);
-    return EVENTS.filter((e) => e.id !== panelEvent.id).sort((a, b) => d(a) - d(b)).slice(0, 3);
-  }, [panelEvent]);
+    return events.filter((e) => e.id !== panelEvent.id).sort((a, b) => d(a) - d(b)).slice(0, 3);
+  }, [panelEvent, events]);
 
   const stop = useCallback(() => setPlaying(false), []);
-  useAutoplay(playing, year, ERA.akhir, setYear, stop);
+  useAutoplay(playing, year, era.akhir, setYear, stop);
 
   const changeYear = (y: number) => {
     setPlaying(false);
-    setYear(Math.max(ERA.mulai, Math.min(ERA.akhir, Math.round(y))));
+    setYear(Math.max(era.mulai, Math.min(era.akhir, Math.round(y))));
   };
 
   /** Pilih peristiwa; jika belum aktif di tahun ini, linimasa ikut pindah ke awal peristiwa. */
   const pickEvent = (id: string) => {
-    const ev = eventById[id];
+    const ev = events.find((item) => item.id === id);
     if (ev && !isActive(ev, year)) { setPlaying(false); setYear(ev.mulai); }
     setSelectedId(id);
   };
 
   const togglePlay = () => {
     if (playing) { setPlaying(false); return; }
-    if (year >= ERA.akhir) setYear(ERA.mulai);
+    if (year >= era.akhir) setYear(era.mulai);
     setPlaying(true);
   };
 
@@ -88,7 +90,7 @@ export default function App() {
   const decide = (pilihanId: string) => {
     if (!panelEvent || !done[panelEvent.id] || choices[panelEvent.id]) return;
     choose(panelEvent.id, pilihanId);
-    if (selesaiCount + 1 === EVENTS.length) setBannerOpen(true);
+    if (selesaiCount + 1 === events.length) setBannerOpen(true);
   };
 
   useEffect(() => {
@@ -105,33 +107,32 @@ export default function App() {
 
   if (screen === "eras") {
     return <EraSelect onBack={() => setScreen("menu")} onSelectEra={(id) => {
-      if (id !== ERA.id) return;
-      setYear(ERA.tahunAwal);
+      setEraId(id);
+      const selectedEra = id === "era-2" ? ERA2 : ERA;
+      setYear(selectedEra.tahunAwal);
       setSelectedId(null);
       setPlaying(false);
       setBannerOpen(false);
-      setMapReady(false);
-      setCloud(true); // awan menutup layar sampai peta siap
       setScreen("game");
     }} />;
   }
 
   return (
     <>
-      <Header level={level} onLevel={setLevel} onMenu={() => { setPlaying(false); setSelectedId(null); setScreen("menu"); }} />
+      <Header era={era} level={level} onLevel={setLevel} onMenu={() => { setPlaying(false); setSelectedId(null); setScreen("menu"); }} />
 
       <main className="stage">
         <Suspense fallback={<div className="map-loading">Memuat peta Nusantara…</div>}>
           <MapView
+            events={events}
             active={active}
             year={year}
             done={selesai}
             selectedId={panelId}
             onSelect={pickEvent}
-            onReady={() => setMapReady(true)}
           />
         </Suspense>
-        <NowList active={active} done={selesai} selectedId={panelId} onPick={pickEvent} />
+        <NowList era={era} active={active} done={selesai} selectedId={panelId} onPick={pickEvent} />
         <YearBadge year={year} playing={playing} />
 
         {panelEvent && (
@@ -153,8 +154,8 @@ export default function App() {
 
         {bannerOpen && (
           <div className="banner">
-            <strong>Era selesai.</strong> Kamu sudah menyelesaikan semua misi di era “{ERA.nama}”.
-            Keputusanmu sejalan dengan sejarah pada {sejalanCount} dari {EVENTS.length} peristiwa.
+            <strong>Era selesai.</strong> Kamu sudah menyelesaikan semua misi di era “{era.nama}”.
+            Keputusanmu sejalan dengan sejarah pada {sejalanCount} dari {events.length} peristiwa.
             Esai akhir era dan era berikutnya akan hadir di versi selanjutnya.
             <button type="button" className="x" aria-label="Tutup" onClick={() => setBannerOpen(false)}>
               <Icon name="tutup" size={14} />
@@ -164,14 +165,14 @@ export default function App() {
       </main>
 
       <Timebar
+        era={era}
+        events={events}
         year={year}
         playing={playing}
-        progress={`Misi selesai: ${selesaiCount}/${EVENTS.length}`}
+        progress={`Misi selesai: ${selesaiCount}/${events.length}`}
         onYear={changeYear}
         onTogglePlay={togglePlay}
       />
-
-      {cloud && <CloudTransition ready={mapReady} onDone={() => setCloud(false)} />}
     </>
   );
 }

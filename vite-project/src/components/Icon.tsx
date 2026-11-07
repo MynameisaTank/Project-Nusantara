@@ -1,7 +1,7 @@
 import { ICONS, type IconName } from "../lib/icons";
 
 export function Icon({ name, size = 18 }: { name: IconName; size?: number }) {
-  const ic = ICONS[name];
+  const ic = ICONS[name] ?? ICONS.politik;
   return (
     <svg
       width={size}

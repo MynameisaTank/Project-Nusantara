@@ -772,58 +772,6 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
     ],
     hasilHistoris: "Jangkauan Majapahit lebih tepat dipahami sebagai jaringan hubungan dengan beragam tingkat pengaruh. Nagarakretagama merupakan sumber penting, tetapi daftar daerahnya tidak otomatis berarti kontrol langsung yang seragam."
   },
-  "evt-035": {
-    peran: "Penasihat lokal di Bali setelah kampanye Majapahit",
-    situasi: "Kampanye Majapahit sekitar 1343 mengubah hubungan politik. Pemimpin setempat harus menjaga kehidupan masyarakat dan menyesuaikan hubungan dengan kekuatan baru.",
-    pilihan: [
-      { id: "a", teks: "Menghapus semua adat dan praktik keagamaan lokal.", konsekuensi:
-"Langkah itu berisiko memicu penolakan dan tidak mencerminkan kesinambungan budaya yang diketahui. Trade-off: pendekatan ini dapat menjaga kestabilan atau menghemat sumber daya dalam jangka pendek, tetapi mungkin membuat inisiatif jatuh ke tangan pihak lain. Pilihan ini paling masuk akal bila waktu dan sumber daya terbatas; risikonya meningkat bila lawan bergerak cepat." },
-      { id: "b", teks: "Sesuaikan hubungan politik sambil menjaga tradisi dan kepemimpinan lokal yang berlanjut.", konsekuensi:
-"Ini menggambarkan bahwa perubahan kekuasaan tidak selalu menghapus budaya masyarakat setempat. Trade-off: tindakan langsung dapat membuka peluang perubahan yang nyata, tetapi biasanya membutuhkan dukungan, biaya, dan kesiapan lebih besar serta dapat memicu balasan. Hasilnya tidak otomatis berhasil; strategi ini lebih layak bila dukungan dan sumber daya cukup.", historis: true },
-      { id: "c", teks: "Menolak semua hubungan dengan pulau-pulau tetangga.", konsekuensi:
-"Bali kehilangan peluang perdagangan dan diplomasi dalam jaringan regional. Trade-off: pendekatan ini menjaga ruang gerak dan memberi waktu untuk menimbang pilihan lain, tetapi proses bisa lebih lambat dan kesempatan dapat menyempit. Manfaatnya besar ketika informasi belum lengkap; risikonya meningkat jika keputusan harus segera diambil." }
-    ],
-    hasilHistoris: "Kampanye Majapahit ke Bali sekitar 1343 mengubah hubungan politik Jawa–Bali, tetapi tidak menghapus seluruh tradisi lokal. Rincian integrasi politik dan budaya memerlukan pembacaan sumber Jawa dan Bali bersama-sama."
-  },
-  "evt-036": {
-    peran: "Adityawarman, penguasa Sumatra tengah",
-    situasi: "Kekuasaan di Sumatra tengah membutuhkan legitimasi. Prasasti dan hubungan dengan elite dari wilayah lain dapat memperkuat kedudukan, tetapi klaim harus disesuaikan dengan bukti.",
-    pilihan: [
-      { id: "a", teks: "Mengabaikan prasasti dan hanya mengandalkan cerita yang ditulis jauh kemudian.", konsekuensi:
-"Kamu mengesampingkan bukti material yang dapat membantu menilai gelar dan legitimasi. Trade-off: pendekatan ini dapat menjaga kestabilan atau menghemat sumber daya dalam jangka pendek, tetapi mungkin membuat inisiatif jatuh ke tangan pihak lain. Pilihan ini paling masuk akal bila waktu dan sumber daya terbatas; risikonya meningkat bila lawan bergerak cepat." },
-      { id: "b", teks: "Gunakan gelar dan ritual kerajaan sambil membangun hubungan dengan jaringan lokal dan lintas pulau.", konsekuensi:
-"Pilihan ini sejalan dengan cara penguasa abad pertengahan menegaskan legitimasi, meski detail praktiknya harus diteliti dari prasasti. Trade-off: tindakan langsung dapat membuka peluang perubahan yang nyata, tetapi biasanya membutuhkan dukungan, biaya, dan kesiapan lebih besar serta dapat memicu balasan. Hasilnya tidak otomatis berhasil; strategi ini lebih layak bila dukungan dan sumber daya cukup.", historis: true },
-      { id: "c", teks: "Menyatakan seluruh Sumatra sebagai wilayah yang dikelola langsung tanpa bukti.", konsekuensi:
-"Klaim tersebut terlalu luas dan tidak dapat disimpulkan hanya dari gelar seorang raja. Trade-off: pendekatan ini menjaga ruang gerak dan memberi waktu untuk menimbang pilihan lain, tetapi proses bisa lebih lambat dan kesempatan dapat menyempit. Manfaatnya besar ketika informasi belum lengkap; risikonya meningkat jika keputusan harus segera diambil." }
-    ],
-    hasilHistoris: "Adityawarman dikenal melalui prasasti abad ke-14 dan dikaitkan dengan pusat kekuasaan di Sumatra tengah. Hubungannya dengan Jawa dan Melayu menunjukkan jaringan elite, tetapi batas serta bentuk kekuasaannya masih dikaji."
-  },
-  "evt-037": {
-    peran: "Penafsir hubungan Majapahit dan Dompu",
-    situasi: "Sumber Majapahit menyebut wilayah di Nusa Tenggara, termasuk Dompu. Kamu harus membedakan klaim pengaruh, ekspedisi, dan pemerintahan sehari-hari.",
-    pilihan: [
-      { id: "a", teks: "Simpulkan bahwa setiap wilayah yang disebut pasti memiliki pejabat Majapahit tetap.", konsekuensi:
-"Kesimpulan ini melebih-lebihkan apa yang dapat dibuktikan dari daftar wilayah. Trade-off: pendekatan ini dapat menjaga kestabilan atau menghemat sumber daya dalam jangka pendek, tetapi mungkin membuat inisiatif jatuh ke tangan pihak lain. Pilihan ini paling masuk akal bila waktu dan sumber daya terbatas; risikonya meningkat bila lawan bergerak cepat." },
-      { id: "b", teks: "Bandingkan sumber istana dengan bukti dan tradisi lokal Dompu.", konsekuensi:
-"Pendekatan ini memberi ruang bagi sejarah lokal dan membantu menguji klaim pengaruh kerajaan besar. Trade-off: tindakan langsung dapat membuka peluang perubahan yang nyata, tetapi biasanya membutuhkan dukungan, biaya, dan kesiapan lebih besar serta dapat memicu balasan. Hasilnya tidak otomatis berhasil; strategi ini lebih layak bila dukungan dan sumber daya cukup.", historis: true },
-      { id: "c", teks: "Abaikan semua sumber Jawa karena berasal dari istana.", konsekuensi:
-"Kamu kehilangan sumber penting; lebih baik menilai tujuan dan keterbatasannya daripada menolaknya seluruhnya. Trade-off: pendekatan ini menjaga ruang gerak dan memberi waktu untuk menimbang pilihan lain, tetapi proses bisa lebih lambat dan kesempatan dapat menyempit. Manfaatnya besar ketika informasi belum lengkap; risikonya meningkat jika keputusan harus segera diambil." }
-    ],
-    hasilHistoris: "Dompu termasuk dalam pembahasan hubungan Majapahit dengan Nusa Tenggara. Sumber istana perlu dibaca bersama bukti lokal; daftar geografis tidak otomatis menunjukkan administrasi langsung."
-  },
-  "evt-038": {
-    peran: "Penasihat Hayam Wuruk setelah wafatnya Gajah Mada",
-    situasi: "Gajah Mada wafat pada 1364. Raja harus melanjutkan pemerintahan tanpa pejabat yang selama ini sangat dominan.",
-    pilihan: [
-      { id: "a", teks: "Hentikan semua urusan pemerintahan sampai ada tokoh yang persis sama kuatnya.", konsekuensi:
-"Penundaan akan melemahkan koordinasi dan membuka peluang persaingan elite. Trade-off: pendekatan ini dapat menjaga kestabilan atau menghemat sumber daya dalam jangka pendek, tetapi mungkin membuat inisiatif jatuh ke tangan pihak lain. Pilihan ini paling masuk akal bila waktu dan sumber daya terbatas; risikonya meningkat bila lawan bergerak cepat." },
-      { id: "b", teks: "Bagikan tugas kepada pejabat senior dan jaga koordinasi istana.", konsekuensi:
-"Ini sejalan dengan gambaran umum penyesuaian pemerintahan setelah Gajah Mada wafat. Trade-off: tindakan langsung dapat membuka peluang perubahan yang nyata, tetapi biasanya membutuhkan dukungan, biaya, dan kesiapan lebih besar serta dapat memicu balasan. Hasilnya tidak otomatis berhasil; strategi ini lebih layak bila dukungan dan sumber daya cukup.", historis: true },
-      { id: "c", teks: "Serahkan semua wewenang kepada satu daerah jauh dari pusat.", konsekuensi:
-"Langkah ini dapat mengubah keseimbangan kekuasaan secara drastis tanpa dasar yang diketahui. Trade-off: pendekatan ini menjaga ruang gerak dan memberi waktu untuk menimbang pilihan lain, tetapi proses bisa lebih lambat dan kesempatan dapat menyempit. Manfaatnya besar ketika informasi belum lengkap; risikonya meningkat jika keputusan harus segera diambil." }
-    ],
-    hasilHistoris: "Gajah Mada wafat pada 1364. Hayam Wuruk melanjutkan pemerintahan dengan pejabat senior; sumber tidak memberikan rincian lengkap mengenai setiap pembagian tugas atau penyebab kematian Gajah Mada."
-  },
   "evt-039": {
     peran: "Penasihat istana setelah wafatnya Hayam Wuruk",
     situasi: "Hayam Wuruk wafat pada 1389. Keluarga kerajaan dan elite memiliki kepentingan yang berbeda, sehingga pergantian penguasa perlu dikelola dengan hati-hati.",
@@ -877,19 +825,6 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
     ],
     hasilHistoris: "Melaka menjalin hubungan diplomatik dengan Dinasti Ming pada awal abad ke-15. Hubungan tersebut merupakan diplomasi regional, bukan bukti bahwa Melaka menjadi bagian administratif Tiongkok."
   },
-  "evt-043": {
-    peran: "Syahbandar Melaka",
-    situasi: "Kapal dari berbagai kawasan datang dengan barang dan kebiasaan berbeda. Kamu harus menjaga perdagangan tetap ramai dan tertib.",
-    pilihan: [
-        { id: "a", teks: "Buat aturan pelabuhan yang jelas dan perlakukan pedagang secara konsisten.", konsekuensi:
-"Kepercayaan pedagang mungkin meningkat, walau pengawasan membutuhkan biaya. Trade-off: pendekatan ini dapat menjaga kestabilan atau menghemat sumber daya dalam jangka pendek, tetapi mungkin membuat inisiatif jatuh ke tangan pihak lain. Pilihan ini paling masuk akal bila waktu dan sumber daya terbatas; risikonya meningkat bila lawan bergerak cepat." },
-        { id: "b", teks: "Berikan hak dagang eksklusif kepada satu rombongan.", konsekuensi:
-"Pendapatan sesaat bisa naik, tetapi pedagang lain mungkin pindah. Trade-off: tindakan langsung dapat membuka peluang perubahan yang nyata, tetapi biasanya membutuhkan dukungan, biaya, dan kesiapan lebih besar serta dapat memicu balasan. Hasilnya tidak otomatis berhasil; strategi ini lebih layak bila dukungan dan sumber daya cukup.", historis: true },
-        { id: "c", teks: "Biarkan sengketa diselesaikan dengan kekuatan masing-masing.", konsekuensi:
-"Penguasa menghemat administrasi, tetapi kekerasan dan ketidakpastian dapat mengurangi perdagangan. Trade-off: pendekatan ini menjaga ruang gerak dan memberi waktu untuk menimbang pilihan lain, tetapi proses bisa lebih lambat dan kesempatan dapat menyempit. Manfaatnya besar ketika informasi belum lengkap; risikonya meningkat jika keputusan harus segera diambil." }
-    ],
-    hasilHistoris: "Melaka menjadi pusat perdagangan penting pada abad ke-15. Aturan pelabuhan dan jaringan diplomasi berperan dalam menarik pedagang dari berbagai kawasan."
-  },
   "evt-044": {
     peran: "Pejabat istana Majapahit",
     situasi: "Persaingan elite dan perubahan jaringan perdagangan melemahkan pengaruh pusat. Kamu harus memikirkan cara menjaga stabilitas.",
@@ -928,19 +863,6 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
 "Kelompok kecil dapat bertahan di beberapa tempat, tetapi kota dan gudang rentan jatuh. Trade-off: pendekatan ini menjaga ruang gerak dan memberi waktu untuk menimbang pilihan lain, tetapi proses bisa lebih lambat dan kesempatan dapat menyempit. Manfaatnya besar ketika informasi belum lengkap; risikonya meningkat jika keputusan harus segera diambil." }
     ],
     hasilHistoris: "Pada 1511 pasukan Portugis di bawah Afonso de Albuquerque merebut Melaka. Sultan Mahmud Shah melanjutkan perlawanan dari wilayah lain; perdagangan regional berpindah dan beradaptasi."
-  },
-  "evt-047": {
-    peran: "Penguasa Ternate",
-    situasi: "Pedagang Portugis menawarkan senjata dan hubungan dagang, tetapi mereka juga ingin memperoleh hak khusus atas rempah.",
-    pilihan: [
-        { id: "a", teks: "Berunding, tetapi hindari menyerahkan seluruh hak dagang kepada satu pihak.", konsekuensi:
-"Kamu dapat memanfaatkan mitra baru sambil menjaga ruang gerak dengan pedagang lain. Trade-off: pendekatan ini dapat menjaga kestabilan atau menghemat sumber daya dalam jangka pendek, tetapi mungkin membuat inisiatif jatuh ke tangan pihak lain. Pilihan ini paling masuk akal bila waktu dan sumber daya terbatas; risikonya meningkat bila lawan bergerak cepat." },
-        { id: "b", teks: "Berikan monopoli penuh tanpa syarat.", konsekuensi:
-"Dukungan militer mungkin datang, tetapi ketergantungan dan konflik dengan pedagang lain meningkat. Trade-off: tindakan langsung dapat membuka peluang perubahan yang nyata, tetapi biasanya membutuhkan dukungan, biaya, dan kesiapan lebih besar serta dapat memicu balasan. Hasilnya tidak otomatis berhasil; strategi ini lebih layak bila dukungan dan sumber daya cukup.", historis: true },
-        { id: "c", teks: "Usir semua pedagang asing tanpa negosiasi.", konsekuensi:
-"Kemandirian dapat dijaga, tetapi akses pada pasar dan barang luar bisa berkurang. Trade-off: pendekatan ini menjaga ruang gerak dan memberi waktu untuk menimbang pilihan lain, tetapi proses bisa lebih lambat dan kesempatan dapat menyempit. Manfaatnya besar ketika informasi belum lengkap; risikonya meningkat jika keputusan harus segera diambil." }
-    ],
-    hasilHistoris: "Portugis mencapai Maluku pada awal abad ke-16 dan berusaha membangun hubungan dagang serta pengaruh politik. Penguasa lokal tetap menjadi aktor penting dan memanfaatkan persaingan."
   },
   "evt-048": {
     peran: "Penguasa Tidore",
@@ -1164,16 +1086,6 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
     hasilHistoris: "Iskandar Muda naik takhta pada 1607 dan memimpin fase penguatan serta ekspansi Aceh yang berlanjut sepanjang abad ke-17."
   }
 ,
-  "evt-065": {
-    peran: "Penguasa pelabuhan Melaka",
-    situasi: "Situasi: Melaka tumbuh sebagai pelabuhan penghubung Selat Malaka. Kamu harus memilih pendekatan di tengah perubahan politik dan perdagangan. Tidak ada pilihan yang bebas biaya: keputusan perlu menimbang kestabilan, sumber daya, hubungan dengan mitra, dan risiko kehilangan kesempatan. Pertimbangkan dampak bagi kelompok lokal, bukan hanya keuntungan penguasa.",
-    pilihan: [
-      { id: "a", teks: "Mengutamakan kebijakan yang paling sesuai dengan praktik yang tercatat dalam konteks peristiwa ini.", konsekuensi: "Pendekatan ini mencerminkan jalur historis yang dikenal dari sumber, tetapi bukan berarti tanpa masalah. Kebijakan tersebut tetap menghadapi keterbatasan sumber daya, persaingan, dan kompromi politik. Hasil akhirnya dibentuk banyak faktor, sehingga keputusan tokoh tidak boleh dipahami sebagai solusi sempurna atau satu-satunya pilihan rasional.", historis: true },
-      { id: "b", teks: "Memperkuat kerja sama dan perundingan dengan mitra regional.", konsekuensi: "Pendekatan ini dapat memperluas kepercayaan, akses informasi, dan pembagian risiko. Namun, perundingan memerlukan waktu, hadiah atau konsesi, dan kesediaan menerima kompromi. Mitra juga dapat mengubah sikap ketika kepentingannya bergeser. Pilihan ini cocok bila kestabilan jaringan lebih penting daripada hasil cepat." },
-      { id: "c", teks: "Memusatkan sumber daya untuk mengamankan jalur dan titik strategis.", konsekuensi: "Pengamanan terarah dapat melindungi perdagangan dan meningkatkan daya tawar, tetapi membutuhkan biaya, tenaga, dan koordinasi. Jika terlalu berfokus pada titik tertentu, kebutuhan masyarakat atau jalur alternatif dapat terabaikan. Keberhasilannya bergantung pada dukungan lokal dan kemampuan menghindari konflik yang tidak perlu." }
-    ],
-    hasilHistoris: "Sumber sejarah berbeda dalam detail kronologi pendirian Melaka; sekitar 1400 merupakan perkiraan yang umum digunakan. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
   "evt-066": {
     peran: "Penasihat istana Majapahit",
     situasi: "Situasi: Perang Paregreg melemahkan kestabilan Majapahit. Kamu harus memilih pendekatan di tengah perubahan politik dan perdagangan. Tidak ada pilihan yang bebas biaya: keputusan perlu menimbang kestabilan, sumber daya, hubungan dengan mitra, dan risiko kehilangan kesempatan. Pertimbangkan dampak bagi kelompok lokal, bukan hanya keuntungan penguasa.",
@@ -1183,16 +1095,6 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
       { id: "c", teks: "Mengutamakan kebijakan yang paling sesuai dengan praktik yang tercatat dalam konteks peristiwa ini.", konsekuensi: "Pendekatan ini mencerminkan jalur historis yang dikenal dari sumber, tetapi bukan berarti tanpa masalah. Kebijakan tersebut tetap menghadapi keterbatasan sumber daya, persaingan, dan kompromi politik. Hasil akhirnya dibentuk banyak faktor, sehingga keputusan tokoh tidak boleh dipahami sebagai solusi sempurna atau satu-satunya pilihan rasional.", historis: true }
     ],
     hasilHistoris: "Perang Paregreg lazim ditempatkan pada 1404–1406; dampak jangka panjangnya merupakan bagian dari proses yang lebih luas. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
-  "evt-067": {
-    peran: "Penasihat diplomatik Melaka",
-    situasi: "Situasi: Hubungan diplomatik Melaka dan Dinasti Ming memperkuat jaringan niaga. Kamu harus memilih pendekatan di tengah perubahan politik dan perdagangan. Tidak ada pilihan yang bebas biaya: keputusan perlu menimbang kestabilan, sumber daya, hubungan dengan mitra, dan risiko kehilangan kesempatan. Pertimbangkan dampak bagi kelompok lokal, bukan hanya keuntungan penguasa.",
-    pilihan: [
-      { id: "a", teks: "Memusatkan sumber daya untuk mengamankan jalur dan titik strategis.", konsekuensi: "Pengamanan terarah dapat melindungi perdagangan dan meningkatkan daya tawar, tetapi membutuhkan biaya, tenaga, dan koordinasi. Jika terlalu berfokus pada titik tertentu, kebutuhan masyarakat atau jalur alternatif dapat terabaikan. Keberhasilannya bergantung pada dukungan lokal dan kemampuan menghindari konflik yang tidak perlu." },
-      { id: "b", teks: "Mengutamakan kebijakan yang paling sesuai dengan praktik yang tercatat dalam konteks peristiwa ini.", konsekuensi: "Pendekatan ini mencerminkan jalur historis yang dikenal dari sumber, tetapi bukan berarti tanpa masalah. Kebijakan tersebut tetap menghadapi keterbatasan sumber daya, persaingan, dan kompromi politik. Hasil akhirnya dibentuk banyak faktor, sehingga keputusan tokoh tidak boleh dipahami sebagai solusi sempurna atau satu-satunya pilihan rasional.", historis: true },
-      { id: "c", teks: "Memperkuat kerja sama dan perundingan dengan mitra regional.", konsekuensi: "Pendekatan ini dapat memperluas kepercayaan, akses informasi, dan pembagian risiko. Namun, perundingan memerlukan waktu, hadiah atau konsesi, dan kesediaan menerima kompromi. Mitra juga dapat mengubah sikap ketika kepentingannya bergeser. Pilihan ini cocok bila kestabilan jaringan lebih penting daripada hasil cepat." }
-    ],
-    hasilHistoris: "Misi Ming dan hubungan dengan Melaka tercatat dalam sumber Tiongkok; sifat hubungan harus dibedakan dari kolonisasi langsung. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
   },
   "evt-068": {
     peran: "Pengelola pelabuhan pesisir Jawa",
@@ -1324,26 +1226,6 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
     ],
     hasilHistoris: "Tradisi tentang pendirian Cirebon dan tokoh-tokohnya tidak seluruhnya dapat diverifikasi sebagai catatan sezaman. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
   },
-  "evt-081": {
-    peran: "Penasihat Demak",
-    situasi: "Situasi: Demak muncul sebagai kekuatan pesisir menjelang akhir abad ke-15. Kamu harus memilih pendekatan di tengah perubahan politik dan perdagangan. Tidak ada pilihan yang bebas biaya: keputusan perlu menimbang kestabilan, sumber daya, hubungan dengan mitra, dan risiko kehilangan kesempatan. Pertimbangkan dampak bagi kelompok lokal, bukan hanya keuntungan penguasa.",
-    pilihan: [
-      { id: "a", teks: "Memperkuat kerja sama dan perundingan dengan mitra regional.", konsekuensi: "Pendekatan ini dapat memperluas kepercayaan, akses informasi, dan pembagian risiko. Namun, perundingan memerlukan waktu, hadiah atau konsesi, dan kesediaan menerima kompromi. Mitra juga dapat mengubah sikap ketika kepentingannya bergeser. Pilihan ini cocok bila kestabilan jaringan lebih penting daripada hasil cepat." },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan jalur dan titik strategis.", konsekuensi: "Pengamanan terarah dapat melindungi perdagangan dan meningkatkan daya tawar, tetapi membutuhkan biaya, tenaga, dan koordinasi. Jika terlalu berfokus pada titik tertentu, kebutuhan masyarakat atau jalur alternatif dapat terabaikan. Keberhasilannya bergantung pada dukungan lokal dan kemampuan menghindari konflik yang tidak perlu." },
-      { id: "c", teks: "Mengutamakan kebijakan yang paling sesuai dengan praktik yang tercatat dalam konteks peristiwa ini.", konsekuensi: "Pendekatan ini mencerminkan jalur historis yang dikenal dari sumber, tetapi bukan berarti tanpa masalah. Kebijakan tersebut tetap menghadapi keterbatasan sumber daya, persaingan, dan kompromi politik. Hasil akhirnya dibentuk banyak faktor, sehingga keputusan tokoh tidak boleh dipahami sebagai solusi sempurna atau satu-satunya pilihan rasional.", historis: true }
-    ],
-    hasilHistoris: "Tanggal pendirian Demak tidak sepenuhnya pasti; kronologi akhir abad ke-15 merupakan perkiraan umum. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
-  "evt-082": {
-    peran: "Penasihat elite Jawa",
-    situasi: "Situasi: Perubahan politik Majapahit berlangsung bertahap, bukan satu tanggal tunggal. Kamu harus memilih pendekatan di tengah perubahan politik dan perdagangan. Tidak ada pilihan yang bebas biaya: keputusan perlu menimbang kestabilan, sumber daya, hubungan dengan mitra, dan risiko kehilangan kesempatan. Pertimbangkan dampak bagi kelompok lokal, bukan hanya keuntungan penguasa.",
-    pilihan: [
-      { id: "a", teks: "Memusatkan sumber daya untuk mengamankan jalur dan titik strategis.", konsekuensi: "Pengamanan terarah dapat melindungi perdagangan dan meningkatkan daya tawar, tetapi membutuhkan biaya, tenaga, dan koordinasi. Jika terlalu berfokus pada titik tertentu, kebutuhan masyarakat atau jalur alternatif dapat terabaikan. Keberhasilannya bergantung pada dukungan lokal dan kemampuan menghindari konflik yang tidak perlu." },
-      { id: "b", teks: "Mengutamakan kebijakan yang paling sesuai dengan praktik yang tercatat dalam konteks peristiwa ini.", konsekuensi: "Pendekatan ini mencerminkan jalur historis yang dikenal dari sumber, tetapi bukan berarti tanpa masalah. Kebijakan tersebut tetap menghadapi keterbatasan sumber daya, persaingan, dan kompromi politik. Hasil akhirnya dibentuk banyak faktor, sehingga keputusan tokoh tidak boleh dipahami sebagai solusi sempurna atau satu-satunya pilihan rasional.", historis: true },
-      { id: "c", teks: "Memperkuat kerja sama dan perundingan dengan mitra regional.", konsekuensi: "Pendekatan ini dapat memperluas kepercayaan, akses informasi, dan pembagian risiko. Namun, perundingan memerlukan waktu, hadiah atau konsesi, dan kesediaan menerima kompromi. Mitra juga dapat mengubah sikap ketika kepentingannya bergeser. Pilihan ini cocok bila kestabilan jaringan lebih penting daripada hasil cepat." }
-    ],
-    hasilHistoris: "Tahun 1478 merupakan penanda dalam sejumlah kronologi; proses akhir Majapahit diperdebatkan dan berlangsung lebih panjang. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
   "evt-083": {
     peran: "Saudagar Nusantara",
     situasi: "Situasi: Jaringan perdagangan Nusantara menjelang 1500 semakin terhubung. Kamu harus memilih pendekatan di tengah perubahan politik dan perdagangan. Tidak ada pilihan yang bebas biaya: keputusan perlu menimbang kestabilan, sumber daya, hubungan dengan mitra, dan risiko kehilangan kesempatan. Pertimbangkan dampak bagi kelompok lokal, bukan hanya keuntungan penguasa.",
@@ -1374,16 +1256,6 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
     ],
     hasilHistoris: "Kontak awal tidak serta-merta berarti kontrol Portugis. Penaklukan baru terjadi pada 1511, dan sesudahnya jaringan dagang berpindah serta menyesuaikan diri. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
   },
-  "evt-086": {
-    peran: "Panglima dan penasihat setempat",
-    situasi: "Pada 1511, armada Portugis merebut Melaka. Perubahan ini mengguncang pusat politik dan perdagangan di Selat Malaka. Pedagang dan penguasa di kawasan lain merespons dengan mencari pelabuhan, sekutu, dan jalur alternatif. Penaklukan Melaka tidak membuat Portugis menguasai seluruh perdagangan Nusantara. Jaringan niaga tetap multipusat dan persaingan dengan kekuatan lokal terus berlangsung. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
-    pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
-    ],
-    hasilHistoris: "Penaklukan Melaka tidak membuat Portugis menguasai seluruh perdagangan Nusantara. Jaringan niaga tetap multipusat dan persaingan dengan kekuatan lokal terus berlangsung. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
   "evt-087": {
     peran: "Saudagar dan penasihat pelabuhan",
     situasi: "Setelah merebut Melaka, Portugis mengirim ekspedisi ke kepulauan penghasil rempah. Banda terkenal dengan pala, sementara Maluku menjadi sumber cengkih. Penguasa setempat menimbang peluang perdagangan dan risiko campur tangan asing. Kontak awal berlangsung melalui negosiasi dan persaingan. Pengaruh Portugis berbeda-beda antar-pulau dan tidak boleh disamakan dengan penguasaan penuh atas seluruh Maluku. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
@@ -1404,16 +1276,6 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
     ],
     hasilHistoris: "Rincian jumlah kapal dan jalannya serangan berbeda antar-sumber. Inti peristiwanya adalah upaya Demak menantang kedudukan Portugis di Melaka. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
   },
-  "evt-089": {
-    peran: "Penasihat penguasa setempat",
-    situasi: "Pada awal abad ke-16, Aceh semakin penting sebagai pusat politik dan perdagangan di ujung utara Sumatra. Penguasa berusaha mengonsolidasikan wilayah pesisir dan menarik pedagang Muslim yang mencari jalur selain Melaka Portugis. Tahun awal dan urutan penguasa Aceh bervariasi dalam kronologi. Peristiwa ini merangkum proses konsolidasi, bukan menyatakan satu tanggal pendirian yang mutlak. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
-    pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
-    ],
-    hasilHistoris: "Tahun awal dan urutan penguasa Aceh bervariasi dalam kronologi. Peristiwa ini merangkum proses konsolidasi, bukan menyatakan satu tanggal pendirian yang mutlak. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
   "evt-090": {
     peran: "Saudagar dan penasihat pelabuhan",
     situasi: "Sisa ekspedisi Magellan melintasi perairan antara pulau-pulau Nusa Tenggara pada 1521 dalam pelayaran keliling dunia. Catatan ekspedisi menambah dokumentasi Eropa tentang wilayah yang sudah terhubung melalui pelayaran regional. Pelayaran Eropa bukan awal penjelajahan laut di kawasan ini. Pelaut lokal telah menguasai pengetahuan musim, selat, dan pelabuhan selama berabad-abad. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
@@ -1433,36 +1295,6 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
       { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
     ],
     hasilHistoris: "Hubungan Ternate dan Portugis berubah dari waktu ke waktu; kerja sama awal tidak menghapus konflik yang kemudian berkembang. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
-  "evt-092": {
-    peran: "Penasihat penguasa setempat",
-    situasi: "Penguasa Sunda membuat kesepakatan dengan Portugis pada 1522 yang berkaitan dengan perdagangan dan rencana pembangunan pos di Sunda Kelapa. Perjanjian ini menunjukkan bahwa kerajaan lokal melakukan diplomasi aktif, bukan sekadar menjadi sasaran kekuatan luar. Rencana Portugis tidak menghasilkan kendali permanen atas Sunda Kelapa. Perkembangan berikutnya dipengaruhi oleh kekuatan Demak dan Cirebon. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
-    pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true }
-    ],
-    hasilHistoris: "Rencana Portugis tidak menghasilkan kendali permanen atas Sunda Kelapa. Perkembangan berikutnya dipengaruhi oleh kekuatan Demak dan Cirebon. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
-  "evt-093": {
-    peran: "Panglima dan penasihat setempat",
-    situasi: "Pasukan yang berhubungan dengan Demak dan Cirebon merebut Sunda Kelapa pada 1527. Dalam tradisi sejarah, nama Jayakarta dikaitkan dengan perubahan ini. Pelabuhan tersebut tetap penting karena menghubungkan pedalaman Jawa Barat dengan perdagangan laut. Rincian tokoh dan tanggal penamaan berbeda dalam sumber. Peristiwa ini menandai pergeseran kekuasaan, bukan hilangnya peran masyarakat dan jaringan dagang setempat. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
-    pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
-    ],
-    hasilHistoris: "Rincian tokoh dan tanggal penamaan berbeda dalam sumber. Peristiwa ini menandai pergeseran kekuasaan, bukan hilangnya peran masyarakat dan jaringan dagang setempat. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
-  "evt-094": {
-    peran: "Penasihat penguasa setempat",
-    situasi: "Banten berkembang menjadi pusat politik dan perdagangan di ujung barat Jawa. Letaknya dekat Selat Sunda memberi akses pada jalur kapal, sementara lada dan hubungan dengan pedalaman membantu menopang ekonomi. Tanggal pendirian dan proses islamisasi Banten tidak sepenuhnya seragam dalam sumber. Perubahan berlangsung bertahap melalui politik, perdagangan, dan jaringan keagamaan. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
-    pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
-    ],
-    hasilHistoris: "Tanggal pendirian dan proses islamisasi Banten tidak sepenuhnya seragam dalam sumber. Perubahan berlangsung bertahap melalui politik, perdagangan, dan jaringan keagamaan. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
   },
   "evt-095": {
     peran: "Saudagar dan penasihat pelabuhan",
@@ -1514,26 +1346,6 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
     ],
     hasilHistoris: "Perlawanan ini terdiri atas rangkaian tindakan dan persekutuan, bukan satu pertempuran tunggal. Dukungan dari pulau-pulau sekitar turut memengaruhi hasilnya. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
   },
-  "evt-100": {
-    peran: "Penasihat penguasa setempat",
-    situasi: "Sultan Khairun terbunuh pada 1570 setelah ketegangan dengan Portugis. Peristiwa itu memperkuat tekad penerusnya, Baabullah, untuk mengusir Portugis dari Ternate dan menjadi titik penting dalam konflik setempat. Rincian peristiwa pembunuhan bersumber dari narasi sejarah yang perlu dibaca kritis. Akibat politiknya jelas: hubungan dengan Portugis memburuk dan perlawanan meluas. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
-    pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
-    ],
-    hasilHistoris: "Rincian peristiwa pembunuhan bersumber dari narasi sejarah yang perlu dibaca kritis. Akibat politiknya jelas: hubungan dengan Portugis memburuk dan perlawanan meluas. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
-  "evt-101": {
-    peran: "Panglima dan penasihat setempat",
-    situasi: "Pada 1575, Sultan Baabullah berhasil memaksa Portugis meninggalkan benteng mereka di Ternate. Keberhasilan ini memperkuat pengaruh Ternate dalam perdagangan rempah dan memperlihatkan bahwa kekuatan Eropa tidak selalu mampu mempertahankan posisinya. Portugis tetap bertahan di bagian lain kawasan timur, sehingga peristiwa ini bukan akhir kehadiran Eropa di Maluku. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
-    pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
-    ],
-    hasilHistoris: "Portugis tetap bertahan di bagian lain kawasan timur, sehingga peristiwa ini bukan akhir kehadiran Eropa di Maluku. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
   "evt-102": {
     peran: "Penasihat penguasa setempat",
     situasi: "Setelah kehilangan posisi di Ternate, Portugis membangun benteng di Tidore pada akhir abad ke-16. Persaingan antarkerajaan Maluku dan perebutan akses rempah membuat aliansi lokal dan Eropa berubah-ubah. Tidak semua hubungan dapat dijelaskan sebagai pertentangan dua kubu tetap. Penguasa lokal memiliki tujuan sendiri dan dapat mengubah sekutu. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
@@ -1543,16 +1355,6 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
       { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
     ],
     hasilHistoris: "Tidak semua hubungan dapat dijelaskan sebagai pertentangan dua kubu tetap. Penguasa lokal memiliki tujuan sendiri dan dapat mengubah sekutu. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
-  "evt-103": {
-    peran: "Penasihat penguasa setempat",
-    situasi: "Pada akhir abad ke-16, Panembahan Senopati memperluas kekuasaan Mataram dari kawasan pedalaman Jawa. Pertumbuhannya mengubah hubungan antara pusat agraris, pelabuhan pesisir, dan kerajaan-kerajaan lain di Jawa. Tahun berdiri Mataram sering ditulis 1582, tetapi konsolidasi kekuasaannya berlangsung bertahap dan kronologi rinci berbeda antarsumber. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
-    pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
-    ],
-    hasilHistoris: "Tahun berdiri Mataram sering ditulis 1582, tetapi konsolidasi kekuasaannya berlangsung bertahap dan kronologi rinci berbeda antarsumber. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
   },
   "evt-104": {
     peran: "Penasihat penguasa setempat",
@@ -1574,16 +1376,6 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
     ],
     hasilHistoris: "Tanggal dan urutan islamisasi serta konsolidasi Gowa–Tallo tidak selalu sama dalam sumber. Peran Makassar berkembang secara bertahap. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
   },
-  "evt-106": {
-    peran: "Saudagar dan penasihat pelabuhan",
-    situasi: "Armada yang dipimpin Cornelis de Houtman tiba di Banten pada 1596 untuk mencari akses langsung ke perdagangan rempah. Kedatangan itu terjadi di kawasan yang telah memiliki penguasa, pedagang, dan jaringan internasional yang mapan. Ekspedisi awal Belanda mengalami konflik dan kesulitan. Kehadiran Belanda tidak langsung berarti kolonisasi atau kendali atas Nusantara. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
-    pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true }
-    ],
-    hasilHistoris: "Ekspedisi awal Belanda mengalami konflik dan kesulitan. Kehadiran Belanda tidak langsung berarti kolonisasi atau kendali atas Nusantara. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
-  },
   "evt-107": {
     peran: "Saudagar dan penasihat pelabuhan",
     situasi: "Pada 1599, ekspedisi Belanda kembali mengunjungi Aceh. Para penguasa dan pedagang setempat menimbang hubungan dengan pendatang baru berdasarkan harga, keamanan, dan persaingan dengan kekuatan lain. Hubungan dagang awal dapat berisi negosiasi maupun kekerasan. Kunjungan kapal tidak sama dengan penguasaan wilayah. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
@@ -1595,93 +1387,143 @@ export const KEPUTUSAN: Record<string, Keputusan> = {
     hasilHistoris: "Hubungan dagang awal dapat berisi negosiasi maupun kekerasan. Kunjungan kapal tidak sama dengan penguasaan wilayah. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
   },
   "evt-108": {
-    peran: "Saudagar dan penasihat pelabuhan",
-    situasi: "Menjelang 1600, perdagangan Nusantara melibatkan pelabuhan Aceh, Banten, Makassar, Maluku, dan banyak simpul kecil. Perusahaan Eropa berusaha membeli rempah langsung, tetapi tetap bergantung pada pengetahuan pelaut, pemasok, dan perantara setempat. Perubahan abad ke-17 bukan pergantian seketika dari perdagangan Asia menjadi perdagangan Eropa. Banyak jaringan lama bertahan sambil menyesuaikan diri terhadap persaingan baru. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
+    peran: "Penguasa pelabuhan di pesisir utara Sumatra",
+    situasi: "Belasan kapal asing berlabuh dan penumpangnya mengaku harus menunggu angin berbalik selama berbulan-bulan. Mereka datang dari Tiongkok dengan membawa pengawal Mongol, yang kekuasaan Khan Agungnya sering disebut-sebut pedagang di pelabuhanmu. Kamu harus menentukan sikap terhadap tamu yang akan tinggal lama itu.",
     pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
+      { id: "a", teks: "Larang mereka mendarat dan suruh pergi secepat mungkin.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Pelabuhan terhindar dari risiko, tetapi kehilangan peluang dagang dan bisa dianggap memusuhi pihak yang mengaku berada di bawah perlindungan Khan Agung." },
+      { id: "b", teks: "Izinkan mereka menetap sementara, jual bekal dan barang dagangan, tetapi tetap jaga jarak lewat pengawasan pelabuhan.", konsekuensi: "Pilihan ini paling mendekati gambaran dalam catatan Polo: rombongan membangun pertahanan sendiri sambil berhubungan dagang dengan penduduk. Pelabuhan memperoleh keuntungan, tetapi harus mengelola gesekan dengan tamu yang tinggal lama.", historis: true },
+      { id: "c", teks: "Jadikan mereka sekutu dan ikat mereka dengan perjanjian politik.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Aliansi dapat memberi perlindungan, tetapi mengikat pelabuhan pada kepentingan jauh dan bisa menyeretnya ke dalam konflik yang tidak diinginkan." }
     ],
-    hasilHistoris: "Perubahan abad ke-17 bukan pergantian seketika dari perdagangan Asia menjadi perdagangan Eropa. Banyak jaringan lama bertahan sambil menyesuaikan diri terhadap persaingan baru. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
+    hasilHistoris: "Menurut Polo, rombongan bertahan sekitar lima bulan sambil membangun pagar pertahanan dan berdagang dengan penduduk, lalu berlayar ketika angin berubah. Rincian pengaturan antara rombongan dan penguasa setempat tidak tercatat jelas, sehingga pilihan ini bersifat simulasi."
   },
   "evt-109": {
-    peran: "Penasihat penguasa setempat",
-    situasi: "Pada 1602, sejumlah perusahaan dagang Belanda digabung menjadi Vereenigde Oostindische Compagnie (VOC). Perusahaan ini memiliki dukungan negara dan kemampuan membuat perjanjian serta menggunakan kekuatan bersenjata demi kepentingan dagangnya. Pembentukan VOC tidak berarti seluruh Nusantara langsung dikuasai. Pengaruhnya bertambah secara bertahap melalui perdagangan, perjanjian, benteng, dan konflik. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
+    peran: "Ranggawuni, putra Anusapati dan pewaris takhta",
+    situasi: "Ayahmu, Anusapati, telah dibunuh oleh Tohjaya yang kini memegang takhta Singhasari. Tohjaya mulai mencurigai kamu dan sepupumu, Mahisa Cempaka, dan mengirim pasukan untuk menyingkirkan kalian. Kamu harus memutuskan apakah akan bersembunyi, menyerah, atau melawan.",
     pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true }
+      { id: "a", teks: "Menyerah dan mengakui Tohjaya sebagai raja demi keselamatan keluarga.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kamu mungkin selamat untuk sementara, tetapi Tohjaya yang curiga dapat menyingkirkanmu kapan saja, dan garis keturunan Anusapati terancam punah." },
+      { id: "b", teks: "Cari dukungan para perwira yang tidak puas, bergabung dengan sepupumu, lalu rebut kekuasaan dan bagi bersama.", konsekuensi: "Pilihan ini paling mendekati tradisi yang tercatat. Langkah ini berisiko karena kamu melawan raja yang berkuasa, tetapi bila berhasil kamu memperoleh legitimasi dan mengakhiri pertumpahan darah dengan pembagian kekuasaan yang jelas.", historis: true },
+      { id: "c", teks: "Melarikan diri jauh ke luar Jawa dan membangun hidup baru.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kemungkinan besar, kamu aman dari pembunuhan, tetapi kehilangan klaim atas takhta dan membiarkan Singhasari tetap dalam ketidakpastian." }
     ],
-    hasilHistoris: "Pembentukan VOC tidak berarti seluruh Nusantara langsung dikuasai. Pengaruhnya bertambah secara bertahap melalui perdagangan, perjanjian, benteng, dan konflik. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
+    hasilHistoris: "Menurut Pararaton, Tohjaya jatuh sekitar 1250 dan Ranggawuni naik takhta sebagai Wisnuwardhana, memerintah bersama Mahisa Cempaka sebagai Narasimhamurti. Pembagian kekuasaan ini meredakan konflik hingga Kertanagara naik takhta sekitar 1268. Rincian kronologi berbeda menurut sumber."
   },
   "evt-110": {
-    peran: "Saudagar dan penasihat pelabuhan",
-    situasi: "Pada 1603, Belanda membangun pos dagang permanen di Banten. Mereka harus bernegosiasi dengan penguasa lokal dan bersaing dengan pedagang Asia serta bangsa Eropa lainnya untuk memperoleh lada dan komoditas lain. Pos dagang adalah pijakan komersial, bukan bukti bahwa Belanda telah menguasai Banten atau seluruh Jawa. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
+    peran: "Sultan Samudra Pasai",
+    situasi: "Seorang penjelajah dari Maroko tiba dengan kapal, mengaku sedang dalam perjalanan ke Tiongkok sebagai utusan dari sultan di India. Ia butuh bantuan untuk melanjutkan pelayaran. Kamu harus memutuskan bagaimana menyambutnya.",
     pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true }
+      { id: "a", teks: "Tolak karena ia datang tanpa undangan resmi.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kemungkinan besar, kamu menghindari beban tamu asing, tetapi kehilangan kesempatan memperoleh kabar dari dunia Islam lain dan citra Pasai sebagai kerajaan yang ramah ulama." },
+      { id: "b", teks: "Sambut dengan upacara, hadirkan ulama istana untuk berdiskusi, lalu bantu perlengkapan perjalanannya.", konsekuensi: "Pilihan ini paling mendekati catatan Ibnu Battuta. Pasai memperlihatkan kewibawaannya sebagai pusat Islam dan memelihara jejaring dagang serta keilmuan, dengan biaya jamuan yang tidak besar.", historis: true },
+      { id: "c", teks: "Tahan dia di istana sebagai penasihat agar ilmunya tetap di Pasai.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Pasai memperoleh seorang ulama berpengalaman, tetapi tindakan ini bisa merusak reputasi sebagai pelabuhan yang terbuka dan aman bagi pelancong." }
     ],
-    hasilHistoris: "Pos dagang adalah pijakan komersial, bukan bukti bahwa Belanda telah menguasai Banten atau seluruh Jawa. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
+    hasilHistoris: "Menurut Ibnu Battuta, ia dijamu dengan baik, berdiskusi dengan sultan dan para ulama, lalu dibantu melanjutkan pelayaran ke Tiongkok. Catatan ini memperlihatkan keramahan dan jejaring Pasai, meski rinciannya berasal dari satu saksi."
   },
   "evt-111": {
-    peran: "Panglima dan penasihat setempat",
-    situasi: "Pada 1605, VOC dan sekutu lokal menekan Portugis di Ambon hingga benteng Portugis menyerah. Peristiwa ini memperlihatkan bahwa keberhasilan militer Eropa bergantung pula pada aliansi dengan kelompok lokal. Penguasaan benteng tidak sama dengan kontrol penuh atas seluruh perdagangan rempah. Perlawanan dan persaingan berlanjut di pulau-pulau lain. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
+    peran: "Hayam Wuruk, raja Majapahit",
+    situasi: "Dua belas tahun telah berlalu sejak neneknya, Rajapatni, wafat. Menurut tradisi, rohnya perlu disucikan lewat upacara sraddha. Kamu harus memutuskan seberapa besar upacara itu akan digelar, mengingat biayanya besar dan seluruh kerajaan menyimak.",
     pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
+      { id: "a", teks: "Lakukan upacara kecil dan tertutup di lingkungan keluarga.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kemungkinan besar, biayanya murah, tetapi kamu kehilangan kesempatan menegaskan wibawa dinasti di hadapan para pejabat dan wilayah bawahan." },
+      { id: "b", teks: "Gelar upacara besar yang mengundang pejabat dan wakil wilayah, lengkap dengan puji-pujian dan sesaji.", konsekuensi: "Pilihan ini paling mendekati gambaran Nagarakretagama. Biayanya besar dan menyita energi, tetapi upacara itu mempersatukan elite dan memperlihatkan Majapahit sebagai kerajaan yang tertib serta menghormati leluhurnya.", historis: true },
+      { id: "c", teks: "Tunda upacara tanpa batas waktu sampai keadaan kerajaan lebih tenang.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kamu menghemat sumber daya, tetapi menunda kewajiban terhadap leluhur dan bisa dianggap abai terhadap tradisi oleh para bangsawan." }
     ],
-    hasilHistoris: "Penguasaan benteng tidak sama dengan kontrol penuh atas seluruh perdagangan rempah. Perlawanan dan persaingan berlanjut di pulau-pulau lain. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
+    hasilHistoris: "Menurut Nagarakretagama, Majapahit menggelar upacara besar dengan persiapan luas dan kehadiran banyak pejabat. Rincian puisi bersifat memuliakan raja sehingga perlu dibaca kritis."
   },
   "evt-112": {
-    peran: "Panglima dan penasihat setempat",
-    situasi: "Pada 1606, armada Spanyol mengambil posisi di Ternate dan Tidore. Persaingan Eropa bertaut dengan persaingan lokal, sementara para penguasa Maluku tetap berusaha mempertahankan ruang gerak dan kendali atas perdagangan rempah. Kedudukan Spanyol dan Portugis di kawasan berubah mengikuti konflik global dan aliansi setempat. Peta kekuasaan tidak stabil dan tidak mencakup semua pulau secara seragam. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
+    peran: "Shi Jinqing, pemimpin komunitas Tionghoa di Palembang",
+    situasi: "Kamu mengetahui bahwa Chen Zuyi, penguasa Palembang, berencana menyergap armada besar dari Tiongkok yang akan singgah. Jika rencana itu berhasil, jalur dagang akan kacau; bila gagal, Palembang akan dibalas. Kamu harus memutuskan siapa yang akan kamu dukung.",
     pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
+      { id: "a", teks: "Diam saja dan biarkan Chen menjalankan rencananya.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kamu menghindari risiko dianggap pengkhianat oleh pengikut Chen, tetapi bisa ikut terseret dalam pembalasan armada besar bila Chen kalah." },
+      { id: "b", teks: "Laporkan rencana Chen kepada Zheng He agar armada bersiap.", konsekuensi: "Pilihan ini paling mendekati catatan Ma Huan. Kamu menempatkan diri di pihak kekuatan yang lebih besar dan membuka peluang menjadi penguasa setempat, tetapi harus siap menghadapi pembalasan bila rencana gagal.", historis: true },
+      { id: "c", teks: "Menyingkir dari Palembang dengan keluargamu sebelum kekacauan terjadi.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kemungkinan besar, kamu selamat, tetapi kehilangan kedudukan dan kesempatan menjadi tokoh penting di Palembang." }
     ],
-    hasilHistoris: "Kedudukan Spanyol dan Portugis di kawasan berubah mengikuti konflik global dan aliansi setempat. Peta kekuasaan tidak stabil dan tidak mencakup semua pulau secara seragam. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
+    hasilHistoris: "Menurut Ma Huan, Shi Jinqing melaporkan rencana Chen Zuyi. Armada Zheng He menang, Chen ditangkap dan dieksekusi pada 1407, dan Ming mengangkat Shi Jinqing sebagai pengawas Palembang."
   },
   "evt-113": {
-    peran: "Penasihat penguasa setempat",
-    situasi: "Pada masa Iskandar Muda, Aceh menjadi kekuatan regional yang kuat. Armada dan kebijakan istana digunakan untuk memperluas pengaruh terhadap pelabuhan di Sumatra dan Semenanjung Melayu, sekaligus memperkuat posisi Aceh dalam perdagangan. Ekspansi Aceh berlangsung melalui gabungan kampanye militer, diplomasi, dan pengaturan perdagangan. Dampaknya berbeda bagi setiap pelabuhan dan komunitas. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
+    peran: "Penguasa pelabuhan di pesisir Jawa Timur",
+    situasi: "Komunitas pedagang Muslim yang menetap di pelabuhanmu meminta izin mendirikan permukiman dan pemakaman sendiri. Sebagian pejabat istana ragu karena berbeda keyakinan, tetapi pedagang itu membawa banyak keuntungan dagang. Kamu harus memutuskan sikap.",
     pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
+      { id: "a", teks: "Tolak permintaan itu demi menjaga keseragaman keyakinan.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kamu menjaga kesamaan keyakinan, tetapi pedagang bisa pindah ke pelabuhan lain dan pelabuhanmu kehilangan pemasukan." },
+      { id: "b", teks: "Izinkan mereka menetap dan dimakamkan, selama mengikuti aturan setempat dan membayar pajak.", konsekuensi: "Pilihan ini paling mendekati gambaran dari bukti nisan: komunitas Muslim hidup berdampingan dan memakai tarikh Saka. Pelabuhan makin ramai, meski kamu harus menjaga keseimbangan dengan kelompok yang berbeda.", historis: true },
+      { id: "c", teks: "Izinkan, tetapi minta mereka berpindah keyakinan.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Aturan ini bisa memicu perlawanan dan membuat pedagang menghindari pelabuhanmu, padahal tidak ada bukti bahwa kebijakan seperti ini dipaksakan." }
     ],
-    hasilHistoris: "Ekspansi Aceh berlangsung melalui gabungan kampanye militer, diplomasi, dan pengaturan perdagangan. Dampaknya berbeda bagi setiap pelabuhan dan komunitas. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
+    hasilHistoris: "Bukti nisan menunjukkan komunitas Muslim hidup dan dimakamkan di Jawa Timur pada masa Majapahit, dengan memakai tarikh Saka. Kebijakan tiap penguasa pelabuhan tidak tercatat jelas, sehingga pilihan ini hanya simulasi."
   },
   "evt-114": {
-    peran: "Saudagar dan penasihat pelabuhan",
-    situasi: "Pada awal abad ke-17, perusahaan Inggris membangun hubungan dagang dan pos di sejumlah pelabuhan, termasuk Banten, Makassar, dan Jambi. Penguasa lokal dapat menggunakan persaingan antarperusahaan untuk memperoleh harga atau dukungan yang lebih menguntungkan. Pos dagang Inggris tidak selalu bertahan lama dan tidak berarti penguasaan wilayah. Persaingan dagang melibatkan negosiasi, perubahan sekutu, dan konflik. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
+    peran: "Pemuka komunitas di lereng Gunung Lawu",
+    situasi: "Majapahit di dataran rendah sedang melemah dan tidak lagi mampu membiayai pembangunan candi besar. Komunitasmu ingin mendirikan tempat ibadah dan ruwatan di lereng gunung. Kamu harus memutuskan gaya dan lokasinya.",
     pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
+      { id: "a", teks: "Tiru candi megah di dataran rendah agar terlihat setara dengan keraton.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Bangunan akan terlihat prestisius, tetapi biayanya besar dan sulit ditanggung komunitas gunung yang sumber dayanya terbatas." },
+      { id: "b", teks: "Bangun teras berundak sederhana mengikuti kontur lereng dengan relief yang akrab bagi komunitas.", konsekuensi: "Pilihan ini paling mendekati kenyataan Sukuh dan Cetho. Biayanya lebih terjangkau dan selaras dengan tradisi pemujaan di tempat tinggi, tetapi bentuknya berbeda dari norma istana.", historis: true },
+      { id: "c", teks: "Tinggalkan pegunungan dan pindah menjadi bagian komunitas di kota pesisir.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kamu mendapat akses dagang, tetapi kehilangan tempat pemujaan yang diwariskan leluhur dan ikatan dengan gunung." }
     ],
-    hasilHistoris: "Pos dagang Inggris tidak selalu bertahan lama dan tidak berarti penguasaan wilayah. Persaingan dagang melibatkan negosiasi, perubahan sekutu, dan konflik. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
+    hasilHistoris: "Sukuh dan Cetho dibangun sebagai teras berundak di lereng Lawu pada abad ke-15 dengan gaya yang berbeda dari candi klasik. Siapa pembangunnya dan ritual apa yang dijalankan di sana tidak tercatat, sehingga pilihan ini hanya simulasi."
   },
   "evt-115": {
-    peran: "Panglima dan penasihat setempat",
-    situasi: "Pada 1613, VOC mengambil alih benteng Portugis di Solor. Kepulauan Nusa Tenggara memiliki posisi strategis dalam jalur pelayaran dan perdagangan yang menghubungkan Maluku, Jawa, dan wilayah lebih jauh ke barat. Pergantian benteng tidak menghapus peran masyarakat lokal atau menghentikan pelayaran regional. Kontrol atas titik tertentu tetap berbeda dari penguasaan seluruh kawasan. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
+    peran: "Jayadewata (Sri Baduga Maharaja), raja Sunda-Galuh",
+    situasi: "Kamu mewarisi dua pusat kekuasaan Sunda, Galuh dan Sunda, yang selama ini sering berjalan sendiri. Pesisir Jawa mulai dikuasai pelabuhan Islam, dan pedagang asing makin ramai. Kamu harus menentukan di mana pusat kerajaan akan berada dan bagaimana menjaganya.",
     pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
+      { id: "a", teks: "Tetap pisahkan Galuh dan Sunda dengan dua raja yang masing-masing mandiri.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Masing-masing pusat tetap memiliki otonomi, tetapi kekuatan terbagi dan sulit menghadapi tekanan dari pesisir." },
+      { id: "b", teks: "Satukan keduanya di bawah satu raja yang berpusat di Pakuan, perkuat pertahanan, dan jaga pelabuhan.", konsekuensi: "Pilihan ini paling mendekati gambaran tradisi dan Prasasti Batutulis. Kekuasaan lebih terpusat dan pertahanan lebih kuat, tetapi biaya pembangunan besar dan wilayah pesisir tetap sulit dikendalikan.", historis: true },
+      { id: "c", teks: "Tutup pelabuhan dari pedagang asing agar kerajaan tertutup dari pengaruh luar.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kemungkinan besar, pengaruh luar berkurang, tetapi kerajaan kehilangan pemasukan lada dan barang dagangan dari pelabuhan, serta mempercepat kelemahannya." }
     ],
-    hasilHistoris: "Pergantian benteng tidak menghapus peran masyarakat lokal atau menghentikan pelayaran regional. Kontrol atas titik tertentu tetap berbeda dari penguasaan seluruh kawasan. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
+    hasilHistoris: "Tradisi dan Prasasti Batutulis mengenang Sri Baduga sebagai raja yang memerintah dari Pakuan dan membangun pertahanan serta tempat suci. Rincian penyatuan Galuh dan Sunda berasal dari naskah belakangan sehingga pilihan ini hanya simulasi."
   },
   "evt-116": {
-    peran: "Saudagar dan penasihat pelabuhan",
-    situasi: "Pada dasawarsa awal 1600-an, VOC berupaya mengarahkan perdagangan rempah melalui perjanjian, pos, dan kekuatan bersenjata. Namun, penguasa lokal, pedagang Asia, dan pelaut Nusantara tetap menjadi bagian penting jaringan regional. Proses monopoli berlangsung tidak merata dan menghadapi perlawanan. Menjelang 1617, belum ada satu kekuatan yang mengendalikan seluruh kepulauan. Kamu harus menimbang peluang dan biaya dari pilihan yang tersedia. Tidak ada strategi yang bebas risiko; pertimbangkan dampak jangka pendek, hubungan jangka panjang, dan kemampuan penguasa lokal.",
+    peran: "Tomé Pires, juru tulis dan apoteker di kantor dagang Portugis di Melaka",
+    situasi: "Kamu bertugas mencatat obat-obatan dan barang dagangan di Melaka yang baru direbut. Banyak pedagang dari berbagai bangsa berlalu-lalang dan bersedia bercerita. Kamu harus memutuskan seberapa jauh kamu mencatat segala sesuatu yang kamu dengar.",
     pilihan: [
-      { id: "a", teks: "Memperkuat perundingan dan kerja sama dengan mitra regional.", konsekuensi: "Kerja sama dapat menjaga akses informasi dan membuka perdagangan, tetapi membutuhkan kompromi serta kepercayaan. Mitra dapat mengubah sikap ketika kepentingannya berubah. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." },
-      { id: "b", teks: "Memusatkan sumber daya untuk mengamankan pelabuhan dan jalur strategis.", konsekuensi: "Pengamanan dapat melindungi jalur dan meningkatkan daya tawar, tetapi mahal dan berisiko memicu konflik. Fokus berlebihan pada satu titik dapat mengabaikan kebutuhan wilayah lain. Ini mewakili arah perkembangan yang tercatat, tanpa menyiratkan bahwa pilihan tersebut tanpa biaya.", historis: true },
-      { id: "c", teks: "Mengikuti pendekatan yang paling dekat dengan perkembangan yang tercatat dalam peristiwa ini.", konsekuensi: "Pendekatan ini sesuai dengan arah sejarah yang dikenal, tetapi bukan solusi sempurna. Hasilnya tetap dipengaruhi sumber daya, aliansi, persaingan, dan keputusan pihak lain. Skenario ini merupakan alternatif yang masuk akal, bukan catatan keputusan yang benar-benar tercatat." }
+      { id: "a", teks: "Hanya catat daftar barang dan harga yang diperlukan kantor dagang.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kemungkinan besar, laporan menjadi singkat dan mudah dipakai, tetapi dunia sosial dan politik di sekitar pelabuhan hilang dari catatan." },
+      { id: "b", teks: "Susun uraian luas tentang pelabuhan, kerajaan, adat, dan jalur dagang berdasarkan wawancara dan pengamatan.", konsekuensi: "Pilihan ini paling mendekati yang dilakukan Pires. Hasilnya sangat berharga bagi penguasa Portugis dan sejarawan kemudian, meski bergantung pada informasi yang tidak selalu akurat.", historis: true },
+      { id: "c", teks: "Rahasiakan temuanmu dan jual informasi kepada pihak lain.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kamu mungkin mendapat keuntungan pribadi, tetapi berisiko dituduh berkhianat, dan ilmu itu tidak akan sampai kepada generasi berikutnya." }
     ],
-    hasilHistoris: "Proses monopoli berlangsung tidak merata dan menghadapi perlawanan. Menjelang 1617, belum ada satu kekuatan yang mengendalikan seluruh kepulauan. Rincian dan kronologi tertentu dapat berbeda menurut sumber. Peristiwa ini menunjukkan trade-off nyata, bukan pilihan yang sepenuhnya baik atau buruk."
+    hasilHistoris: "Pires menyusun Suma Oriental sekitar 1512–1515 dan menyerahkannya untuk kepentingan Portugal. Naskah itu menjadi sumber penting yang ditemukan kembali pada 1944."
+  },
+  "evt-117": {
+    peran: "Sultan Tidore, sekutu Spanyol di Maluku",
+    situasi: "Kabar tiba bahwa raja Spanyol telah menyerahkan klaimnya atas Maluku kepada Portugal. Sisa pasukan Spanyol di Tidore menyusut, sementara Portugal menguasai benteng di Ternate. Kamu harus memutuskan bagaimana menyikapi kenyataan baru tanpa kehilangan kedudukan.",
+    pilihan: [
+      { id: "a", teks: "Tetap setia pada Spanyol dan lanjutkan perang melawan Portugal.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kemungkinan besar, kamu menjaga kesetiaan, tetapi tanpa dukungan nyata dari Spanyol, Tidore menghadapi tekanan Portugal dan Ternate sendirian." },
+      { id: "b", teks: "Terima kenyataan bahwa Spanyol mundur, lalu atur hubungan dengan Portugal tanpa melepaskan kepentingan sendiri.", konsekuensi: "Pilihan ini paling dekat dengan kenyataan pasca-1529: pihak Maluku menyesuaikan diri dengan perubahan kekuatan. Tidore memperoleh ruang bernapas, tetapi harus berhati-hati agar tidak dijadikan bawahan Portugal.", historis: true },
+      { id: "c", teks: "Bersekutu dengan Ternate untuk mengusir semua orang Eropa.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Persatuan kedua kesultanan sulit terwujud karena persaingan lama, dan Eropa masih terlalu kuat dengan meriam serta kapalnya." }
+    ],
+    hasilHistoris: "Setelah 1529 Spanyol mundur dari Maluku, dan Portugal memperkuat posisinya, meski persaingan Ternate dan Tidore berlanjut. Cara tiap sultan menyikapinya tidak tercatat dalam satu keputusan tunggal, sehingga pilihan ini bersifat simulasi."
+  },
+  "evt-118": {
+    peran: "Jaka Tingkir (Hadiwijaya), penguasa Pajang",
+    situasi: "Sunan Prawata telah dibunuh, dan Arya Penangsang dari Jipang mengancam kerabat dinasti Demak lainnya. Kamu menantu Sultan Trenggana dan memiliki pasukan di Pajang. Kamu harus memutuskan cara menghadapi Penangsang dan siapa yang kamu andalkan.",
+    pilihan: [
+      { id: "a", teks: "Turun sendiri memimpin seluruh pasukan tanpa bantuan sekutu.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kamu mempertahankan kendali penuh, tetapi risikonya besar bila pasukanmu kalah dan tidak ada sekutu yang dapat menopang." },
+      { id: "b", teks: "Ajak para perwira kepercayaan dengan janji hadiah tanah, lalu gabungkan kekuatan untuk mengalahkan Penangsang.", konsekuensi: "Pilihan ini paling mendekati tradisi babad. Kamu berhasil menyingkirkan ancaman dan memperoleh pamor, tetapi hadiah tanah menumbuhkan sekutu yang kelak menjadi pesaing, yaitu Mataram.", historis: true },
+      { id: "c", teks: "Berunding dengan Penangsang dan tawarkan pembagian kekuasaan.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kekerasan mungkin dihindari, tetapi Penangsang yang telah membunuh Prawata sulit dipercaya, dan keluarga korban akan menuntut balas." }
+    ],
+    hasilHistoris: "Menurut tradisi, Penangsang kalah dan tewas, lalu Hadiwijaya memindahkan pusaka Demak ke Pajang. Para sekutunya diganjar tanah, termasuk Mentaok yang menjadi cikal bakal Mataram. Rincian peran tiap tokoh berasal dari babad."
+  },
+  "evt-119": {
+    peran: "Sultan Baabullah dari Ternate",
+    situasi: "Sebuah kapal asing berbendera Inggris berlabuh di Ternate. Kamu baru mengusir Portugis dari pulaumu dan masih berselisih dengan Tidore. Kapten kapal itu meminta izin berdagang rempah. Kamu harus memutuskan sikap terhadap tamu dari bangsa Eropa yang baru.",
+    pilihan: [
+      { id: "a", teks: "Tolak dan usir kapal itu karena bangsa Eropa dianggap ancaman.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kamu menjauhkan risiko, tetapi kehilangan peluang diplomatik dan informasi tentang kekuatan Eropa lain." },
+      { id: "b", teks: "Terima dengan upacara, izinkan jual beli secukupnya, dan bina hubungan baik.", konsekuensi: "Pilihan ini paling mendekati catatan kunjungan Drake. Ternate memperoleh pembeli baru dan gambaran kekuatan Eropa, namun sultan harus menjaga agar hubungan tidak berubah menjadi ketergantungan.", historis: true },
+      { id: "c", teks: "Tahan kapal itu sebagai sandera untuk memaksa Eropa berunding.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Tekanan itu bisa memberi posisi tawar, tetapi mengundang pembalasan dan merusak reputasi Ternate sebagai pelabuhan yang aman." }
+    ],
+    hasilHistoris: "Menurut laporan awak kapal, Baabullah menerima Drake dengan hangat, memberinya hadiah, dan mengizinkannya membeli cengkih. Hubungan itu tidak berlanjut menjadi perjanjian resmi."
+  },
+  "evt-120": {
+    peran: "Murhum, raja Wolio di Buton",
+    situasi: "Pedagang Muslim dari Johor dan Maluku semakin ramai singgah di pelabuhanmu, dan penguasa Ternate serta Gowa juga memperhatikan Buton. Sebagian bangsawan adat ingin tetap memegang tatanan lama, sementara yang lain menilai Islam bisa memperkuat posisimu. Kamu harus memutuskan arah kerajaan.",
+    pilihan: [
+      { id: "a", teks: "Pertahankan adat lama dan tolak ajaran baru dari para pedagang.", konsekuensi: "Kemungkinan besar Buton tetap utuh secara adat, tetapi mungkin tertinggal dalam jaringan dagang Islam yang sedang berkembang. Bangsawan yang menginginkan perubahan bisa kecewa dan mencari dukungan dari luar." },
+      { id: "b", teks: "Peluk Islam, angkat diri sebagai sultan, dan tetap hormati adat lama dalam pemerintahan.", konsekuensi: "Pilihan ini paling mendekati tradisi Buton. Kedudukanmu dalam jaringan pelayaran menguat, tetapi kamu harus menjaga keseimbangan antara pejabat adat dan ulama yang baru.", historis: true },
+      { id: "c", teks: "Serahkan Buton ke Ternate agar mendapat perlindungan dari kesultanan yang lebih besar.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Buton mendapat keamanan, tetapi kehilangan kemandirian dan mungkin harus membayar upeti yang besar." }
+    ],
+    hasilHistoris: "Menurut tradisi, Murhum memeluk Islam sekitar 1540 dan Buton menjadi kesultanan, dengan adat lama tetap dipertahankan. Tahun dan jalur masuknya Islam diperdebatkan."
+  },
+  "evt-121": {
+    peran: "Kepala kampung di pesisir Raja Ampat",
+    situasi: "Kapal dari Tidore dan Ternate datang bergantian, masing-masing meminta penghormatan dan hasil laut. Kamu harus memutuskan kepada siapa kamu menyerahkan hasil kampungmu.",
+    pilihan: [
+      { id: "a", teks: "Terima semua kapal dan bagi hasil laut kepada mereka secara seimbang.", konsekuensi: "Kemungkinan besar kampungmu terhindar dari konflik terbuka, tetapi kamu harus menanggung beban penghormatan ganda dan kepercayaan kedua pihak bisa tipis." },
+      { id: "b", teks: "Menyerahkan penghormatan kepada Tidore, sesuai tradisi pengakuan yang paling sering dicatat.", konsekuensi: "Pilihan ini paling mendekati gambaran tradisi Tidore. Kampungmu mendapat perlindungan dagang dari arah Tidore, tetapi kamu terikat pada kepentingan kesultanan itu.", historis: true },
+      { id: "c", teks: "Menolak semua kapal dan tinggal di pedalaman agar tidak terseret persaingan.", konsekuensi: "Ini skenario alternatif, bukan catatan sejarah. Kemungkinan besar, Kampungmu terhindar dari tekanan, tetapi kehilangan akses pasar dan barang yang dibutuhkan." }
+    ],
+    hasilHistoris: "Tradisi Tidore mencatat klaim atas Raja Ampat sejak abad ke-15 hingga ke-16, tetapi bentuk penghormatan dan kekuasaan nyatanya tidak sepenuhnya terdokumentasi."
   }
 };

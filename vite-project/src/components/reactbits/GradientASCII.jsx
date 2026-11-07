@@ -45,6 +45,7 @@ uniform int uShape;
 uniform vec3 uRamp[8];
 uniform int uCount;
 uniform float uScale;
+uniform float uSunSize;
 uniform float uSoftness;
 uniform float uFlow;
 uniform vec2 uSeed;
@@ -123,7 +124,7 @@ vec3 pinch(vec2 p, float time, out float order) {
 vec3 rise(vec2 p, float time, out float order) {
   float wide = max(uAspect, 0.9);
   vec2 center = vec2(0.05 * sin(time * 0.45) * wide, -0.7);
-  vec2 radius = vec2(0.82 * wide, 0.64 * (1.0 + 0.04 * sin(time * 0.8)));
+  vec2 radius = vec2(0.82 * wide, 0.64 * (1.0 + 0.04 * sin(time * 0.8))) * uSunSize;
   float d = length((p - center) / radius);
   float soft = mix(0.6, 1.15, uSoftness);
   float t = clamp(pow(clamp(1.0 - d, 0.0, 1.0), soft) * 1.35, 0.0, 1.0);
@@ -434,6 +435,7 @@ const GradientASCII = ({
   flicker = 0.2,
   softness = 0.5,
   scale = 1,
+  sunSize = 1,
   flow = 0.5,
   speed = 1,
   gradientOpacity = 0.9,
@@ -465,6 +467,7 @@ const GradientASCII = ({
     flicker: clamp(flicker, 0, 1),
     softness: clamp(softness, 0, 1),
     scale: clamp(scale, 0.4, 2.5),
+    sunSize: clamp(sunSize, 0.2, 2),
     flow: clamp(flow, 0, 2),
     speed: Math.max(0, speed),
     gradientOpacity: clamp(gradientOpacity, 0, 1),
@@ -631,6 +634,7 @@ const GradientASCII = ({
       gl.uniform3fv(fu.uRamp, ramp);
       gl.uniform1i(fu.uCount, s.colors.length);
       gl.uniform1f(fu.uScale, s.scale);
+      gl.uniform1f(fu.uSunSize, s.sunSize);
       gl.uniform1f(fu.uSoftness, s.softness);
       gl.uniform1f(fu.uFlow, s.flow);
       gl.uniform2f(fu.uSeed, s.variation * 3.17, s.variation * 1.91);

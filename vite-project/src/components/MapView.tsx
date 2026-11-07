@@ -2,17 +2,40 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { KATEGORI } from "../data/era";
-import { EVENTS } from "../data/events";
+import type { Kerajaan } from "../data/kerajaan";
 import type { SejarahEvent } from "../types";
 import { isUtama } from "../lib/jenis";
+import { kekuatanPadaTahun, opasitasWilayah } from "../lib/kekuasaan";
+import { MODA_LABEL, MODA_SVG } from "../lib/moda";
+import { perjalananDekat } from "../lib/perjalanan";
 import "../styles/jenis-event.css";
+import "../styles/perjalanan.css";
+import "../styles/wilayah.css";
+
+const DURASI_PERJALANAN_MS = 9000;
+const BAGIAN_JALAN = 0.85;
+/** Label wilayah hanya tampil kalau kekuatan kerajaan di tahun itu cukup berarti. */
+const AMBANG_LABEL_WILAYAH = 0.12;
 
 interface Props {
   active: SejarahEvent[];
+  events: SejarahEvent[];
   year: number;
   done: Record<string, true>;
   selectedId: string | null;
   onSelect: (id: string) => void;
+  wilayah: Kerajaan[];
+  tampilkanWilayah: boolean;
+  onKingdomSelect: (id: string) => void;
+  /** mode gelap: warna putih pada lapisan peta dibalik menjadi gelap */
+  darkMap?: boolean;
+}
+
+function centroid(ring: [number, number][]): [number, number] {
+  if (ring.length === 0) return [0, 0];
+  let lat = 0, lng = 0;
+  for (const [a, b] of ring) { lat += a; lng += b; }
+  return [lat / ring.length, lng / ring.length];
 }
 
 /**
@@ -44,13 +67,18 @@ function makeEventIcon(categoryId: string, color: string, kind: "utama" | "sampi
   });
 }
 
-export function MapView({ active, year, done, selectedId, onSelect }: Props) {
+export function MapView({ active, events, year, done, selectedId, onSelect, wilayah, tampilkanWilayah, onKingdomSelect, darkMap }: Props) {
   const elRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const layerRef = useRef<L.LayerGroup | null>(null);
   const markersRef = useRef<Map<string, L.Marker>>(new Map());
+  const wilayahLayerRef = useRef<L.LayerGroup | null>(null);
+  const wilayahPolyRef = useRef<Map<string, L.Polygon>>(new Map());
+  const wilayahLabelRef = useRef<Map<string, L.Marker>>(new Map());
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
+  const onKingdomRef = useRef(onKingdomSelect);
+  onKingdomRef.current = onKingdomSelect;
 
   useEffect(() => {
     const el = elRef.current;
@@ -97,7 +125,7 @@ export function MapView({ active, year, done, selectedId, onSelect }: Props) {
     const layer = L.layerGroup().addTo(map);
     const markers = new Map<string, L.Marker>();
 
-    for (const ev of EVENTS) {
+    for (const ev of events) {
       // Fallback for an event whose category is not defined in KATEGORI.
       const category = KATEGORI[ev.kategori] ?? KATEGORI.politik;
       const icon = makeEventIcon(String(ev.kategori), category.warna, isUtama(ev) ? "utama" : "sampingan");
@@ -135,7 +163,7 @@ export function MapView({ active, year, done, selectedId, onSelect }: Props) {
       layerRef.current = null;
       markersRef.current.clear();
     };
-  }, []);
+  }, [events]);
 
   useEffect(() => {
     const layer = layerRef.current;
@@ -143,7 +171,7 @@ export function MapView({ active, year, done, selectedId, onSelect }: Props) {
 
     const activeIds = new Set(active.map((event) => event.id));
 
-    for (const event of EVENTS) {
+    for (const event of events) {
       const marker = markersRef.current.get(event.id);
       if (!marker) continue;
 
@@ -166,11 +194,89 @@ export function MapView({ active, year, done, selectedId, onSelect }: Props) {
         layer.removeLayer(marker);
       }
     }
-  }, [active, year, done, selectedId]);
+  }, [active, events, year, done, selectedId]);
 
   useEffect(() => {
     const map = mapRef.current;
-    const event = EVENTS.find((item) => item.id === selectedId);
+    if (!map) return;
+
+    const layer = L.layerGroup();
+    const polys = new Map<string, L.Polygon>();
+    const labels = new Map<string, L.Marker>();
+    for (const k of wilayah) {
+      const kolonial = k.jenis === "kolonial";
+      const poly = L.polygon(k.wilayah, {
+        color: k.warna,
+        weight: kolonial ? 2 : 1,
+        dashArray: kolonial ? "4 3" : undefined,
+        opacity: 0,
+        fillColor: k.warna,
+        fillOpacity: 0,
+        interactive: true
+      });
+      polys.set(k.id, poly);
+      layer.addLayer(poly);
+
+      poly.on("click", () => onKingdomRef.current(k.id));
+      if (!kolonial && !k.tanpaLabel) {
+        const [lat, lng] = k.labelPoint ?? centroid(k.wilayah[0] ?? []);
+        const label = L.marker([lat, lng], {
+          icon: L.divIcon({
+            className: "wilayah-label-shell",
+            html: `<span class="wilayah-label" style="--label-color:${k.warna}">${k.nama}</span>`,
+            iconSize: L.point(0, 0),
+            iconAnchor: L.point(0, 0)
+          }),
+          interactive: true,
+          keyboard: false
+        });
+        label.on("click", () => onKingdomRef.current(k.id));
+        labels.set(k.id, label);
+      }
+    }
+
+    wilayahLayerRef.current = layer;
+    wilayahPolyRef.current = polys;
+    wilayahLabelRef.current = labels;
+
+    return () => {
+      layer.remove();
+      wilayahLayerRef.current = null;
+      wilayahPolyRef.current = new Map();
+      wilayahLabelRef.current = new Map();
+    };
+  }, [wilayah]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const layer = wilayahLayerRef.current;
+    if (!map || !layer) return;
+
+    if (!tampilkanWilayah) {
+      if (map.hasLayer(layer)) layer.remove();
+      return;
+    }
+    if (!map.hasLayer(layer)) layer.addTo(map);
+
+    for (const k of wilayah) {
+      const poly = wilayahPolyRef.current.get(k.id);
+      if (!poly) continue;
+      const kekuatan = kekuatanPadaTahun(k, year);
+      const fillOpacity = opasitasWilayah(kekuatan);
+      poly.setStyle({ fillOpacity, opacity: fillOpacity > 0 ? Math.min(0.55, fillOpacity + 0.2) : 0 });
+
+      const label = wilayahLabelRef.current.get(k.id);
+      if (label) {
+        const tampakkanLabel = kekuatan >= AMBANG_LABEL_WILAYAH;
+        if (tampakkanLabel && !layer.hasLayer(label)) layer.addLayer(label);
+        if (!tampakkanLabel && layer.hasLayer(label)) layer.removeLayer(label);
+      }
+    }
+  }, [year, tampilkanWilayah, wilayah]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const event = events.find((item) => item.id === selectedId);
     if (!map || !event) return;
 
     const zoom = Math.max(
@@ -190,12 +296,90 @@ export function MapView({ active, year, done, selectedId, onSelect }: Props) {
       duration: 0.65,
       easeLinearity: 0.25
     });
-  }, [selectedId]);
+  }, [selectedId, events]);
+
+  const aktifKey = active.map((event) => event.id).join(",");
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const pusat = events.find((event) => event.id === selectedId);
+    if (!map || !pusat || !active.some((event) => event.id === pusat.id)) return;
+
+    const layer = L.layerGroup().addTo(map);
+    const warna = (KATEGORI[pusat.kategori] ?? KATEGORI.politik).warna;
+    const perjalanan = perjalananDekat(pusat, active).map((j) => {
+      L.polyline(j.titik, {
+        color: warna,
+        weight: 2,
+        dashArray: "4 6",
+        opacity: 0.6,
+        interactive: false
+      }).addTo(layer);
+
+      const marker = L.marker(j.awal, {
+        icon: L.divIcon({
+          className: "travel-marker",
+          html: `<span class="travel-vessel" role="img" aria-label="${MODA_LABEL[j.moda]}" style="--travel-color:${warna}">${MODA_SVG[j.moda]}</span>`,
+          iconSize: L.point(30, 30),
+          iconAnchor: L.point(15, 15)
+        }),
+        interactive: false,
+        keyboard: false
+      }).addTo(layer);
+
+      return { marker, titik: j.titik };
+    });
+
+    if (perjalanan.length === 0) return () => layer.remove();
+
+    const diam = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (diam) {
+      for (const { marker, titik } of perjalanan) {
+        const tengah = titik[Math.floor(titik.length / 2)];
+        if (tengah) marker.setLatLng(tengah);
+      }
+      return () => layer.remove();
+    }
+
+    const mulai = performance.now();
+    let frameId = 0;
+
+    const frame = (now: number) => {
+      perjalanan.forEach(({ marker, titik }, i) => {
+        const fase = ((now - mulai) / DURASI_PERJALANAN_MS + i / perjalanan.length) % 1;
+        if (fase > BAGIAN_JALAN) {
+          marker.setOpacity(0);
+        } else {
+          marker.setOpacity(1);
+          const posisi = (fase / BAGIAN_JALAN) * (titik.length - 1);
+          const segmen = Math.min(Math.floor(posisi), titik.length - 2);
+          const u = posisi - segmen;
+          const a = titik[segmen];
+          const b = titik[segmen + 1];
+          if (!a || !b) return;
+          const [lat0, lng0] = a;
+          const [lat1, lng1] = b;
+          marker.setLatLng([lat0 + (lat1 - lat0) * u, lng0 + (lng1 - lng0) * u]);
+          const arah = lng1 < lng0 ? -1 : 1;
+          const vessel = marker.getElement()?.querySelector<HTMLElement>(".travel-vessel");
+          if (vessel) vessel.style.transform = `scaleX(${arah})`;
+        }
+      });
+      frameId = requestAnimationFrame(frame);
+    };
+    frameId = requestAnimationFrame(frame);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      layer.remove();
+    };
+  }, [selectedId, events, aktifKey]);
 
   return (
     <div
       id="map"
       ref={elRef}
+      className={darkMap ? "map-dark" : undefined}
       role="application"
       aria-label="Peta interaktif Nusantara"
     />

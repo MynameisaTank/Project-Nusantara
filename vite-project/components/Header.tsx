@@ -1,4 +1,4 @@
-import { ERA } from "../data/era";
+import type { Era } from "../types";
 import type { Level } from "../types";
 
 const LEVELS: { value: Level; label: string }[] = [
@@ -8,19 +8,20 @@ const LEVELS: { value: Level; label: string }[] = [
 ];
 
 interface Props {
+  era: Era;
   level: Level;
   onLevel: (l: Level) => void;
   onMenu: () => void;
 }
 
-export function Header({ level, onLevel, onMenu }: Props) {
+export function Header({ era, level, onLevel, onMenu }: Props) {
   return (
     <header className="topbar">
       <div className="brand">
         <h1>Nusantara Bersamaan</h1>
         <p className="subtitle">Ketika peristiwa-peristiwa sejarah bertemu dalam satu masa.</p>
         <p className="era">
-          {ERA.nama} · {ERA.mulai}–{ERA.akhir} M
+          {era.nama} · {era.mulai}–{era.akhir} M
         </p>
       </div>
       <div className="header-actions"><button className="menu-return" type="button" onClick={onMenu}>← Menu</button><div className="levels" role="group" aria-label="Tingkat bahasa">

@@ -1,0 +1,56 @@
+.era-select-screen--tunnel .era-select-content {
+  z-index: auto;
+}
+
+.era-select-screen--tunnel > .era-ascii-bg {
+  opacity: 0.55;
+}
+
+.era-select-screen--tunnel .era-select-nav {
+  z-index: 20;
+}
+
+.era-carousel {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  width: 100vw;
+  height: 100vh;
+}
+
+.era-carousel__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #5fa8a380;
+  border-radius: 50%;
+  background: #111211cc;
+  color: #dff2f0;
+  font-size: 20px;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.era-carousel__arrow--left {
+  left: 0;
+}
+
+.era-carousel__arrow--right {
+  right: 0;
+}
+
+.era-carousel__arrow:hover {
+  background: #7fc4bf;
+  border-color: #7fc4bf;
+  color: #0f1816;
+}
+
+.era-carousel__arrow:focus-visible {
+  outline: 2px solid #7fc4bf;
+  outline-offset: 3px;
+}

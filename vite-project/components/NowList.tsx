@@ -1,14 +1,17 @@
 import { useMemo, useState } from "react";
 import type { SejarahEvent } from "../types";
+import type { Era } from "../types";
+import { isUtama } from "../lib/jenis";
 
 interface Props {
+  era: Era;
   active: SejarahEvent[];
   done: Record<string, true>;
   selectedId: string | null;
   onPick: (id: string) => void;
 }
 
-export function NowList({ active, done, selectedId, onPick }: Props) {
+export function NowList({ era, active, done, selectedId, onPick }: Props) {
   const [open, setOpen] = useState(() => window.innerWidth > 860);
   const [query, setQuery] = useState("");
 
@@ -53,7 +56,7 @@ export function NowList({ active, done, selectedId, onPick }: Props) {
 
           <div className="event-list-meta">
             <span>{filtered.length} ditampilkan</span>
-            <span>1200–1400 M</span>
+            <span>{era.mulai}–{era.akhir} M</span>
           </div>
 
           <ul className="event-list">
@@ -68,11 +71,11 @@ export function NowList({ active, done, selectedId, onPick }: Props) {
               <li key={event.id}>
                 <button
                   type="button"
-                  className={`event-row${selectedId === event.id ? " is-selected" : ""}${done[event.id] ? " is-complete" : ""}`}
+                  className={`event-row${selectedId === event.id ? " is-selected" : ""}${done[event.id] ? " is-complete" : ""}${isUtama(event) ? " is-utama" : " is-sampingan"}`}
                   onClick={() => onPick(event.id)}
                   aria-current={selectedId === event.id ? "true" : undefined}
                 >
-                  <span className={`event-category event-category--${event.kategori}`} aria-hidden="true" />
+                  <span className={`event-category event-category--${event.kategori}`} aria-hidden="true" title={event.kategori} />
                   <span className="event-row-copy">
                     <span className="event-title">{event.judul}</span>
                     <span className="event-meta">{event.tahun} · {event.lokasi.nama}</span>

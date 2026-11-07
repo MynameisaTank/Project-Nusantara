@@ -1,0 +1,25 @@
+/* Overlay transisi clip ke mode kuis: layar penuh cyan-teal dengan teks MODE QUIZ */
+.qzc {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #5fd4cf;
+  color: #04201e;
+  pointer-events: none;
+  will-change: clip-path, opacity;
+}
+
+/* teks SVG: lebar penuh di tengah layar, foto mengisi setiap huruf lewat <pattern> */
+.qzc-svg {
+  display: block;
+  width: min(92vw, 1100px);
+  height: auto;
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 900;
+  font-size: 190px;
+  letter-spacing: -0.02em;
+  will-change: transform;
+}

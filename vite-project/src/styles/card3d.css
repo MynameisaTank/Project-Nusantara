@@ -1,0 +1,30 @@
+/* Kartu 3D: setara dengan utilitas Tailwind pada sumbernya, ditulis sebagai CSS biasa. */
+.c3d-perspective {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+.c3d-tilt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  transition: transform 0.2s linear;
+}
+
+.c3d-body,
+.c3d-body > * {
+  transform-style: preserve-3d;
+}
+
+.c3d-item {
+  width: fit-content;
+  transition: transform 0.2s linear;
+}
+
+.c3d-item--full {
+  width: 100%;
+}

@@ -13,6 +13,8 @@ export interface GradientASCIIProps {
   flicker?: number;
   softness?: number;
   scale?: number;
+  /** ukuran matahari pada shape "rise" (1 = bawaan) */
+  sunSize?: number;
   flow?: number;
   speed?: number;
   grain?: number;

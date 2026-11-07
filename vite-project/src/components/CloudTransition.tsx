@@ -24,7 +24,7 @@ function rng(seed: number) {
 function makePuffs() {
   const next = rng(2024);
   const out: { style: CSSProperties; back: boolean }[] = [];
-  const layers = [
+  const layers: { cols: number; rows: number; size: [number, number]; back: boolean }[] = [
     { cols: 5, rows: 4, size: [46, 62], back: true },
     { cols: 7, rows: 5, size: [34, 50], back: false }
   ];

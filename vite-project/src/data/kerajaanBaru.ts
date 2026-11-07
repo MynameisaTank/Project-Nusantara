@@ -1,0 +1,166 @@
+import type { Kerajaan } from "./kerajaan";
+import { WILAYAH_PROVINSI } from "./wilayahProvinsi";
+
+/*
+ * Kerajaan tambahan untuk melengkapi peta. Bentuk wilayah diambil dari provinsi modern
+ * (Natural Earth admin-1) sebagai pendekatan kasar; kekuatan dan rentang tahun mengikuti
+ * catatan sejarah ringkas, dan bisa diperhalus lagi bila sumber yang lebih rinci tersedia.
+ * Kerajaan era 1 dan era 2 dibedakan oleh timeline kekuatan: di luar rentangnya wilayah tidak tampil.
+ */
+export const KERAJAAN_BARU: Kerajaan[] = [
+  // era 1 (1200-1617)
+  {
+    id: "gelgel",
+    nama: "Gelgel (Bali)",
+    warna: "#b5523b",
+    wilayah: WILAYAH_PROVINSI["gelgel"] ?? [],
+    labelPoint: [-8.5, 115.27],
+    kekuatan: [[1200, 0.2], [1450, 0.4], [1550, 0.5], [1617, 0.4]],
+  },
+  {
+    id: "palembang",
+    nama: "Palembang",
+    warna: "#7a9e3c",
+    wilayah: WILAYAH_PROVINSI["palembang"] ?? [],
+    labelPoint: [-2.99, 104.76],
+    kekuatan: [[1300, 0.3], [1500, 0.35], [1617, 0.35]],
+  },
+  {
+    id: "johor",
+    nama: "Johor-Riau",
+    warna: "#3f8f8a",
+    wilayah: WILAYAH_PROVINSI["johor"] ?? [],
+    labelPoint: [1.5, 103.7],
+    kekuatan: [[1512, 0.3], [1560, 0.35], [1617, 0.4]],
+  },
+  {
+    id: "buton",
+    nama: "Buton",
+    warna: "#8e6b3e",
+    wilayah: WILAYAH_PROVINSI["buton"] ?? [],
+    labelPoint: [-5.45, 122.6],
+    kekuatan: [[1300, 0.2], [1617, 0.25]],
+  },
+  {
+    id: "lampung",
+    nama: "Lampung (Skala Brak)",
+    warna: "#6e8f5a",
+    wilayah: WILAYAH_PROVINSI["lampung"] ?? [],
+    labelPoint: [-5.0, 104.5],
+    kekuatan: [[1400, 0.2], [1617, 0.3]],
+  },
+  // era 2 (1600-1800)
+  {
+    id: "klungkung",
+    nama: "Klungkung (Bali)",
+    warna: "#c0643f",
+    wilayah: WILAYAH_PROVINSI["klungkung"] ?? [],
+    labelPoint: [-8.53, 115.4],
+    kekuatan: [[1686, 0.5], [1800, 0.5]],
+  },
+  {
+    id: "siak",
+    nama: "Siak Sri Indrapura",
+    warna: "#5f8fb0",
+    wilayah: WILAYAH_PROVINSI["siak"] ?? [],
+    labelPoint: [0.8, 102.0],
+    kekuatan: [[1723, 0.4], [1800, 0.4]],
+  },
+  {
+    id: "deli",
+    nama: "Deli",
+    warna: "#9a7fb5",
+    wilayah: WILAYAH_PROVINSI["deli"] ?? [],
+    labelPoint: [3.6, 98.7],
+    kekuatan: [[1632, 0.35], [1800, 0.35]],
+  },
+  {
+    id: "pontianak",
+    nama: "Pontianak",
+    warna: "#b07a5f",
+    wilayah: WILAYAH_PROVINSI["pontianak"] ?? [],
+    labelPoint: [-0.03, 109.33],
+    kekuatan: [[1771, 0.4], [1800, 0.4]],
+  },
+  // tambahan dari sumber provinsi yang sama
+  {
+    id: "sumbawa",
+    nama: "Sumbawa",
+    warna: "#d4a24c",
+    wilayah: WILAYAH_PROVINSI["sumbawa"] ?? [],
+    labelPoint: [-8.5, 117.4],
+    kekuatan: [[1400,0.3],[1617,0.35],[1800,0.3]],
+  },
+  {
+    id: "nusa-tenggara-timur",
+    nama: "Kerajaan-kerajaan Nusa Tenggara Timur",
+    warna: "#a0785a",
+    wilayah: WILAYAH_PROVINSI["nusa-tenggara-timur"] ?? [],
+    labelPoint: [-9.2, 123.5],
+    kekuatan: [[1200,0.2],[1617,0.25],[1800,0.25]],
+  },
+  {
+    id: "papua-barat",
+    nama: "Raja Ampat dan Papua Barat",
+    warna: "#4f8a6a",
+    wilayah: WILAYAH_PROVINSI["papua-barat"] ?? [],
+    labelPoint: [-0.9, 131.2],
+    kekuatan: [[1500,0.15],[1617,0.2],[1800,0.2]],
+  },
+  {
+    id: "mandar",
+    nama: "Mandar (Sulawesi Barat)",
+    warna: "#7b6fa8",
+    wilayah: WILAYAH_PROVINSI["mandar"] ?? [],
+    labelPoint: [-2.9, 119.3],
+    kekuatan: [[1300,0.2],[1617,0.3],[1800,0.3]],
+  },
+  {
+    id: "bolaang",
+    nama: "Bolaang Mongondow",
+    warna: "#6f9e9e",
+    wilayah: WILAYAH_PROVINSI["bolaang"] ?? [],
+    labelPoint: [0.8, 124.3],
+    kekuatan: [[1400,0.2],[1617,0.25],[1800,0.25]],
+  },
+  {
+    id: "gorontalo",
+    nama: "Gorontalo (Limboto)",
+    warna: "#b87d8a",
+    wilayah: WILAYAH_PROVINSI["gorontalo"] ?? [],
+    labelPoint: [0.55, 122.45],
+    kekuatan: [[1500,0.25],[1617,0.3],[1800,0.3]],
+  },
+  {
+    id: "kotawaringin",
+    nama: "Kotawaringin",
+    warna: "#8a6f3c",
+    wilayah: WILAYAH_PROVINSI["kotawaringin"] ?? [],
+    labelPoint: [-2, 112.5],
+    kekuatan: [[1300,0.2],[1617,0.3],[1800,0.3]],
+  },
+  {
+    id: "hitu",
+    nama: "Hitu (Ambon)",
+    warna: "#c26a50",
+    wilayah: WILAYAH_PROVINSI["hitu"] ?? [],
+    labelPoint: [-3.5, 128.2],
+    kekuatan: [[1200,0.2],[1617,0.3],[1650,0.15],[1651,0]],
+  },
+  {
+    id: "batak",
+    nama: "Batak (Toba)",
+    warna: "#7a8c5a",
+    wilayah: WILAYAH_PROVINSI["batak"] ?? [],
+    labelPoint: [2.3, 98.9],
+    kekuatan: [[1200,0.15],[1617,0.2],[1800,0.2]],
+  },
+  {
+    id: "bengkulu-lokal",
+    nama: "Bengkulu (Sungai Lemau)",
+    warna: "#9c8a5f",
+    wilayah: WILAYAH_PROVINSI["bengkulu-lokal"] ?? [],
+    labelPoint: [-3.8, 102.26],
+    kekuatan: [[1400,0.15],[1685,0.2],[1800,0.2]],
+  },
+];

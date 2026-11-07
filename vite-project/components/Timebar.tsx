@@ -1,9 +1,10 @@
 import { useMemo } from "react";
-import { ERA } from "../data/era";
-import { EVENTS } from "../data/events";
+import type { Era, SejarahEvent } from "../types";
 import { Icon } from "./Icon";
 
 interface Props {
+  era: Era;
+  events: SejarahEvent[];
   year: number;
   playing: boolean;
   progress: string;
@@ -11,35 +12,28 @@ interface Props {
   onTogglePlay: () => void;
 }
 
-const span = ERA.akhir - ERA.mulai;
-
-export function Timebar({ year, playing, progress, onYear, onTogglePlay }: Props) {
+export function Timebar({ era, events, year, playing, progress, onYear, onTogglePlay }: Props) {
+  const span = era.akhir - era.mulai;
   const marks = useMemo(
-    () => EVENTS.map((event) => ({
+    () => events.map((event) => ({
       id: event.id,
       judul: event.judul,
       tahun: event.tahun,
       mulai: event.mulai,
       akhir: event.akhir
     })),
-    []
+    [events]
   );
 
   return (
     <footer className="timebar" aria-label="Navigasi waktu">
-      <div className="timebar-current">
-        <span className="timebar-label">TAHUN TERPILIH</span>
-        <span className="year" aria-live="polite">{year}</span>
-        <span className="year-suffix">M</span>
-      </div>
-
       <div className="timebar-transport">
         <button
           type="button"
           className="transport-button"
           aria-label="Mundur satu tahun"
-          onClick={() => onYear(Math.max(ERA.mulai, year - 1))}
-          disabled={year <= ERA.mulai}
+          onClick={() => onYear(Math.max(era.mulai, year - 1))}
+          disabled={year <= era.mulai}
         >−</button>
         <button
           type="button"
@@ -53,8 +47,8 @@ export function Timebar({ year, playing, progress, onYear, onTogglePlay }: Props
           type="button"
           className="transport-button"
           aria-label="Maju satu tahun"
-          onClick={() => onYear(Math.min(ERA.akhir, year + 1))}
-          disabled={year >= ERA.akhir}
+          onClick={() => onYear(Math.min(era.akhir, year + 1))}
+          disabled={year >= era.akhir}
         >+</button>
       </div>
 
@@ -64,7 +58,7 @@ export function Timebar({ year, playing, progress, onYear, onTogglePlay }: Props
             <span
               key={mark.id}
               className={"mark" + (year >= mark.mulai && year <= mark.akhir ? " on" : "")}
-              style={{ left: `${((mark.mulai - ERA.mulai) / span) * 100}%` }}
+              style={{ left: `${((mark.mulai - era.mulai) / span) * 100}%` }}
             />
           ))}
         </div>
@@ -72,16 +66,16 @@ export function Timebar({ year, playing, progress, onYear, onTogglePlay }: Props
           id="yearSlider"
           type="range"
           step={1}
-          min={ERA.mulai}
-          max={ERA.akhir}
+          min={era.mulai}
+          max={era.akhir}
           value={year}
           aria-label="Pilih tahun dalam linimasa"
           onChange={(event) => onYear(Number(event.target.value))}
         />
         <div className="range-ends">
-          <span>{ERA.mulai}</span>
+          <span>{era.mulai}</span>
           <span className="progress">{progress}</span>
-          <span>{ERA.akhir}</span>
+          <span>{era.akhir}</span>
         </div>
       </div>
     </footer>

@@ -9,7 +9,8 @@
       "DOM.Iterable"
     ],
     "types": [
-      "vite/client"
+      "vite/client",
+      "node"
     ],
     "jsx": "react-jsx",
     "strict": true,
@@ -24,5 +25,10 @@
   "include": [
     "src",
     "vite.config.ts"
+  ],
+  "exclude": [
+    "src/components/components",
+    "src/components/reactbits/Topography.tsx",
+    "src/components/reactbits/ScrollExpand.tsx"
   ]
 }

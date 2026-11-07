@@ -1,4 +1,3 @@
-import { EVENTS } from "../data/events";
 import type { Level } from "../types";
 
 const STORE_KEY = "nusantaraBersamaan.v2";
@@ -24,12 +23,13 @@ export function loadStore(): Saved {
     if (saved && typeof saved.level === "number" && saved.level >= 1 && saved.level <= 3) {
       result.level = saved.level as Level;
     }
-    for (const ev of EVENTS) {
-      if (saved?.done?.[ev.id]) result.done[ev.id] = true;
-      const c = saved?.choices?.[ev.id];
-      if (typeof c === "string" && ev.keputusan.pilihan.some((p) => p.id === c)) {
-        result.choices[ev.id] = c;
-      }
+    // Data peristiwa tidak dimuat saat aplikasi dibuka, jadi di sini hanya bentuknya yang diperiksa.
+    // Pilihan yang id-nya tidak lagi ada di sebuah peristiwa dibuang saat data era itu dimuat (lihat App.tsx).
+    for (const [id, nilai] of Object.entries(saved?.done ?? {})) {
+      if (nilai) result.done[id] = true;
+    }
+    for (const [id, pilihan] of Object.entries(saved?.choices ?? {})) {
+      if (typeof pilihan === "string") result.choices[id] = pilihan;
     }
   } catch {
     /* penyimpanan bisa kosong atau diblokir; abaikan */

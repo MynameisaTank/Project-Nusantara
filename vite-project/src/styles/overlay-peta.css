@@ -1,0 +1,204 @@
+/*
+ * Overlay di atas peta: pemilih tingkat bahasa (floating dock) dan legenda negara Eropa.
+ *
+ * Peta mengisi seluruh area (kartu indeks peristiwa melayang di kiri atas), jadi posisi dihitung dari tepi peta.
+ * Keduanya dinaikkan 52px supaya berada di atas pegangan laci linimasa (tinggi sekitar 38px) di tengah bawah.
+ */
+
+.level-dock {
+  position: absolute;
+  z-index: 1100;
+  bottom: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.level-dock__label {
+  margin: 0;
+  font: 600 11px/1 var(--sans, sans-serif);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink, #1d2928);
+}
+
+html.ui-dark .level-dock__label {
+  color: #f2f2f2;
+}
+
+.legenda-eropa {
+  position: absolute;
+  z-index: 1100;
+  left: 20px;
+  bottom: 52px;
+  width: 280px;
+  max-width: calc(100% - 40px);
+  border: 1px solid var(--line, #e1e7e3);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--ink, #1d2928);
+  font: 400 12px/1.35 var(--sans, sans-serif);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* tertutup: kapsul kecil yang lebarnya mengikuti isinya */
+.legenda-eropa:not(:has(.legenda-eropa__isi)) {
+  width: auto;
+}
+
+.legenda-eropa__toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+  padding: 10px 14px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: 600 13px var(--sans, sans-serif);
+  text-align: left;
+  cursor: pointer;
+}
+
+/* deretan titik warna di kapsul tertutup: warna tiap negara terlihat tanpa harus membuka legenda */
+.legenda-eropa__titik {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.legenda-eropa__titik i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.legenda-eropa__isi {
+  max-height: min(60vh, 480px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.legenda-eropa__isi ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 12px 4px;
+  display: grid;
+  gap: 8px;
+}
+
+.legenda-eropa__isi li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  opacity: 0.7;
+}
+
+.legenda-eropa__isi li.is-aktif {
+  opacity: 1;
+}
+
+.legenda-eropa__isi li i {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.legenda-eropa__isi li strong {
+  display: block;
+  font-weight: 600;
+}
+
+.legenda-eropa__isi li.is-aktif strong {
+  font-weight: 700;
+}
+
+.legenda-eropa__isi li small {
+  display: block;
+  color: var(--muted, #74817e);
+}
+
+.legenda-eropa__catatan {
+  margin: 0;
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--line, #e1e7e3);
+  color: var(--muted, #74817e);
+  font-size: 11.5px;
+}
+
+html.ui-dark .legenda-eropa {
+  background: rgba(22, 22, 22, 0.95);
+  border-color: #2a2a2a;
+  color: #f2f2f2;
+}
+
+html.ui-dark .legenda-eropa__isi li small,
+html.ui-dark .legenda-eropa__catatan {
+  color: #a8a8a8;
+}
+
+html.ui-dark .legenda-eropa__catatan {
+  border-top-color: #2a2a2a;
+}
+
+/* Laci linimasa yang terbuka menutupi bagian bawah peta; dock dan legenda disembunyikan agar tidak menimpanya. */
+.stage:has(.timeline-drawer-panel) .legenda-eropa,
+.stage:has(.timeline-drawer-panel) .level-dock {
+  display: none;
+}
+
+/* Ponsel dan tablet kecil: titik pindah sama dengan tata letak peta di style.css (860px). */
+@media (max-width: 860px) {
+  .level-dock {
+    left: auto;
+    right: max(12px, env(safe-area-inset-right, 0px));
+    transform: none;
+    align-items: flex-end;
+  }
+
+  .level-dock__label {
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    font-size: 11px;
+  }
+
+  html.ui-dark .level-dock__label {
+    background: rgba(22, 22, 22, 0.92);
+  }
+
+  .legenda-eropa {
+    left: max(12px, env(safe-area-inset-left, 0px));
+    width: min(300px, calc(100% - 24px));
+    max-width: none;
+  }
+
+  .legenda-eropa:not(:has(.legenda-eropa__isi)) {
+    width: auto;
+  }
+
+  .legenda-eropa__toggle[aria-expanded="false"] .legenda-eropa__sub {
+    display: none;
+  }
+
+  .legenda-eropa__isi {
+    max-height: min(46svh, 380px);
+  }
+
+  /* Saat panel peristiwa atau kerajaan terbuka (lembar bawah), lapisan lain disembunyikan agar tidak menumpuk. */
+  .stage--panel .legenda-eropa,
+  .stage--panel .level-dock,
+  .stage--panel .event-explorer,
+  .stage--panel .timeline-drawer {
+    display: none;
+  }
+}

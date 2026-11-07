@@ -107,14 +107,16 @@ export default function FlexCarousel({
           aria-label={`${item.title || item.alt || `Era ${index + 1}`}${offset === 0 ? ', terpilih' : ', pilih era'}`}
           tabIndex={Math.abs(offset) > 2 ? -1 : 0}
         >
-          <img src={item.src} alt={item.alt || ''} draggable={false} loading={index < 3 ? 'eager' : 'lazy'} />
+          <img src={item.src} alt={item.alt || ''} draggable={false} loading={index < 3 ? 'eager' : 'lazy'} onError={e => { e.currentTarget.style.visibility = 'hidden'; }} />
           <span className="flex-carousel__shade" />
-          <span className="flex-carousel__card-label"><small>{item.subtitle}</small><strong>{item.title}</strong></span>
+          {!captions && (
+            <span className="flex-carousel__card-label"><small>{item.subtitle}</small><strong>{item.title}</strong></span>
+          )}
         </button>;
       })}
     </div>
     {captions && <div className="flex-carousel__caption">
-      <div><span className="flex-carousel__eyebrow">MENJELAJAHI ZAMAN</span><h3>{items[active]?.title}</h3><p>{items[active]?.subtitle}</p></div>
+      <div><h3>{items[active]?.title}</h3><p>{items[active]?.subtitle}</p></div>
       <div className="flex-carousel__controls">
         <span className="flex-carousel__count">{String(active + 1).padStart(2, '0')} <i>/</i> {String(items.length).padStart(2, '0')}</span>
         <button type="button" aria-label="Era sebelumnya" onPointerDown={e => e.stopPropagation()} onClick={() => move(-1)}>←</button>

@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap");
-
 :root {
   color-scheme: light;
   --canvas: #f7f8f6;
@@ -18,9 +16,13 @@
   --red: #b45f43;
   --good: #3f795c;
   --bad: #a84d43;
-  --sans: "DM Sans", Inter, ui-sans-serif, system-ui, sans-serif;
-  --serif: "Newsreader", Georgia, serif;
-  --header-height: 70px;
+  --sans: "Karla", ui-sans-serif, system-ui, sans-serif;
+  --serif: "IM Fell English", Georgia, serif;
+  --fs-xs: 11px;
+  --fs-sm: 13px;
+  --fs-md: 15px;
+  --fs-lg: 20px;
+  --fs-xl: 30px;
   --timeline-height: 92px;
   font-family: var(--sans);
   font-synthesis: none;
@@ -37,7 +39,8 @@ body {
   color: var(--ink);
   background: var(--canvas);
   font-family: var(--sans);
-  font-size: 14px;
+  font-size: var(--fs-md);
+  line-height: 1.55;
 }
 button, input { font: inherit; }
 button { color: inherit; }
@@ -50,43 +53,37 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
 
-/* App frame */
-#root { display: grid; grid-template-rows: var(--header-height) minmax(0, 1fr) var(--timeline-height); }
+/* App frame: peta mengisi seluruh tinggi layar; header mengambang di atasnya */
+#root { display: grid; grid-template-rows: minmax(0, 1fr) var(--timeline-height); }
 .topbar {
-  position: relative; z-index: 1300;
-  display: flex; align-items: center; justify-content: space-between; gap: 20px;
-  min-width: 0; padding: 0 28px;
-  background: rgba(255,255,255,.96);
-  border-bottom: 1px solid var(--line);
+  position: fixed; top: 16px; right: 20px; z-index: 1300;
+  display: flex; align-items: center; gap: 12px;
+  min-width: 0; padding: 0; background: none; border: 0;
 }
-.brand { display: flex; align-items: baseline; gap: 15px; min-width: 0; }
-.brand h1 {
-  margin: 0; color: var(--ink);
-  font: 600 23px/1 var(--serif); letter-spacing: -.035em;
+.levels {
+  display: flex; align-items: center; gap: 3px; flex: none;
+  padding: 4px; border-radius: 999px;
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(255,255,255,.6);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  box-shadow: 0 6px 18px rgba(29,41,40,.14), inset 0 1px rgba(255,255,255,.5);
 }
-.subtitle {
-  margin: 0; color: var(--muted);
-  font: 400 13px/1.4 var(--sans); letter-spacing: .005em;
-}
-.era {
-  margin: 0 0 0 auto; color: var(--muted);
-  font: 500 11px/1.3 var(--sans); letter-spacing: .08em; text-transform: uppercase;
-}
-.levels { display: flex; align-items: center; gap: 5px; flex: none; }
 .levels-label {
-  margin-right: 7px; color: var(--muted);
+  margin: 0 6px 0 7px; color: var(--ink-soft);
   font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
 }
 .lvl {
-  padding: 8px 12px; border: 1px solid transparent; border-radius: 6px;
-  background: transparent; color: var(--muted);
+  padding: 7px 12px; border: 1px solid transparent; border-radius: 999px;
+  background: transparent; color: var(--ink-soft);
   font-size: 12px; font-weight: 600; cursor: pointer; transition: .18s ease;
 }
-.lvl:hover { color: var(--ink); background: var(--surface-soft); }
-.lvl.active { color: var(--ink); background: var(--surface-soft); border-color: var(--line); }
+.lvl:hover { color: var(--ink); background: rgba(255,255,255,.55); }
+.lvl.active { color: var(--ink); background: rgba(255,255,255,.92); box-shadow: 0 2px 8px rgba(29,41,40,.14); }
 
 /* Main cartographic canvas */
 .stage { position: relative; min-height: 0; overflow: hidden; background: #e6ece8; }
+.leaflet-control-attribution { display: none !important; }
 #map {
   position: absolute; inset: 0; width: 100%; height: 100%; min-height: 0;
   background: #e7eeeb;
@@ -244,7 +241,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .event-category--perdagangan { background: #b18a4b; }
 .event-category--budaya { background: #71866a; }
 .event-row-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 4px; }
-.event-title { color: var(--ink); font: 500 15px/1.22 var(--serif); }
+.event-title { color: var(--ink); font: 600 14px/1.3 var(--sans); }
 .event-meta { color: var(--muted); font-size: 10px; line-height: 1.35; }
 .event-row.is-selected .event-title { color: #9c4f37; }
 .event-row.is-complete .event-title { color: #71817a; }
@@ -253,7 +250,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 
 /* Story panel — keep existing StoryPanel component and its class contract */
 .panel {
-  position: absolute; z-index: 1100; top: 20px; right: 20px; bottom: 20px;
+  position: absolute; z-index: 1100; top: 76px; right: 20px; bottom: 20px;
   display: flex; flex-direction: column; width: min(390px, calc(100% - 40px));
   overflow: hidden; color: var(--ink); background: rgba(255,255,255,.98);
   border: 1px solid #dce4df; border-radius: 10px;
@@ -264,7 +261,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   display: inline-flex; align-items: center; gap: 6px; padding: 0;
   color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
 }
-.panel h2 { margin: 8px 32px 7px 0; color: var(--ink); font: 500 27px/1.08 var(--serif); letter-spacing: -.025em; }
+.panel h2 { margin: 8px 32px 7px 0; color: var(--ink); font: 400 var(--fs-xl)/1.1 var(--serif); letter-spacing: -.01em; }
 .meta { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
 .close {
   position: absolute; top: 15px; right: 15px; display: grid; place-items: center;
@@ -273,8 +270,14 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 }
 .close:hover { color: var(--ink); background: var(--surface-soft); }
 .panel-body { flex: 1; min-height: 0; overflow: auto; padding: 18px 23px 26px; }
+.panel-image { margin: 0 0 18px; border-radius: 8px; overflow: hidden; background: var(--surface-soft); }
+.panel-image img { display: block; width: 100%; max-height: 220px; object-fit: cover; }
+.panel-image figcaption { padding: 6px 10px; color: var(--muted); font-size: 10px; line-height: 1.4; }
 .lvl-note { margin: 0 0 7px; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-.story { color: #344440; font: 400 18px/1.55 var(--serif); }
+.story { color: #344440; font: 400 var(--fs-md)/1.75 var(--sans); }
+/* teks panjang dipecah menjadi beberapa paragraf (lihat Story.tsx) */
+.story p { margin: 0 0 0.95em; }
+.story p:last-child { margin-bottom: 0; }
 .term { border-bottom: 1px dotted var(--accent); color: inherit; cursor: help; }
 .gloss { margin-top: 9px; padding: 9px 12px; border-left: 2px solid var(--accent); background: #faf5f2; color: var(--ink-soft); font-size: 12px; line-height: 1.55; }
 .more { margin-top: 14px; padding: 12px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--ink-soft); font-size: 11px; }
@@ -290,7 +293,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .step.locked h3 { color: var(--muted); }
 .hint { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
 .peran { margin: 0 0 5px; color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.situasi { margin: 0 0 13px; color: #344440; font: 400 17px/1.5 var(--serif); }
+.situasi { margin: 0 0 13px; color: #344440; font: 400 var(--fs-md)/1.7 var(--sans); }
 .choices, .opts { display: grid; gap: 7px; }
 .choice { padding: 11px 12px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
 .choice.mine { border-color: var(--accent); background: #fcf7f4; }
@@ -324,7 +327,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .sekitar li { border-bottom: 1px solid var(--line); }
 .sekitar li button { width: 100%; padding: 10px 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
 .sekitar li button:hover .t { color: var(--accent); }
-.sekitar .t { display: block; color: var(--ink); font: 500 15px/1.25 var(--serif); }
+.sekitar .t { display: block; color: var(--ink); font: 600 14px/1.3 var(--sans); }
 .sekitar .y, .presisi { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
 .banner {
   position: absolute; z-index: 1200; left: 50%; bottom: 20px; transform: translateX(-50%);
@@ -353,6 +356,9 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .transport-button:disabled { opacity: .35; cursor: default; }
 .play { border-color: var(--ink); background: var(--ink); color: #fff; }
 .play:hover { border-color: var(--ink-soft); background: var(--ink-soft); color: #fff; }
+.transport-button.speed { width: auto; min-width: 44px; padding: 0 8px; font: 600 12px var(--sans); }
+.transport-button.wilayah-toggle { width: auto; padding: 0 11px; font: 600 11px var(--sans); color: var(--muted); }
+.transport-button.wilayah-toggle.active { color: var(--ink); background: var(--accent-soft); border-color: var(--accent); }
 .slider-wrap { min-width: 0; position: relative; }
 .track-marks { position: relative; height: 8px; margin: 0 8px -1px; pointer-events: none; }
 .mark { position: absolute; bottom: 0; width: 1px; height: 6px; background: #aab5af; }
@@ -377,16 +383,11 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 
 /* Responsive */
 @media (max-width: 860px) {
-  :root { --header-height: auto; --timeline-height: 104px; }
-  #root { grid-template-rows: auto minmax(0, 1fr) var(--timeline-height); }
-  .topbar { min-height: 64px; padding: 10px 16px; gap: 10px; flex-wrap: wrap; }
-  .brand { flex: 1 1 100%; justify-content: space-between; gap: 8px; }
-  .brand h1 { font-size: 21px; }
-  .subtitle { display: none; }
-  .era { margin-left: 0; font-size: 9px; }
-  .levels { width: 100%; justify-content: flex-start; }
-  .levels-label { margin-right: auto; }
-  .lvl { padding: 6px 10px; }
+  :root { --timeline-height: 104px; }
+  .topbar { top: 10px; right: 10px; gap: 8px; }
+  .menu-return { padding: 7px 11px; font-size: 11px; }
+  .levels-label { display: none; }
+  .lvl { padding: 6px 9px; font-size: 11px; }
   .event-explorer { top: 12px; left: 12px; width: min(310px, calc(100% - 24px)); max-height: 42%; }
   .event-explorer:not(.is-open) { width: min(280px, calc(100% - 24px)); }
   .panel { top: auto; right: 10px; bottom: 10px; left: 10px; width: auto; max-height: 58%; }
@@ -504,7 +505,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .landing-screen, .era-select-screen { position: relative; min-height: 100%; overflow: hidden; color: #f4eddd; background: #243a34; isolation: isolate; }
 .landing-grain { position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .16; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E"); }
 .landing-nav, .era-select-nav { min-height: 82px; padding: 0 clamp(22px, 5.5vw, 88px); display: flex; align-items: center; gap: 13px; border-bottom: 1px solid #ffffff24; }
-.landing-brand-mark { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid #d7b88a; color: #e1c49b; font: 500 23px var(--serif); }
+.landing-brand-mark { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid #5fa8a3; color: #8fd4cf; font: 500 23px var(--serif); }
 .landing-brand-copy { display: flex; flex-direction: column; gap: 3px; letter-spacing: .14em; }
 .landing-brand-copy strong { color: #f4eddd; font-size: 11px; font-weight: 700; letter-spacing: .19em; }
 .landing-brand-copy span { color: #aebdb2; font-size: 8px; letter-spacing: .17em; }
@@ -576,9 +577,18 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .era-card-action:disabled { border-color: #ddd8ca; background: #eeeade; color: #9d9d8e; cursor: not-allowed; }
 .era-select-note { margin: 21px 0 0; color: #8b8f80; font-size: 10px; line-height: 1.6; }
 /* Menu return action in game header */
-.header-actions { display: flex; align-items: center; gap: 17px; }
-.menu-return { padding: 7px 10px; border: 1px solid var(--line); border-radius: 5px; background: #fff; color: var(--ink-soft); cursor: pointer; font-size: 11px; white-space: nowrap; }
-.menu-return:hover { border-color: var(--accent); color: var(--accent); }
+.header-actions { display: flex; align-items: center; gap: 12px; }
+.menu-return {
+  padding: 9px 14px; border-radius: 999px;
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(255,255,255,.6);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  box-shadow: 0 6px 18px rgba(29,41,40,.14), inset 0 1px rgba(255,255,255,.5);
+  color: var(--ink-soft); cursor: pointer; font-size: 12px; font-weight: 600; white-space: nowrap;
+  transition: background .2s, color .2s, transform .2s;
+}
+.menu-return:hover { color: var(--ink); background: rgba(255,255,255,.75); transform: translateY(-1px); }
 @media (max-width: 900px) {
   .landing-hero { grid-template-columns: minmax(0, 1fr) minmax(300px, .85fr); gap: 26px; }
   .landing-copy h1 { font-size: clamp(46px, 6vw, 64px); }
@@ -608,8 +618,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   .era-card-art { height: 90px; margin: 13px 0; }
   .era-card h2 { font-size: 24px; }
   .era-card-action { margin-top: 4px; }
-  .topbar { padding: 10px 14px; }
-  .header-actions { width: 100%; justify-content: space-between; }
 }
 .map-loading { position: absolute; inset: 0; display: grid; place-items: center; background: #e6ece8; color: #40514f; font-size: 13px; letter-spacing: .04em; }
 
@@ -662,13 +670,13 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .landing-title-spiral .infinite-spiral{min-height:0}
 .landing-description--center{position:relative;z-index:3;max-width:600px;margin:23px auto 26px;color:#c0cdc4;font-size:14px;line-height:1.9;text-shadow:0 2px 12px #102820}
 .landing-actions--center{position:relative;z-index:4;justify-content:center;gap:13px}
-.jelly-button{min-height:48px;min-width:150px;padding:0 22px;display:inline-flex;align-items:center;justify-content:center;gap:22px;border:1px solid #d8b78c80;border-radius:999px;background:#18372f99;color:#f4eddd;font-size:12px;font-weight:700;cursor:pointer;box-shadow:inset 0 1px #ffffff16,0 8px 22px #071a1533;backdrop-filter:blur(10px);transition:transform .28s cubic-bezier(.2,1.6,.4,1),background .25s,border-color .25s,box-shadow .25s}
-.jelly-button span{font-size:17px;color:#e1c49b}
-.jelly-button:hover{transform:translateY(-3px) scale(1.035);background:#426653a8;border-color:#e1c49b;box-shadow:inset 0 1px #ffffff22,0 12px 28px #071a1545}
+.jelly-button{min-height:48px;min-width:150px;padding:0 22px;display:inline-flex;align-items:center;justify-content:center;gap:22px;border:1px solid #5fa8a380;border-radius:999px;background:#18372f99;color:#f4eddd;font-size:12px;font-weight:700;cursor:pointer;box-shadow:inset 0 1px #ffffff16,0 8px 22px #071a1533;backdrop-filter:blur(10px);transition:transform .28s cubic-bezier(.2,1.6,.4,1),background .25s,border-color .25s,box-shadow .25s}
+.jelly-button span{font-size:17px;color:#8fd4cf}
+.jelly-button:hover{transform:translateY(-3px) scale(1.035);background:#426653a8;border-color:#7fc4bf;box-shadow:inset 0 1px #ffffff22,0 12px 28px #071a1545}
 .jelly-button:active{transform:scale(.96)}
-.jelly-button--primary{background:#d8b78c;color:#20392f;border-color:#f0d4a8}
-.jelly-button--primary span{color:#20392f}
-.jelly-button--primary:hover{background:#f0d4a8;color:#20392f}
+.jelly-button--primary{background:#5fa8a3;color:#0f2420;border-color:#7fc4bf}
+.jelly-button--primary span{color:#0f2420}
+.jelly-button--primary:hover{background:#7fc4bf;color:#0f2420}
 .landing-era-note{display:flex;align-items:center;gap:9px;margin-top:34px;color:#9eafa4;font-size:8px;letter-spacing:.14em}
 .landing-era-note i{width:6px;height:6px;border-radius:50%;background:#a9c59c;box-shadow:0 0 0 4px #a9c59c20}
 .landing-era-note b{color:#e6d3b4;font-weight:600}
@@ -711,10 +719,10 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .landing-title-spiral{width:clamp(340px,52vw,650px);height:clamp(340px,52vw,650px);opacity:.86;filter:drop-shadow(0 0 22px #d8b78c12)}
 .landing-title-spiral .infinite-spiral{overflow:visible}
 .landing-description--center{color:#c6c2b8;text-shadow:0 2px 12px #000}
-.jelly-button{background:#111211cc;color:#f4eddd;border-color:#bba27a80;box-shadow:inset 0 1px #ffffff10,0 8px 26px #0008}
-.jelly-button:hover{background:#28251f;border-color:#e1c49b;box-shadow:inset 0 1px #ffffff18,0 12px 28px #0009}
-.jelly-button--primary{background:#d8b78c;color:#141414;border-color:#f0d4a8}
-.jelly-button--primary:hover{background:#f0d4a8;color:#141414}
+.jelly-button{background:#111211cc;color:#f4eddd;border-color:#5fa8a380;box-shadow:inset 0 1px #ffffff10,0 8px 26px #0008}
+.jelly-button:hover{background:#1f2b28;border-color:#7fc4bf;box-shadow:inset 0 1px #ffffff18,0 12px 28px #0009}
+.jelly-button--primary{background:#5fa8a3;color:#0f1816;border-color:#7fc4bf}
+.jelly-button--primary:hover{background:#7fc4bf;color:#0f1816}
 .landing-era-note{color:#aaa69c}.landing-era-note i{background:#d8b78c;box-shadow:0 0 0 4px #d8b78c20}.landing-era-note b{color:#e6d3b4}
 .landing-screen--centered .landing-footer{border-top-color:#ffffff18;color:#858178}
 .landing-corner-spiral{display:none!important}
@@ -750,7 +758,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .scroll-hero-orbit{width:min(490px,82vw);height:min(490px,82vw);position:relative;margin:-20px 0 -18px;flex-shrink:0}
 .scroll-hero-orbit .infinite-spiral{width:100%;height:100%}
 .scroll-hero-inner h2{font:400 clamp(32px,5vw,66px)/1 var(--serif,Georgia,serif);letter-spacing:-.045em;margin:0 0 16px;color:#f4eddd}
-.scroll-hero-inner h2 em,.landing-below-copy h2 em{color:#d8b78c;font-weight:400}
+.scroll-hero-inner h2 em,.landing-below-copy h2 em{color:#7fc4bf;font-weight:400}
 .scroll-hero-inner>p:not(.landing-eyebrow){max-width:590px;font-size:13px;line-height:1.85;color:#c6c0b4;margin:0 auto 14px}
 .scroll-hero-inner .landing-actions{margin-top:8px}
 .landing-below-fold{position:relative;z-index:3;min-height:72vh;padding:clamp(70px,12vw,170px) clamp(24px,10vw,150px);display:flex;align-items:center;justify-content:space-between;gap:60px;background:#080808;border-top:1px solid #ffffff1b}
@@ -842,3 +850,282 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 
 /* Kartu era: hanya nomor, judul, rentang tahun */
 .accordion-gallery .ag-panel__label>span { opacity: 1; max-height: none; font-size: 12px; letter-spacing: .1em; color: #d8b78c; }
+
+/* Garis waktu peristiwa utama yang bisa dibuka dari tepi bawah peta */
+.timeline-drawer { position: absolute; left: 0; right: 0; bottom: 0; z-index: 500; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+.timeline-drawer-handle { pointer-events: auto; display: flex; align-items: center; gap: 8px; padding: 8px 18px; border: 1px solid var(--line); border-bottom: none; border-radius: 10px 10px 0 0; background: var(--surface); color: var(--ink-soft); font-size: 11px; font-weight: 700; letter-spacing: .03em; cursor: pointer; box-shadow: 0 -4px 14px #1d292814; }
+.timeline-drawer-handle:hover { color: var(--accent); }
+.timeline-drawer-chevron { display: inline-block; transition: transform .25s; }
+.timeline-drawer-chevron.is-open { transform: rotate(180deg); }
+.timeline-drawer-count { padding: 1px 7px; border-radius: 999px; background: var(--surface-soft); color: var(--ink-soft); font-size: 10px; font-weight: 700; }
+.timeline-drawer-panel { pointer-events: auto; width: min(560px, calc(100% - 32px)); max-height: 46vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-bottom: none; border-radius: 10px 10px 0 0; box-shadow: 0 -10px 28px #1d292822; padding: 10px 8px 10px 10px; }
+.timeline-drawer-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.timeline-drawer-row { width: 100%; display: flex; align-items: baseline; gap: 10px; padding: 8px 10px; border: 0; border-radius: 7px; background: none; text-align: left; cursor: pointer; }
+.timeline-drawer-row:hover { background: var(--surface-soft); }
+.timeline-drawer-row.is-active { background: var(--accent-soft); }
+.timeline-drawer-row.is-selected { outline: 1px solid var(--accent); outline-offset: -1px; }
+.timeline-drawer-year { flex: none; min-width: 68px; color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: .03em; }
+.timeline-drawer-copy { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.timeline-drawer-title { font-size: 12.5px; color: var(--ink); font-weight: 600; }
+.timeline-drawer-place { font-size: 10.5px; color: var(--muted); }
+.timeline-drawer-note { margin: 8px 4px 2px; padding-top: 8px; border-top: 1px dashed var(--line); font-size: 10px; color: var(--muted); line-height: 1.5; }
+@media (max-width: 700px) {
+  .timeline-drawer-handle { font-size: 10px; padding: 7px 14px; }
+  .timeline-drawer-panel { width: calc(100% - 16px); max-height: 52vh; }
+}
+
+/* Mode gelap peta: lapisan basemap dan hillshade dibalik warnanya, sehingga area putih menjadi gelap.
+   Poligon wilayah dan penanda tidak ikut dibalik karena berada di pane terpisah. */
+#map.map-dark.leaflet-container { background: #0c0f0e; }
+#map.map-dark .leaflet-tile-pane { filter: invert(0.92) hue-rotate(180deg) brightness(0.92) contrast(0.95); }
+#map.map-dark .leaflet-control-zoom a { background: #1a1f1e; color: #e8e2d2; border-color: #2c3432; }
+
+/* Mode gelap seluruh antarmuka peta (aktif bersama tombol Gelap): bar kontrol, indeks tahun, panel, dan tombol dibuat hitam. */
+html.ui-dark .topbar,
+html.ui-dark .timebar,
+html.ui-dark .panel,
+html.ui-dark .timeline-drawer,
+html.ui-dark .timeline-drawer-panel,
+html.ui-dark .levels,
+html.ui-dark .banner,
+html.ui-dark .year-badge,
+html.ui-dark .explorer-search,
+html.ui-dark .slider-wrap,
+html.ui-dark .event-list,
+html.ui-dark .menu-return {
+  background: #000 !important;
+  border-color: #1c1c1c !important;
+  color: #e6e6e6 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html.ui-dark .transport-button,
+html.ui-dark .levels button,
+html.ui-dark .wilayah-toggle,
+html.ui-dark .dark-toggle {
+  background: #0a0a0a !important;
+  border-color: #2a2a2a !important;
+  color: #d9d9d9 !important;
+}
+html.ui-dark .transport-button.active,
+html.ui-dark .levels button.active,
+html.ui-dark .wilayah-toggle.active,
+html.ui-dark .dark-toggle.active {
+  background: #1f1f1f !important;
+  color: #ffffff !important;
+}
+html.ui-dark .panel p,
+html.ui-dark .panel .meta,
+html.ui-dark .timeline-drawer-note,
+html.ui-dark .event-list-meta,
+html.ui-dark .event-meta {
+  color: #a8a8a8 !important;
+}
+html.ui-dark .progress,
+html.ui-dark .track-marks {
+  color: #9a9a9a !important;
+}
+
+/* Mode gelap: baris event dan teksnya dibuat hitam dengan tulisan terang (tanpa redup). */
+html.ui-dark .event-row,
+html.ui-dark .event-explorer,
+html.ui-dark .event-row-copy,
+html.ui-dark .event-list .event-row {
+  background: #000 !important;
+  color: #f0f0f0 !important;
+  opacity: 1 !important;
+  border-color: #1c1c1c !important;
+}
+html.ui-dark .event-title,
+html.ui-dark .event-row .event-title,
+html.ui-dark .event-row.is-sampingan .event-title {
+  color: #f5f5f5 !important;
+  opacity: 1 !important;
+}
+html.ui-dark .event-meta,
+html.ui-dark .event-list-meta,
+html.ui-dark .explorer-kicker,
+html.ui-dark .explorer-heading-main,
+html.ui-dark .event-empty {
+  color: #bdbdbd !important;
+  opacity: 1 !important;
+}
+html.ui-dark .explorer-search input,
+html.ui-dark .explorer-search,
+html.ui-dark input[type="search"],
+html.ui-dark input[type="text"] {
+  background: #0a0a0a !important;
+  color: #f5f5f5 !important;
+  border-color: #2a2a2a !important;
+}
+html.ui-dark .explorer-search input::placeholder,
+html.ui-dark input::placeholder {
+  color: #8a8a8a !important;
+}
+
+/* Mode gelap: panel detail memakai variabel warna terang, sehingga judul (h2) dan teks lain yang memakai
+   var(--ink), var(--ink-soft), var(--muted), atau var(--line) ikut terbaca di atas latar hitam. */
+html.ui-dark .panel {
+  --ink: #f2f2f2;
+  --ink-soft: #d0d0d0;
+  --muted: #a8a8a8;
+  --line: #2a2a2a;
+  --surface-soft: #161616;
+}
+
+/* Mode gelap: opsi kuis, pilihan keputusan, dan tombol tutup panel dibuat hitam dengan tulisan terang. */
+html.ui-dark .panel .opt,
+html.ui-dark .panel .choice {
+  background: #000 !important;
+  border-color: #2a2a2a !important;
+  color: #e6e6e6 !important;
+}
+html.ui-dark .panel .opt:hover:not(:disabled) {
+  background: #141414 !important;
+  border-color: #6b4f43 !important;
+  color: #ffffff !important;
+}
+html.ui-dark .panel .opt.right {
+  background: #0b1d13 !important;
+  border-color: #2f6b47 !important;
+  color: #9fe0b6 !important;
+}
+html.ui-dark .panel .opt.wrong {
+  background: #1d0c0b !important;
+  border-color: #6b2f2a !important;
+  color: #f2a79f !important;
+}
+html.ui-dark .panel .choice.mine { background: #141414 !important; border-color: #6b4f43 !important; }
+html.ui-dark .panel .hasil,
+html.ui-dark .panel .verdict.diff,
+html.ui-dark .panel .verdict.same {
+  background: #0d0d0d !important;
+  color: #d9d9d9 !important;
+}
+html.ui-dark .panel .close {
+  background: #000 !important;
+  border-color: #2a2a2a !important;
+  color: #d9d9d9 !important;
+}
+html.ui-dark .panel .close:hover { background: #141414 !important; color: #ffffff !important; }
+
+/* Mode gelap: marker peristiwa dan kapal perjalanan memakai outline hitam, bukan putih. */
+html.ui-dark .atlas-marker {
+  border-color: var(--marker-color, #647b68);
+  background: color-mix(in srgb, var(--marker-color, #647b68) 22%, #000);
+  box-shadow:
+    inset 0 0 6px color-mix(in srgb, var(--marker-color, #647b68) 75%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--marker-color, #647b68) 80%, transparent),
+    0 0 8px color-mix(in srgb, var(--marker-color, #647b68) 45%, transparent);
+}
+html.ui-dark .atlas-marker-symbol {
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--marker-color, #647b68) 80%, transparent));
+}
+html.ui-dark .atlas-marker:hover,
+html.ui-dark .atlas-marker.is-selected {
+  box-shadow:
+    inset 0 0 6px color-mix(in srgb, var(--marker-color, #647b68) 75%, transparent),
+    0 0 0 3px color-mix(in srgb, var(--marker-color, #647b68) 45%, transparent),
+    0 0 14px color-mix(in srgb, var(--marker-color, #647b68) 55%, transparent);
+}
+html.ui-dark .atlas-marker.is-selected { outline-color: var(--marker-color, #647b68); }
+
+/* Mode gelap: daftar penguasa tidak lagi memakai kotak terang, dan teks isi panel dibuat putih. */
+html.ui-dark .panel .kingdom-rulers li { background: transparent !important; }
+html.ui-dark .panel .kingdom-rulers li.is-current {
+  background: #1a1a1a !important;
+  color: #ffffff !important;
+  box-shadow: inset 2px 0 0 #5fd4cf;
+}
+html.ui-dark .panel .story,
+html.ui-dark .panel .story p,
+html.ui-dark .panel .kingdom-ringkas,
+html.ui-dark .panel .kingdom-paragraf,
+html.ui-dark .panel .kingdom-sorotan li,
+html.ui-dark .panel .kingdom-ruler-nama,
+html.ui-dark .panel .kingdom-ruler-btn,
+html.ui-dark .panel .kingdom-ruler-masa,
+html.ui-dark .panel .kingdom-ruler-gelar,
+html.ui-dark .panel .situasi,
+html.ui-dark .panel .peran,
+html.ui-dark .panel .q,
+html.ui-dark .panel .choice .teks,
+html.ui-dark .panel .choice .akibat,
+html.ui-dark .panel .kingdom-rulers li span {
+  color: #ffffff !important;
+}
+html.ui-dark .atlas-marker.is-complete::after { border-color: #000; }
+html.ui-dark .travel-vessel svg { stroke: #000; }
+
+/* Mode gelap: judul panel indeks waktu dan bar garis waktu di bawah ikut hitam (sebelumnya masih putih). */
+html.ui-dark [class*="explorer"],
+html.ui-dark [class*="drawer"],
+html.ui-dark [class*="panel-head"],
+html.ui-dark [class*="panel-body"],
+html.ui-dark .panel-head,
+html.ui-dark .panel-body {
+  background-color: #000 !important;
+  color: #f2f2f2 !important;
+  border-color: #1c1c1c !important;
+}
+html.ui-dark .timeline-drawer-handle,
+html.ui-dark .timeline-drawer-count {
+  background: #000 !important;
+  color: #f2f2f2 !important;
+  border-color: #2a2a2a !important;
+}
+
+/* Mode gelap: angka dan label yang sebelumnya abu-abu dibuat putih. */
+html.ui-dark .explorer-heading-main,
+html.ui-dark .explorer-heading-main strong,
+html.ui-dark .explorer-heading-main > span:first-child,
+html.ui-dark .explorer-count,
+html.ui-dark .levels-label,
+html.ui-dark .year-badge,
+html.ui-dark .year-plain,
+html.ui-dark .year-shuffle,
+html.ui-dark .year-badge-suffix {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Mode gelap: scrollbar daftar indeks waktu dan tombol zoom dibuat gelap. */
+html.ui-dark .event-list,
+html.ui-dark .panel-body,
+html.ui-dark .explorer-content {
+  scrollbar-color: #3a3a3a #000 !important;
+  scrollbar-width: thin;
+}
+html.ui-dark .event-list::-webkit-scrollbar,
+html.ui-dark .panel-body::-webkit-scrollbar,
+html.ui-dark .explorer-content::-webkit-scrollbar {
+  width: 10px;
+  background: #000;
+}
+html.ui-dark .event-list::-webkit-scrollbar-track,
+html.ui-dark .panel-body::-webkit-scrollbar-track,
+html.ui-dark .explorer-content::-webkit-scrollbar-track {
+  background: #000;
+}
+html.ui-dark .event-list::-webkit-scrollbar-thumb,
+html.ui-dark .panel-body::-webkit-scrollbar-thumb,
+html.ui-dark .explorer-content::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+  border-radius: 999px;
+}
+html.ui-dark .leaflet-control-zoom a,
+html.ui-dark .leaflet-control-zoom-in,
+html.ui-dark .leaflet-control-zoom-out {
+  background: #0a0a0a !important;
+  color: #f2f2f2 !important;
+  border-color: #2a2a2a !important;
+}
+html.ui-dark .leaflet-control-zoom a:hover {
+  background: #1f1f1f !important;
+}
+
+/* Hasil pencarian di indeks waktu: deskripsi singkat, dan gaya khusus untuk peristiwa yang belum terjadi. */
+.event-desc { display: block; margin-top: 3px; font-size: 0.85em; line-height: 1.4; opacity: 0.85; }
+.event-row.is-future .event-title { font-style: italic; }
+.event-row.is-future .event-desc { font-style: italic; opacity: 0.6; }

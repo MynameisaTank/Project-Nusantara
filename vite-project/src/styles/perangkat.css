@@ -1,0 +1,168 @@
+/* Tingkat grafis (lihat lib/perangkat.ts): latar pengganti dan galeri gambar untuk perangkat tanpa WebGL/WebGPU. */
+
+/* Pengganti efek kaca (AeroShards) di menu utama pada tingkat sedang dan dasar. */
+.menu-grafis-fallback {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(127, 196, 191, 0.22), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(42, 157, 143, 0.18), transparent 55%),
+    linear-gradient(180deg, #1f3d37 0%, #172f29 100%);
+}
+
+/* Pengganti shader latar pemilihan era pada tingkat dasar. */
+.era-grafis-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(216, 183, 140, 0.25), transparent 60%),
+    linear-gradient(180deg, #2c2116 0%, #172f29 100%);
+}
+
+/* Pengganti galeri 3D pada tingkat dasar: deretan gambar yang tetap bisa dipilih dengan keyboard. */
+.era-grafis-grid {
+  list-style: none;
+  margin: 0;
+  padding: 96px 20px 40px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+.era-grafis-grid button {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(244, 237, 221, 0.18);
+  border-radius: 14px;
+  background: rgba(10, 20, 18, 0.55);
+  color: #f4eddd;
+  text-align: left;
+  cursor: pointer;
+}
+
+.era-grafis-grid button:hover,
+.era-grafis-grid button:focus-visible {
+  border-color: #7fc4bf;
+  outline: none;
+}
+
+.era-grafis-grid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #0f1f1b;
+}
+
+.era-grafis-grid__judul {
+  padding: 10px 12px 2px;
+  font-weight: 600;
+}
+
+.era-grafis-grid small {
+  padding: 0 12px 12px;
+  opacity: 0.75;
+}
+
+/*
+ * Progres pemasangan aset di layar pemuatan. Elemennya harus berada di atas lapisan gelap ::before milik
+ * .loading-screen (z-index 1), dan namanya tidak boleh sama dengan .loading-progress bawaan layar itu.
+ */
+.loading-detail,
+.loading-pasang {
+  position: relative;
+  z-index: 2;
+}
+
+.loading-detail {
+  margin: 6px 0 0;
+  color: #cfc8ba;
+  font-size: 0.85rem;
+}
+
+.loading-pasang {
+  width: clamp(220px, 40vw, 320px);
+  height: 4px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: rgba(244, 237, 221, 0.18);
+  overflow: hidden;
+}
+
+.loading-pasang > span {
+  display: block;
+  height: 100%;
+  background: #7fc4bf;
+  transition: width 0.3s ease;
+}
+
+/* Spanduk "versi baru siap" di bawah layar. */
+.pembaruan-versi {
+  position: fixed;
+  z-index: 3000;
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px 10px 16px;
+  border: 1px solid #7fc4bf66;
+  border-radius: 999px;
+  background: rgba(8, 10, 10, 0.94);
+  color: #f4eddd;
+  font: 500 13px var(--sans, sans-serif);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+}
+
+.pembaruan-versi button {
+  min-height: 34px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #5fa8a3;
+  color: #0f1816;
+  font: 600 13px var(--sans, sans-serif);
+  cursor: pointer;
+}
+
+/* Bagian "Aplikasi" di panel Pengaturan menu: tombol pasang dan petunjuk iPhone. */
+.menu-settings-aplikasi {
+  display: grid;
+  gap: 8px;
+}
+
+.menu-settings-aplikasi button {
+  min-height: 40px;
+  border: 1px solid #7fc4bf66;
+  border-radius: 999px;
+  background: #14312b;
+  color: #f4eddd;
+  font: 500 14px var(--sans, sans-serif);
+  cursor: pointer;
+}
+
+.menu-settings-aplikasi button:hover {
+  border-color: #7fc4bf;
+}
+
+/* Pilihan mode grafis di panel Pengaturan. */
+.menu-settings-row select {
+  margin-left: auto;
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: #14312b;
+  color: inherit;
+  font: inherit;
+}

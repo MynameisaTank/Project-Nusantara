@@ -1,16 +1,36 @@
 /* Hero menu utama: AeroShards sebagai latar, tanpa kotak gambar di tengah judul */
 .landing-scroll-page { scroll-behavior: smooth; }
-.menu-aero { position: relative; z-index: 2; min-height: calc(100svh - 74px); display: grid; place-items: center; padding: 48px clamp(22px, 6vw, 88px) 96px; overflow: hidden; background: #050606; }
+.menu-aero { position: relative; z-index: 2; min-height: calc(100svh - 74px); display: grid; place-items: center; padding: 48px clamp(22px, 6vw, 88px) 96px; overflow: hidden; background: transparent; }
+/* Shard menutupi seluruh halaman menu, termasuk bagian bawah (Jejak panjang) */
+.landing-screen > .landing-shards-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.landing-screen > .landing-shards-bg .aero-shards { position: absolute; inset: 0; }
+.landing-screen > .landing-below-fold { background: transparent; }
+/* Aliran horizontal di area judul (hero), di atas lapisan shard halaman */
+.landing-screen > .menu-aero-hero-shards { position: absolute; top: 74px; left: 0; right: 0; height: calc(100svh - 74px); z-index: 0; overflow: hidden; pointer-events: none; }
+.landing-screen > .menu-aero-hero-shards .aero-shards { position: absolute; inset: 0; }
+
+/* Tombol & panel Pengaturan (pojok kanan atas). Wrapper dibuat fixed; hanya tombol & panel yang bisa diklik */
+.landing-screen > .menu-settings { position: fixed; inset: 0; z-index: 60; pointer-events: none; }
+.menu-settings-toggle { position: fixed; top: 16px; right: 22px; pointer-events: auto; padding: 8px 14px; border: 1px solid #7fc4bf66; border-radius: 999px; background: rgba(5,6,6,.7); color: #f4eddd; font: 400 13px var(--menu-label, Georgia, serif); letter-spacing: .08em; cursor: pointer; }
+.menu-settings-toggle:hover { border-color: #7fc4bf; color: #7fc4bf; }
+.menu-settings-panel { position: fixed; top: 60px; right: 22px; pointer-events: auto; width: min(320px, calc(100vw - 44px)); padding: 18px 20px; border: 1px solid #7fc4bf44; border-radius: 14px; background: rgba(8,10,10,.92); backdrop-filter: blur(10px); color: #f4eddd; box-shadow: 0 18px 50px rgba(0,0,0,.5); }
+.menu-settings-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.menu-settings-head button { background: none; border: none; color: #f4eddd; font-size: 20px; line-height: 1; cursor: pointer; }
+.menu-settings-section { margin: 14px 0 8px; font: 400 12px var(--menu-label, Georgia, serif); letter-spacing: .14em; text-transform: uppercase; color: #7fc4bf; }
+.menu-settings-row { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+.menu-settings-row em { font-style: normal; color: #7fc4bf; margin-left: 6px; }
+.menu-settings-row input[type=range] { width: 100%; accent-color: #5fa8a3; }
+.menu-settings-hint { margin: 10px 0 0; font-size: 12px; color: #a59b89; }
 .menu-aero-bg { position: absolute; inset: 0; z-index: 0; }
 .menu-aero-bg .aero-shards { position: absolute; inset: 0; }
 /* lapisan gelap tipis di belakang teks supaya tetap terbaca di atas shard */
 .menu-aero::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse 60% 55% at 50% 50%, rgba(5,6,6,.62), rgba(5,6,6,0) 100%); }
-.menu-aero-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 880px; pointer-events: none; }
+.menu-aero-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 1400px; width: 100%; pointer-events: none; }
 .menu-aero-content .jelly-button, .menu-aero-content a { pointer-events: auto; }
 .menu-aero-content .landing-eyebrow { justify-content: center; margin-bottom: 8px; }
-.menu-aero-title { margin: 0; font: 400 clamp(3.4rem, 11vw, 10rem)/.95 var(--serif, Georgia, serif); letter-spacing: -.02em; color: #f4eddd; text-shadow: 0 6px 40px rgba(0,0,0,.55); }
+.menu-aero-title { width: min(96vw, 1800px); margin: 0; font: 400 clamp(3.4rem, 11vw, 10rem)/.95 var(--serif, Georgia, serif); letter-spacing: -.01em; color: #f4eddd; text-shadow: 0 6px 40px rgba(0,0,0,.55); }
 .menu-aero-content h2 { margin: 22px 0 30px; font: 400 clamp(1.5rem, 3vw, 2.4rem)/1.1 var(--serif, "Newsreader", Georgia, serif); color: #f4eddd; letter-spacing: -.02em; }
-.menu-aero-content h2 em { color: #d8b78c; font-weight: 400; }
+.menu-aero-content h2 em { color: #7fc4bf; font-weight: 400; }
 .menu-aero-desc { max-width: 34rem; margin: 0 0 22px; font-size: .9rem; line-height: 1.8; color: #cfc8ba; }
 .menu-aero-hint { position: absolute; z-index: 2; left: 50%; bottom: 26px; transform: translateX(-50%); font-size: .75rem; letter-spacing: .04em; color: #a59b89; text-decoration: none; transition: color .2s; }
 .menu-aero-hint:hover { color: #f4eddd; }
@@ -21,9 +41,8 @@
 
 /* Tipografi menu utama: huruf cetak lama (IM Fell) menggantikan Newsreader + Instrument Sans */
 .landing-scroll-page {
-  --serif: "IM Fell English", "Iowan Old Style", Georgia, serif;
   --menu-label: "IM Fell English SC", "IM Fell English", Georgia, serif;
-  font-family: var(--serif);
+  font-family: var(--sans);
 }
 .landing-scroll-page .jelly-button,
 .landing-scroll-page .landing-nav-note,
@@ -31,6 +50,28 @@
 .landing-scroll-page .landing-eyebrow,
 .landing-scroll-page .landing-footer span { font-family: var(--menu-label); font-weight: 400; letter-spacing: .09em; }
 .landing-scroll-page .jelly-button { font-size: 15px; }
+.menu-jejak-actions { display: flex; justify-content: center; margin: 8px 0 28px; }
+/* tombol Mulai! dan Pilih era di tengah halaman, tepat di bawah judul */
+.menu-aero-content .landing-actions--center { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 28px; width: 100%; }
 .landing-scroll-page .landing-nav-note { font-size: 12px; }
 .menu-aero-content h2 { font-style: normal; }
 .menu-aero-content h2 em { font-style: italic; }
+
+#root:has(.landing-screen) {
+  scrollbar-color: #2a2a2a #050606;
+  scrollbar-width: thin;
+}
+
+#root:has(.landing-screen)::-webkit-scrollbar {
+  width: 10px;
+  background: #050606;
+}
+
+#root:has(.landing-screen)::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 999px;
+}
+
+#root:has(.landing-screen)::-webkit-scrollbar-track {
+  background: #050606;
+}

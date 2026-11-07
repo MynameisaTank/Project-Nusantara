@@ -1,0 +1,805 @@
+/* Halaman Materi Evaluasi: jalur kronologis peristiwa dengan garis beranimasi. */
+#root:has(.exam-page) {
+  display: block;
+  min-height: 100%;
+  height: 100%;
+  overflow: auto;
+  background: #050606;
+  scrollbar-color: #2a2a2a #050606;
+  scrollbar-width: thin;
+}
+
+.exam-page {
+  --era1: #7fc4bf;
+  --era2: #e8803a;
+  min-height: 100vh;
+  padding: 28px clamp(16px, 4vw, 56px) 96px;
+  background: #050606;
+  color: #f4eddd;
+  font-family: var(--sans, system-ui, sans-serif);
+}
+
+.exam-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto 20px;
+}
+
+.exam-back {
+  flex: none;
+  padding: 8px 14px;
+  border: 1px solid #2a3331;
+  border-radius: 999px;
+  background: #0a0d0d;
+  color: #f4eddd;
+  font: 500 13px var(--sans, system-ui, sans-serif);
+  cursor: pointer;
+}
+.exam-back:hover { border-color: var(--era1); color: var(--era1); }
+
+.exam-kicker {
+  margin: 0 0 4px;
+  font: 600 11px var(--sans, system-ui, sans-serif);
+  letter-spacing: 0.16em;
+  color: var(--era1);
+}
+.exam-heading h1 {
+  margin: 0;
+  font: 400 clamp(1.7rem, 3.6vw, 2.8rem)/1.1 var(--serif, Georgia, serif);
+}
+.exam-sub {
+  max-width: 46rem;
+  margin: 10px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #b9b3a5;
+}
+
+/* filter */
+.exam-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+  max-width: 1400px;
+  margin: 0 auto 8px;
+}
+.exam-chip-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.exam-chip {
+  padding: 7px 13px;
+  border: 1px solid #2a3331;
+  border-radius: 999px;
+  background: #0a0d0d;
+  color: #d9d4c6;
+  font: 500 12.5px var(--sans, system-ui, sans-serif);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.exam-chip:hover { border-color: var(--era1); }
+.exam-chip.is-on { background: #16312f; border-color: var(--era1); color: #ffffff; }
+.exam-select {
+  padding: 7px 12px;
+  border: 1px solid #2a3331;
+  border-radius: 999px;
+  background: #0a0d0d;
+  color: #d9d4c6;
+  font: 500 12.5px var(--sans, system-ui, sans-serif);
+}
+.exam-count { margin: 0 0 0 auto; font-size: 12.5px; color: #8f8a7e; }
+
+/* kanvas jalur */
+.exam-stage {
+  position: relative;
+  max-width: 1400px;
+  margin: 8px auto 0;
+}
+.exam-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+.exam-edge { --edge: var(--era1); }
+.exam-edge--era2 { --edge: var(--era2); }
+
+.exam-edge-base {
+  fill: none;
+  stroke: var(--edge);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-opacity: 0.32;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: exam-draw 0.7s ease forwards;
+  animation-delay: calc(var(--i, 0) * 55ms);
+}
+.exam-edge-flow {
+  fill: none;
+  stroke: var(--edge);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 5 11;
+  opacity: 0;
+  filter: drop-shadow(0 0 4px var(--edge));
+  animation: exam-flow 1.1s linear infinite, exam-fade 0.4s ease forwards;
+  animation-delay: 0s, calc(var(--i, 0) * 55ms + 600ms);
+}
+
+@keyframes exam-draw { to { stroke-dashoffset: 0; } }
+@keyframes exam-flow { to { stroke-dashoffset: -32; } }
+@keyframes exam-fade { to { opacity: 0.95; } }
+@keyframes exam-pop {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+
+/* kartu peristiwa */
+.exam-node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid #25302e;
+  border-top: 3px solid var(--era1);
+  border-radius: 12px;
+  background: rgba(12, 16, 16, 0.96);
+  color: #f4eddd;
+  text-align: left;
+  cursor: pointer;
+  opacity: 0;
+  animation: exam-pop 0.5s ease forwards;
+  animation-delay: calc(var(--i, 0) * 45ms);
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.exam-node--era2 { border-top-color: var(--era2); }
+.exam-node:hover { transform: translateY(-3px); border-color: #3b4a47; }
+.exam-node.is-active {
+  border-color: #f4eddd;
+  box-shadow: 0 0 0 2px rgba(244, 237, 221, 0.18), 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.exam-node:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; }
+
+.exam-node-top { display: flex; align-items: center; gap: 7px; }
+.exam-node-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.exam-node-year { font: 600 11px var(--sans, system-ui, sans-serif); color: #a8a396; letter-spacing: 0.02em; }
+.exam-node-title {
+  font: 600 13px/1.35 var(--sans, system-ui, sans-serif);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.exam-empty { position: absolute; inset: 40px 0 auto; text-align: center; color: #8f8a7e; }
+
+/* panel detail */
+.exam-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+.exam-detail {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 60;
+  width: min(480px, 100vw);
+  height: 100vh;
+  overflow-y: auto;
+  padding: 26px 24px 40px;
+  border-left: 1px solid #1f2826;
+  background: #080b0b;
+  color: #f4eddd;
+  animation: exam-slide 0.3s ease;
+  scrollbar-color: #2a2a2a #080b0b;
+  scrollbar-width: thin;
+}
+@keyframes exam-slide { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.exam-detail-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  border: none;
+  background: none;
+  color: #f4eddd;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+.exam-detail-tags { display: flex; gap: 8px; margin-bottom: 10px; }
+.exam-tag {
+  padding: 3px 10px;
+  border: 1px solid #2a3331;
+  border-radius: 999px;
+  font: 600 11px var(--sans, system-ui, sans-serif);
+  color: #d9d4c6;
+}
+.exam-tag--era1 { border-color: var(--era1); color: var(--era1); }
+.exam-tag--era2 { border-color: var(--era2); color: var(--era2); }
+
+.exam-detail h2 { margin: 0 0 4px; font: 400 1.55rem/1.2 var(--serif, Georgia, serif); padding-right: 28px; }
+.exam-detail-meta { margin: 0 0 14px; font-size: 13px; color: #a8a396; }
+.exam-detail-ringkas { margin: 0 0 16px; font-size: 14.5px; line-height: 1.65; color: #ece6d6; font-weight: 500; }
+.exam-level { display: flex; gap: 8px; margin-bottom: 10px; }
+.exam-detail-body { margin: 0 0 18px; font-size: 14px; line-height: 1.75; color: #d6d0c1; }
+
+.exam-block { margin: 0 0 18px; padding-top: 14px; border-top: 1px solid #1a2220; }
+.exam-block h3 { margin: 0 0 8px; font: 600 12px var(--sans, system-ui, sans-serif); letter-spacing: 0.12em; text-transform: uppercase; color: var(--era1); }
+.exam-block p, .exam-block li { font-size: 13.5px; line-height: 1.7; color: #cfc9ba; }
+.exam-block ul { margin: 0; padding-left: 18px; }
+
+.exam-quiz-q { font-weight: 600; color: #f4eddd !important; margin: 0 0 10px; }
+.exam-quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.exam-option {
+  padding: 10px 12px;
+  border: 1px solid #2a3331;
+  border-radius: 10px;
+  background: #0b0f0f;
+  color: #e6e0d2;
+  font: 500 13px/1.4 var(--sans, system-ui, sans-serif);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.exam-option:hover:not(:disabled) { border-color: var(--era1); }
+.exam-option:disabled { cursor: default; }
+.exam-option.is-correct { border-color: #5fb878; background: #10261a; }
+.exam-option.is-wrong { border-color: #d9625a; background: #2a1413; }
+.exam-quiz-result { margin: 10px 0 0 !important; }
+.exam-quiz-result.is-correct { color: #8fd7a4 !important; }
+.exam-quiz-result.is-wrong { color: #f0a29c !important; }
+
+.exam-detail-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+.exam-detail-nav button {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  border: 1px solid #2a3331;
+  border-radius: 10px;
+  background: #0b0f0f;
+  color: #f4eddd;
+  text-align: left;
+  cursor: pointer;
+}
+.exam-detail-nav button:disabled { opacity: 0.4; cursor: default; }
+.exam-detail-nav button:hover:not(:disabled) { border-color: var(--era1); }
+.exam-detail-nav span { font: 600 12.5px var(--sans, system-ui, sans-serif); }
+.exam-detail-nav small {
+  font-size: 11.5px;
+  color: #a8a396;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 700px) {
+  .exam-header { flex-direction: column; }
+  .exam-count { margin-left: 0; }
+  .exam-detail { width: 100vw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exam-edge-base { animation: none; stroke-dashoffset: 0; }
+  .exam-edge-flow { animation: none; opacity: 0.8; }
+  .exam-node { animation: none; opacity: 1; }
+  .exam-detail { animation: none; }
+}
+
+/* Graf bercabang: wadah bisa digulir ke samping, garis dan kartu ikut menyorot rantai sebab-akibat. */
+.exam-scroller { max-width: 1400px; margin: 8px auto 0; overflow-x: auto; padding-bottom: 12px; scrollbar-color: #2a2a2a #050606; scrollbar-width: thin; }
+.exam-stage { max-width: none; margin: 0 auto; }
+.exam-node { transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.25s; }
+.exam-node.is-dim { opacity: 0.32 !important; }
+.exam-edge { transition: opacity 0.25s; }
+.exam-edge.is-dim { opacity: 0.18; }
+.exam-edge.is-lit .exam-edge-base { stroke-opacity: 0.85; stroke-width: 3; }
+.exam-edge.is-lit .exam-edge-flow { stroke-width: 3.2; }
+
+.exam-rel ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.exam-rel li { display: flex; flex-direction: column; gap: 3px; }
+.exam-rel li button {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid #2a3331;
+  border-radius: 8px;
+  background: #0b0f0f;
+  color: #f4eddd;
+  text-align: left;
+  cursor: pointer;
+}
+.exam-rel li button:hover { border-color: var(--era1); }
+.exam-rel li button strong { font: 600 12.5px/1.35 var(--sans, system-ui, sans-serif); }
+.exam-rel li button span { flex: none; font-size: 11.5px; color: #a8a396; }
+.exam-rel li small { font-size: 12px; line-height: 1.5; color: #9fb7b3; padding-left: 4px; }
+.exam-rel-kosong { font-style: italic; color: #8f8a7e !important; }
+
+/* Node berbentuk lingkaran dengan label di bawahnya (menggantikan kartu). */
+.exam-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  height: auto;
+  border: none;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  text-align: center;
+}
+.exam-node:hover { transform: none; border-color: transparent; }
+.exam-node.is-active { border-color: transparent; box-shadow: none; }
+.exam-node-circle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 3px solid var(--era1);
+  background: radial-gradient(circle at 35% 30%, #1b2624, #0a0e0e 70%);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.exam-node--era2 .exam-node-circle { border-color: var(--era2); }
+.exam-node:hover .exam-node-circle { transform: scale(1.1); }
+.exam-node.is-active .exam-node-circle {
+  border-color: #f4eddd;
+  box-shadow: 0 0 0 4px rgba(244, 237, 221, 0.2), 0 0 26px rgba(244, 237, 221, 0.35);
+  transform: scale(1.14);
+}
+.exam-node-year { font: 700 13.5px var(--sans, system-ui, sans-serif); color: #f4eddd; letter-spacing: 0.01em; }
+.exam-node-dot { position: absolute; right: 2px; bottom: 4px; width: 11px; height: 11px; border-radius: 50%; border: 2px solid #0a0e0e; }
+.exam-node-title {
+  font: 600 12px/1.35 var(--sans, system-ui, sans-serif);
+  color: #e6e0d2;
+  max-width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.exam-node.is-active .exam-node-title { color: #ffffff; }
+
+/* Tata letak radial: satu viewport yang bisa digeser (drag), di-zoom, dan dimulai dari pusat. */
+.exam-scroller {
+  height: calc(100vh - 240px);
+  min-height: 480px;
+  max-width: 1400px;
+  margin: 8px auto 0;
+  overflow: auto;
+  cursor: grab;
+  border: 1px solid #13201e;
+  border-radius: 14px;
+  background: radial-gradient(circle at center, #0b1312 0%, #050606 72%);
+  touch-action: pan-x pan-y;
+}
+.exam-scroller.is-dragging { cursor: grabbing; user-select: none; }
+.exam-zoomwrap { position: relative; }
+.exam-stage { position: absolute; left: 0; top: 0; margin: 0; max-width: none; transform-origin: 0 0; }
+.exam-zoom { display: flex; gap: 6px; }
+.exam-zoom .exam-chip { min-width: 40px; text-align: center; }
+
+.exam-ring { fill: none; stroke: #7fc4bf; stroke-opacity: 0.1; stroke-dasharray: 3 8; }
+.exam-ring-label { fill: #7f8a86; font: 600 10px var(--sans, system-ui, sans-serif); text-anchor: middle; opacity: 0.65; letter-spacing: 0.04em; }
+
+.exam-node-title { font-size: 11.5px; -webkit-line-clamp: 2; }
+
+/* Graf yang tumbuh dari satu peristiwa di pusat: tanpa lapisan dekade, tanpa tirai gelap di belakang detail. */
+.exam-ring, .exam-ring-label { display: none; }
+.exam-backdrop { display: none; }
+/* saat detail terbuka, area graf menyempit supaya peristiwa yang diklik tetap terlihat di sebelah panel */
+@media (min-width: 1000px) {
+  .exam-page.has-detail .exam-scroller { margin-right: min(480px, 38vw); max-width: none; }
+}
+/* penanda lingkaran yang masih punya peristiwa terhubung yang belum muncul */
+.exam-node.has-more .exam-node-circle::after {
+  content: "+";
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 17px;
+  height: 17px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #f4eddd;
+  color: #0a0e0e;
+  font: 700 13px/1 var(--sans, system-ui, sans-serif);
+}
+.exam-node.has-more .exam-node-circle { animation: exam-hint 2.2s ease-in-out infinite; }
+@keyframes exam-hint {
+  0%, 100% { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5); }
+  50% { box-shadow: 0 0 0 5px rgba(244, 237, 221, 0.12), 0 6px 18px rgba(0, 0, 0, 0.5); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .exam-node.has-more .exam-node-circle { animation: none; }
+}
+
+/* Node bergambar: foto dalam lingkaran, tahun sebagai lencana di bawahnya, huruf cetak lama (bukan sans generik). */
+.exam-heading h1 { font-family: var(--serif, "IM Fell English", Georgia, serif); font-weight: 400; letter-spacing: 0.01em; }
+.exam-node { gap: 4px; }
+.exam-node-circle { background: #0c1110; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55); }
+.exam-node-photo {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 35% 30%, #1d2927, #0a0e0e 75%);
+}
+.exam-node-icon { display: grid; place-items: center; opacity: 0.9; }
+.exam-node-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.92) contrast(1.02);
+}
+.exam-node-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 -18px 22px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+.exam-node-dot { right: -3px; bottom: 2px; width: 12px; height: 12px; z-index: 2; }
+.exam-node-year {
+  position: relative;
+  z-index: 1;
+  margin-top: -13px;
+  padding: 1px 10px 2px;
+  border: 1px solid var(--era1);
+  border-radius: 999px;
+  background: #0a0e0e;
+  color: #f4eddd;
+  font: 400 13px/1.25 var(--serif, "IM Fell English", Georgia, serif);
+  letter-spacing: 0.03em;
+}
+.exam-node--era2 .exam-node-year { border-color: var(--era2); }
+.exam-node.is-active .exam-node-year { background: #f4eddd; color: #0a0e0e; border-color: #f4eddd; }
+.exam-node-title {
+  font: 400 13.5px/1.28 var(--serif, "IM Fell English", Georgia, serif);
+  color: #ece6d6;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+.exam-node.is-active .exam-node-circle { transform: scale(1.1); }
+.exam-node:hover .exam-node-circle { transform: scale(1.07); }
+
+/* ===== Animasi buka node: node sebelumnya mundur, cabang internal (ringkasan, penyebab, akibat, detail) terbuka ===== */
+
+/* peristiwa yang baru dimunculkan terbang keluar dari peristiwa asalnya (--dx/--dy = arah ke asal) */
+.exam-node {
+  opacity: 1;
+  animation: exam-terbang 0.7s cubic-bezier(0.2, 0.85, 0.25, 1) both;
+}
+@keyframes exam-terbang {
+  from { opacity: 0; transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(0.3); }
+  to { opacity: 1; transform: none; }
+}
+
+/* node sebelumnya mundur: mengecil, meredup, dan sedikit mundur ke belakang */
+.exam-node.is-mundur { z-index: 1; }
+.exam-node.is-mundur .exam-node-circle {
+  transform: scale(0.78);
+  filter: brightness(0.62) saturate(0.7);
+}
+.exam-node.is-mundur .exam-node-title,
+.exam-node.is-mundur .exam-node-year { opacity: 0.55; }
+.exam-node .exam-node-title,
+.exam-node .exam-node-year { transition: opacity 0.4s ease; }
+.exam-node .exam-node-circle { transition: transform 0.45s cubic-bezier(0.2, 0.85, 0.25, 1), filter 0.45s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
+
+/* wadah cabang internal */
+.exam-grup { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 8; }
+.exam-facet { position: absolute; width: 0; height: 0; }
+.exam-facet-center { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); }
+.exam-facet-anim {
+  animation: exam-facet-masuk 0.55s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+.exam-grup.is-menutup .exam-facet-anim {
+  animation: exam-facet-keluar 0.38s cubic-bezier(0.5, 0, 0.9, 0.4) both;
+  animation-delay: 0ms;
+  pointer-events: none;
+}
+@keyframes exam-facet-masuk {
+  from { opacity: 0; transform: translate(var(--fx, 0px), var(--fy, 0px)) scale(0.15); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes exam-facet-keluar {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translate(var(--fx, 0px), var(--fy, 0px)) scale(0.15); }
+}
+
+/* kapsul cabang */
+.exam-facet-kapsul {
+  padding: 6px 15px 7px;
+  border: 1px solid #7fc4bf;
+  border-radius: 999px;
+  background: #0b100f;
+  color: #ece6d6;
+  font: 400 13.5px/1.2 var(--serif, "IM Fell English", Georgia, serif);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+  transition: transform 0.2s, background 0.2s, color 0.2s;
+}
+.exam-facet-kapsul:hover { transform: scale(1.07); background: #17302d; color: #ffffff; }
+.exam-facet-kapsul--ringkasan { border-color: #f4eddd; }
+.exam-facet-kapsul--sebab { border-color: #e0a56a; }
+.exam-facet-kapsul--akibat { border-color: #7fc4bf; }
+.exam-facet-kapsul--detail { border-color: #b08fd8; }
+
+/* garis dari node ke cabang */
+.exam-facet-line {
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  stroke-opacity: 0.7;
+  animation: exam-draw 0.45s ease forwards;
+  animation-delay: var(--d, 0ms);
+}
+.exam-facet-line--ringkasan { stroke: #f4eddd; }
+.exam-facet-line--sebab { stroke: #e0a56a; }
+.exam-facet-line--akibat { stroke: #7fc4bf; }
+.exam-facet-line--detail { stroke: #b08fd8; }
+.exam-grup-garis.is-menutup .exam-facet-line { animation: exam-undraw 0.32s ease forwards; animation-delay: 0ms; }
+@keyframes exam-undraw { from { stroke-dashoffset: 0; } to { stroke-dashoffset: 1; } }
+
+/* kartu yang mekar dari kapsul */
+.exam-kartu {
+  position: relative;
+  width: 272px;
+  padding: 14px 18px 16px;
+  border: 1px solid #2d3d3a;
+  border-radius: 16px;
+  background: rgba(8, 12, 11, 0.97);
+  color: #e9e3d3;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.65);
+  font-family: var(--serif, "IM Fell English", Georgia, serif);
+  text-align: left;
+  cursor: default;
+}
+.exam-kartu--ringkasan { border-color: #6b665a; }
+.exam-kartu--sebab { border-color: #8a6a44; }
+.exam-kartu--akibat { border-color: #3d6a66; }
+.exam-kartu h4 { margin: 0 0 6px; font: 400 16px/1.2 var(--serif, "IM Fell English", Georgia, serif); letter-spacing: 0.04em; color: #ffffff; }
+.exam-kartu p { margin: 0; font: 400 14.5px/1.5 var(--serif, "IM Fell English", Georgia, serif); color: #e4ddcc; }
+.exam-kartu-meta { margin-bottom: 6px !important; font-size: 12.5px !important; color: #9b968a !important; }
+.exam-kartu-tutup { position: absolute; top: 8px; right: 12px; border: none; background: none; color: #a8a396; font-size: 20px; line-height: 1; cursor: pointer; }
+.exam-kartu-tutup:hover { color: #ffffff; }
+.exam-kartu-daftar { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; max-height: 260px; overflow-y: auto; }
+.exam-kartu-daftar li { display: flex; flex-direction: column; gap: 2px; }
+.exam-kartu-daftar button {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 9px;
+  border: 1px solid #2a3a37;
+  border-radius: 9px;
+  background: #0d1312;
+  color: #f2ecdc;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--serif, "IM Fell English", Georgia, serif);
+}
+.exam-kartu-daftar button:hover { border-color: #7fc4bf; }
+.exam-kartu-daftar strong { font-weight: 400; font-size: 13.5px; line-height: 1.3; }
+.exam-kartu-daftar button span { flex: none; font-size: 12px; color: #a8a396; }
+.exam-kartu-daftar small { font-size: 12.5px; line-height: 1.4; color: #98b3ae; padding-left: 3px; }
+.exam-kartu-semua {
+  margin-top: 10px;
+  padding: 6px 12px;
+  border: 1px solid #7fc4bf;
+  border-radius: 999px;
+  background: transparent;
+  color: #ece6d6;
+  font: 400 13px var(--serif, "IM Fell English", Georgia, serif);
+  cursor: pointer;
+}
+.exam-kartu-semua:hover { background: #17302d; }
+
+@media (prefers-reduced-motion: reduce) {
+  .exam-node, .exam-facet-anim, .exam-grup.is-menutup .exam-facet-anim { animation: none; }
+  .exam-facet-line { animation: none; stroke-dashoffset: 0; }
+  .exam-grup-garis.is-menutup .exam-facet-line { display: none; }
+}
+
+/* Latar Lightfall di belakang seluruh halaman Materi Evaluasi; konten tetap di atasnya. */
+.exam-page { position: relative; isolation: isolate; }
+.exam-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.exam-header, .exam-controls, .exam-scroller { position: relative; z-index: 1; }
+/* area graf dibuat semi-transparan agar cahaya di belakang tetap terlihat */
+.exam-scroller { background: radial-gradient(circle at center, rgba(11, 19, 18, 0.5) 0%, rgba(5, 6, 6, 0.32) 72%); }
+
+/* Kartu cabang berbentuk 3D: terbuka dengan memutar dari atas, miring mengikuti kursor, isi melayang. */
+.exam-c3d { perspective: 1000px; }
+.exam-kartu {
+  transform-origin: 50% 0%;
+  animation: exam-kartu-buka 0.65s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  /* kartu tidak lagi memakai tinggi tetap; ukuran mengikuti isi */
+  display: block;
+}
+@keyframes exam-kartu-buka {
+  from { opacity: 0; transform: rotateX(-78deg) translateZ(-90px) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+.exam-kartu .c3d-item { transition: transform 0.25s ease-out; }
+.exam-kartu-tutup.c3d-item { position: absolute; }
+.exam-kartu-semua.c3d-item { margin-top: 10px; }
+.exam-kartu p.c3d-item { margin: 0; }
+.exam-kartu h4.c3d-item { margin: 0 0 6px; }
+@media (prefers-reduced-motion: reduce) {
+  .exam-kartu { animation: none; }
+}
+
+/* ===== Karusel 3D: satu kartu di tengah, dua kartu serong di kiri dan kanan ===== */
+.exam-kar { position: absolute; width: 0; height: 0; z-index: 8; }
+.exam-kar-pos { position: absolute; left: 0; top: 0; transform: translate(-50%, 0); }
+.exam-kar.is-atas .exam-kar-pos { transform: translate(-50%, -100%); }
+.exam-kar-anim {
+  animation: exam-kar-masuk 0.7s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  transform-origin: 50% 0%;
+}
+.exam-kar.is-atas .exam-kar-anim { transform-origin: 50% 100%; }
+.exam-kar.is-menutup .exam-kar-anim { animation: exam-kar-keluar 0.4s cubic-bezier(0.5, 0, 0.9, 0.4) both; pointer-events: none; }
+@keyframes exam-kar-masuk {
+  from { opacity: 0; transform: translateY(var(--fy, 0px)) rotateX(55deg) scale(0.25); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes exam-kar-keluar {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(var(--fy, 0px)) rotateX(55deg) scale(0.25); }
+}
+
+.exam-kar-panggung {
+  display: grid;
+  width: 720px;
+  perspective: 1100px;
+  transform-style: preserve-3d;
+}
+.exam-kar-kartu {
+  grid-area: 1 / 1;
+  align-self: start;
+  justify-self: center;
+  width: 254px;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease, filter 0.5s ease;
+}
+.exam-kar-kartu.is-tengah { transform: translateZ(0) scale(1); opacity: 1; z-index: 3; }
+.exam-kar-kartu.is-kiri {
+  transform: translateX(-236px) translateZ(-80px) rotateY(36deg) scale(0.9);
+  opacity: 0.8;
+  filter: brightness(0.72);
+  z-index: 1;
+  cursor: pointer;
+}
+.exam-kar-kartu.is-kanan {
+  transform: translateX(236px) translateZ(-80px) rotateY(-36deg) scale(0.9);
+  opacity: 0.8;
+  filter: brightness(0.72);
+  z-index: 1;
+  cursor: pointer;
+}
+.exam-kar-kartu.is-kiri:hover,
+.exam-kar-kartu.is-kanan:hover { filter: brightness(0.95); opacity: 0.95; }
+.exam-kar-kartu .exam-kartu { width: 254px; animation: none; }
+.exam-kartu-kosong { font-style: italic; color: #9b968a !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .exam-kar-anim, .exam-kar.is-menutup .exam-kar-anim { animation: none; }
+  .exam-kar-kartu { transition: none; }
+}
+
+/* Wadah karusel tidak boleh menangkap klik: kartu samping berada di belakang (translateZ negatif), jadi kotak wadah
+   di Z=0 akan menutupinya saat hit-testing. Hanya kartu yang menerima klik. */
+.exam-kar, .exam-kar-pos, .exam-kar-anim, .exam-kar-panggung { pointer-events: none; }
+.exam-kar-kartu { pointer-events: auto; }
+.exam-kar.is-menutup .exam-kar-kartu { pointer-events: none; }
+
+/* ===== Pencarian kata kunci: jalur dari pusat ke hasil disorot, kamera mengikuti ===== */
+.exam-cari { display: flex; align-items: center; gap: 8px; flex: 1 1 280px; min-width: 240px; max-width: 520px; }
+.exam-cari-input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 14px;
+  border: 1px solid #2a3331;
+  border-radius: 999px;
+  background: rgba(10, 13, 13, 0.85);
+  color: #f4eddd;
+  font: 400 14px var(--serif, "IM Fell English", Georgia, serif);
+  letter-spacing: 0.02em;
+}
+.exam-cari-input::placeholder { color: #8a867a; }
+.exam-cari-input:focus { outline: none; border-color: #f4c46a; box-shadow: 0 0 0 3px rgba(244, 196, 106, 0.18); }
+
+.exam-hasil { max-width: 1400px; margin: 4px auto 8px; position: relative; z-index: 1; }
+.exam-hasil-info { margin: 0 0 8px; font: 400 14px var(--serif, "IM Fell English", Georgia, serif); color: #d8d2c2; }
+.exam-hasil-daftar { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* jalur yang sedang ditelusuri */
+.exam-node.is-jalur .exam-node-circle {
+  border-color: #f4c46a;
+  box-shadow: 0 0 0 4px rgba(244, 196, 106, 0.22), 0 0 24px rgba(244, 196, 106, 0.45);
+}
+.exam-node.is-jalur .exam-node-year { border-color: #f4c46a; }
+.exam-node.is-cocok:not(.is-jalur) .exam-node-circle { outline: 2px dashed #f4c46a; outline-offset: 4px; }
+.exam-edge.is-jalur { --edge: #f4c46a; }
+.exam-edge.is-jalur .exam-edge-base { stroke-opacity: 0.95; stroke-width: 3.6; }
+.exam-edge.is-jalur .exam-edge-flow { stroke-width: 3.6; animation-duration: 0.6s, 0.4s; }
+
+/* ===== Optimalisasi render ===== */
+/* filter drop-shadow beranimasi pada banyak garis sangat mahal; sisakan hanya pada garis yang sedang disorot */
+.exam-edge-flow { filter: none; }
+.exam-edge.is-lit .exam-edge-flow,
+.exam-edge.is-jalur .exam-edge-flow { filter: drop-shadow(0 0 3px var(--edge)); }
+/* garis yang diredupkan tidak perlu beranimasi */
+.exam-edge.is-dim .exam-edge-flow { animation-play-state: paused; }
+
+/* denyut penanda "masih ada peristiwa terhubung": animasi transform/opacity (dikerjakan compositor), bukan box-shadow */
+.exam-node.has-more .exam-node-circle { animation: none; }
+.exam-node.has-more .exam-node-circle::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid rgba(244, 237, 221, 0.4);
+  pointer-events: none;
+  opacity: 0.4;
+  animation: exam-denyut 2.2s ease-in-out 4; /* berdenyut 4x lalu diam: tidak ada animasi abadi saat halaman idle */
+  will-change: transform, opacity; /* layer sendiri: berjalan di compositor, tidak memicu hitung ulang gaya tiap frame */
+}
+@keyframes exam-denyut {
+  0%, 100% { transform: scale(0.94); opacity: 0.15; }
+  50% { transform: scale(1.1); opacity: 0.65; }
+}
+/* node berdiri sendiri: perubahan di dalamnya tidak memicu penghitungan ulang tata letak di luarnya */
+.exam-node { contain: layout style; }
+
+@media (prefers-reduced-motion: reduce) {
+  .exam-node.has-more .exam-node-circle::before { animation: none; opacity: 0.4; }
+}
+
+/* ===== Optimalisasi tahap 2: batasi animasi main-thread ===== */
+/* Banyak garis: yang tidak disorot tampil statis (tanpa animasi aliran dan tanpa filter). */
+.exam-stage--banyak .exam-edge:not(.is-lit):not(.is-jalur-baru) .exam-edge-flow {
+  animation: none;
+  opacity: 0.5;
+  filter: none;
+}
+/* Garis jalur lama: statis berwarna emas; hanya dua garis jalur terbaru dan garis node terpilih yang mengalir. */
+.exam-edge.is-jalur:not(.is-jalur-baru) .exam-edge-flow { animation: none; opacity: 0.9; filter: none; }
+
+/* Sorotan seluruh jalur: saat kamera memperkecil tampilan, semua garis dan node jalur menyala bersama. */
+.exam-stage--sorot .exam-edge.is-jalur { --edge: #fff4cf; }
+.exam-stage--sorot .exam-edge.is-jalur .exam-edge-base { stroke-opacity: 1; stroke-width: 6; }
+.exam-stage--sorot .exam-edge.is-jalur .exam-edge-flow { animation: none; opacity: 1; stroke-width: 6; filter: drop-shadow(0 0 6px #fff4cf) drop-shadow(0 0 14px rgba(244, 196, 106, 0.9)); }
+.exam-stage--sorot .exam-node.is-jalur .exam-node-circle {
+  border-color: #fff4cf;
+  box-shadow: 0 0 0 5px rgba(255, 244, 207, 0.55), 0 0 34px rgba(244, 196, 106, 0.9);
+}
+.exam-stage--sorot .exam-node.is-jalur .exam-node-year { border-color: #fff4cf; box-shadow: 0 0 12px rgba(244, 196, 106, 0.8); }
+.exam-edge.is-jalur .exam-edge-flow { filter: none; }
+.exam-edge.is-jalur-baru .exam-edge-flow,
+.exam-edge.is-lit .exam-edge-flow { filter: drop-shadow(0 0 3px var(--edge)); }
+
+
+/* Perangkat sentuh: chip filter dan tombol kontrol lebih mudah diketuk. */
+@media (pointer: coarse) {
+  .exam-chip { min-height: 40px; }
+}
