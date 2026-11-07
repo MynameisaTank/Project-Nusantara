@@ -42,6 +42,7 @@ export function YearBadge({ year, playing }: Props) {
           threshold={0}
           rootMargin="0px"
           triggerOnce
+          segera
           triggerOnHover={false}
           textAlign="left"
         />

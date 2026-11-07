@@ -1,14 +1,18 @@
 /**
  * "Pemasangan" aset grafis untuk web: sebelum menu dibuka, modul grafik yang dibutuhkan tingkat aktif
- * diunduh lebih dulu (lewat import dinamis), gambar yang langsung terlihat di menu disimpan ke Cache Storage,
- * dan aplikasi menunggu service worker selesai menyimpan kode aplikasi di perangkat (lihat lib/pwa.ts).
+ * diunduh lebih dulu (lewat import dinamis) dan gambar yang langsung terlihat di menu disimpan ke Cache Storage.
  * Kunjungan berikutnya memakai salinan dari cache, sehingga pemuatan jauh lebih cepat.
+ *
+ * Perangkat lemah (tingkat Ringan dan Dasar, mis. ponsel Android 9 kelas bawah) hanya mengunduh gambar menu
+ * yang kecil sebelum menu tampil. Modul layar berikutnya tidak dimuat di muka, karena mengimpornya berarti
+ * menjalankannya (±1 detik di CPU lambat) dan itu bisa memotong sentuhan pengguna di menu; modul itu diunduh
+ * service worker di latar (mendaftar saat browser menganggur, lib/pwa.ts), dan dijalankan ketika layarnya dibuka.
  *
  * Setiap tugas dibatasi waktunya dan seluruh proses dibatasi total, jadi kegagalan jaringan
  * tidak pernah menahan aplikasi di layar pemuatan.
  */
-import type { Tingkat } from "./perangkat";
-import { GAMBAR_GALERI_MENU, GAMBAR_MARQUEE, MARQUEE_RINGAN } from "../data/asetGrafis";
+import { tingkatHemat, type Tingkat } from "./perangkat";
+import { GAMBAR_MARQUEE, GAMBAR_MARQUEE_KECIL, MARQUEE_RINGAN } from "../data/asetGrafis";
 import { layarKecil } from "./layar";
 
 export interface Kemajuan {
@@ -21,7 +25,6 @@ export interface Kemajuan {
 const NAMA_CACHE = "nusantara-grafis-v2";
 const AWALAN_CACHE = "nusantara-grafis-";
 const WAKTU_TUGAS_MS = 15000;
-const WAKTU_SERVICE_WORKER_MS = 10000;
 const WAKTU_TOTAL_MS = 25000;
 /** Unduhan serentak dibatasi agar tidak membanjiri jaringan seluler dan tidak memicu batas laju Wikimedia Commons. */
 const PARALEL = 4;
@@ -29,8 +32,6 @@ const PARALEL = 4;
 interface Tugas {
   label: string;
   jalankan: () => Promise<unknown>;
-  /** batas waktu khusus; bawaannya WAKTU_TUGAS_MS */
-  waktu?: number;
 }
 
 function batasWaktu<T>(janji: Promise<T>, ms: number): Promise<T> {
@@ -87,10 +88,19 @@ async function bersihkanCacheLama(): Promise<void> {
   await Promise.all(nama.filter((n) => n.startsWith(AWALAN_CACHE) && n !== NAMA_CACHE).map((n) => caches.delete(n)));
 }
 
-/** Menunggu service worker aktif (hanya ada di build produksi). Jika tidak tersedia, langsung selesai. */
-async function tungguServiceWorker(): Promise<void> {
-  if (!import.meta.env.PROD || !("serviceWorker" in navigator)) return;
-  await navigator.serviceWorker.ready;
+/** Modul grafik yang dipakai layar sesudah menu (pemilihan era dan efek latar), menurut tingkat. */
+function daftarModul(tingkat: Tingkat): Tugas[] {
+  const modul: Tugas[] = [];
+  if (tingkat === "dasar") return modul;
+  modul.push({ label: "modul galeri 3D", jalankan: () => import("../components/reactbits/SphereGallery") });
+  // Tingkat Ringan memakai latar gradien CSS, jadi shader latar tidak perlu diunduh.
+  if (tingkat === "sedang" || tingkat === "tinggi") {
+    modul.push({ label: "shader latar", jalankan: () => import("../components/reactbits/GradientASCII") });
+  }
+  if (tingkat === "tinggi") {
+    modul.push({ label: "efek kaca menu", jalankan: () => import("../components/reactbits/AeroShards") });
+  }
+  return modul;
 }
 
 /** Jalankan tugas dengan paling banyak `paralel` yang berjalan bersamaan, mulai dari tugas pertama. */
@@ -100,7 +110,7 @@ async function jalankanBertahap(tugas: Tugas[], paralel: number, saatSelesai: (t
     while (berikutnya < tugas.length) {
       const t = tugas[berikutnya++]!;
       try {
-        await batasWaktu(t.jalankan(), t.waktu ?? WAKTU_TUGAS_MS);
+        await batasWaktu(t.jalankan(), WAKTU_TUGAS_MS);
       } catch (galat) {
         console.warn(`[persiapan] ${t.label} belum tersedia:`, galat);
       } finally {
@@ -123,23 +133,18 @@ export async function siapkanGrafis(
   void bersihkanCacheLama().catch(() => undefined);
 
   const tugas: Tugas[] = [];
-  if (tingkat !== "dasar") {
-    tugas.push({ label: "modul galeri 3D", jalankan: () => import("../components/reactbits/SphereGallery") });
-    tugas.push({ label: "shader latar", jalankan: () => import("../components/reactbits/GradientASCII") });
-  }
-  if (tingkat === "tinggi") {
-    tugas.push({ label: "efek kaca menu", jalankan: () => import("../components/reactbits/AeroShards") });
-  }
-  // Mode hemat hanya melewati gambar; modul grafik tetap diunduh karena dibutuhkan untuk tampilan.
-  // Hanya gambar yang langsung terlihat di menu yang diunduh di muka; gambar layar lain dimuat saat dibuka.
-  // Layar sempit memakai lebih sedikit gambar latar (lihat MARQUEE_RINGAN).
+  const ringkas = layarKecil() || tingkatHemat(tingkat);
+  // Perangkat lemah tidak memuat modul layar berikutnya di muka (lihat catatan di atas berkas).
+  if (!tingkatHemat(tingkat)) tugas.push(...daftarModul(tingkat));
+  // Mode hemat data hanya melewati gambar. Hanya gambar yang langsung terlihat di menu yang diunduh di muka;
+  // gambar layar lain dimuat saat layarnya dibuka. Layar sempit dan perangkat lemah memakai lebih sedikit
+  // gambar latar dan versi yang lebih kecil (lihat MARQUEE_RINGAN), sama dengan yang dipilih MainMenu.
   if (!hemat) {
-    const latar = layarKecil() ? GAMBAR_MARQUEE.slice(0, MARQUEE_RINGAN) : GAMBAR_MARQUEE;
-    for (const url of [...latar, ...GAMBAR_GALERI_MENU]) {
+    const latar = ringkas ? GAMBAR_MARQUEE_KECIL.slice(0, MARQUEE_RINGAN) : GAMBAR_MARQUEE;
+    for (const url of latar) {
       tugas.push({ label: "gambar sejarah", jalankan: () => unduhGambar(url) });
     }
   }
-  tugas.push({ label: "menyimpan aplikasi di perangkat", jalankan: tungguServiceWorker, waktu: WAKTU_SERVICE_WORKER_MS });
 
   const total = tugas.length;
   let selesai = 0;

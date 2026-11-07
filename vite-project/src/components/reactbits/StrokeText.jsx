@@ -6,9 +6,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import './StrokeText.css';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+// Perubahan dari sumber: ScrollTrigger didaftarkan hanya saat trigger="scroll" dipakai (lihat di bawah). Yang sudah
+// terdaftar menahan ticker GSAP tetap berjalan selamanya, sehingga halaman menyusun bingkai terus walau diam.
 
 const DEFAULT_TEXT = 'Draw Attention';
 const SHADOW_OPACITY = 0.5;
@@ -238,6 +237,7 @@ const StrokeText = ({
     } else {
       timeline = build();
       if (trigger === 'scroll') {
+        gsap.registerPlugin(ScrollTrigger);
         scrollTrigger = ScrollTrigger.create({
           trigger: root,
           start: 'top 82%',

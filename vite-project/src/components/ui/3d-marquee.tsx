@@ -7,9 +7,12 @@ import type { CSSProperties } from "react";
 export const ThreeDMarquee = ({
   images,
   className,
+  reducedMotion = "user",
 }: {
   images: string[];
   className?: string;
+  /** Perubahan dari sumber: "always" membekukan gerakan kolom di perangkat lemah (bawaannya mengikuti pengaturan sistem). */
+  reducedMotion?: "user" | "always";
 }) => {
   // Split the images array into 4 equal parts
   const chunkSize = Math.ceil(images.length / 4);
@@ -19,7 +22,7 @@ export const ThreeDMarquee = ({
   });
   // Perubahan dari sumber: menghormati prefers-reduced-motion lewat konfigurasi Motion.
   return (
-    <MotionConfig reducedMotion="user">
+    <MotionConfig reducedMotion={reducedMotion}>
       <div
         className={cn(
           "mx-auto block h-[600px] overflow-hidden rounded-2xl max-sm:h-100",

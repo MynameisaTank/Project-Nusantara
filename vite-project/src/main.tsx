@@ -5,11 +5,14 @@ import "./styles/style.css";
 import "./styles/noise-frames.css";
 import App from "./App";
 import "./styles/mobile.css";
+import "./styles/ringan.css";
 import { pasangPenangkapGalat } from "./lib/clientLog";
 import { mulaiPwa } from "./lib/pwa";
+import { pasangLayarPenuhOtomatis } from "./lib/layarPenuh";
 
 pasangPenangkapGalat();
 mulaiPwa();
+pasangLayarPenuhOtomatis();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

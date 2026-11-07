@@ -1,10 +1,13 @@
 "use client";
 
 import { cn } from "../../lib/utils";
+import { useGrafisHemat } from "../../lib/grafis";
+import { useLayarKecil } from "../../lib/layar";
 import noiseUrl from "../../assets/noise.png";
 import {
+  cancelFrame,
+  frame,
   motion,
-  useAnimationFrame,
   useMotionTemplate,
   useMotionValue,
   useReducedMotion,
@@ -74,9 +77,15 @@ export const NoiseBackground = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  // Pengguna yang meminta reduced motion tidak melihat gerakan; gradien tetap di tengah
+  // Pengguna yang meminta reduced motion tidak melihat gerakan; gradien tetap di tengah.
+  // Hal yang sama berlaku di tingkat grafik hemat: setiap bingkai gradien membaca ukuran elemen dan menulis ulang
+  // gaya, dan menu memakai enam bingkai sekaligus, yang terasa di ponsel dengan CPU lambat.
   const reduceMotion = useReducedMotion();
-  const runs = animating && !reduceMotion;
+  const hemat = useGrafisHemat();
+  // Di layar sempit gradien juga diam: tidak ada kursor yang menyorot tombol, dan tiga lapis gradien per kartu
+  // digambar ulang setiap bingkai.
+  const kecil = useLayarKecil();
+  const runs = animating && !reduceMotion && !hemat && !kecil;
 
   // Use spring animation for smooth movement
   const springX = useSpring(x, { stiffness: 100, damping: 30 });
@@ -123,9 +132,25 @@ export const NoiseBackground = ({
     velocityRef.current = generateRandomVelocityRef.current();
   }, [speed]);
 
-  // Animate using motion/react's useAnimationFrame
-  useAnimationFrame((time) => {
-    if (!runs || !containerRef.current) return;
+  // Perubahan dari sumber: useAnimationFrame berlangganan ke loop bingkai Motion selama komponen terpasang, walau
+  // isinya langsung kembali. Enam kartu di menu membuat halaman menyusun bingkai 60 kali per detik tanpa henti.
+  // Di sini langganan hanya ada selama gradien benar-benar bergerak (runs), sama seperti useAnimationFrame lainnya
+  // (waktu dihitung sejak langganan dimulai).
+  const awalWaktuRef = useRef(0);
+  useEffect(() => {
+    if (!runs) return;
+    const langkah = ({ timestamp }: { timestamp: number }) => {
+      if (!awalWaktuRef.current) awalWaktuRef.current = timestamp;
+      gerakkan(timestamp - awalWaktuRef.current);
+    };
+    frame.update(langkah, true);
+    return () => cancelFrame(langkah);
+    // gerakkan hanya memakai ref, x, y, dan speed, jadi cukup bergantung pada nilai-nilai ini
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [runs, x, y, speed]);
+
+  function gerakkan(time: number) {
+    if (!containerRef.current) return;
 
     const rect = containerRef.current.getBoundingClientRect();
     const maxX = rect.width;
@@ -171,13 +196,15 @@ export const NoiseBackground = ({
 
     x.set(newX);
     y.set(newY);
-  });
+  }
 
   return (
     <div
       ref={containerRef}
       className={cn(
-        "group relative overflow-hidden rounded-2xl bg-neutral-200 p-2 backdrop-blur-sm dark:bg-neutral-800",
+        // Perubahan dari sumber: backdrop-blur-sm dihapus. Semua bingkai di proyek ini berlatar solid, jadi blur tidak
+        // terlihat, tetapi tetap dihitung ulang setiap kali latar di belakangnya (marquee) bergerak.
+        "group relative overflow-hidden rounded-2xl bg-neutral-200 p-2 dark:bg-neutral-800",
         "shadow-[0px_0.5px_1px_0px_var(--color-neutral-400)_inset,0px_1px_0px_0px_var(--color-neutral-100)]",
         "dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)]",
         backdropBlur &&
@@ -222,15 +249,18 @@ export const NoiseBackground = ({
         }}
       />
 
-      {/* Static Noise Pattern (berkas lokal, bukan dari CDN pihak ketiga) */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <img
-          src={noiseUrl}
-          alt=""
-          className="h-full w-full object-cover opacity-[var(--noise-opacity)]"
-          style={{ mixBlendMode: "overlay" }}
-        />
-      </div>
+      {/* Static Noise Pattern (berkas lokal, bukan dari CDN pihak ketiga). Perangkat lemah melewatinya: 224 KB gambar
+          dan mode campuran overlay yang memaksa setiap tombol disusun terpisah, untuk butiran yang nyaris tak terlihat. */}
+      {!hemat && (
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <img
+            src={noiseUrl}
+            alt=""
+            className="h-full w-full object-cover opacity-[var(--noise-opacity)]"
+            style={{ mixBlendMode: "overlay" }}
+          />
+        </div>
+      )}
 
       {/* Content */}
       <div className={cn("relative z-10", className)}>{children}</div>

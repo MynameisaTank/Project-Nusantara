@@ -29,6 +29,8 @@ export interface ShuffleProps {
   respectReducedMotion?: boolean;
   triggerOnHover?: boolean;
   hoverRadius?: number;
+  /** mulai animasi langsung saat dipasang, tanpa ScrollTrigger (untuk teks yang selalu terlihat) */
+  segera?: boolean;
 }
 
 declare const Shuffle: (props: ShuffleProps) => JSX.Element;

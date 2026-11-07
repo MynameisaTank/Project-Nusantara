@@ -14,12 +14,70 @@
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400..900&display=swap">
+  <!-- Font tidak lagi memblokir tampilan pertama: stylesheet diunduh sebagai "print" lalu dijadikan "all" setelah tiba.
+       Teks tampil dulu dengan font cadangan (display=swap), lalu berganti. Di jaringan lambat ini mempercepat layar pertama. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400..900&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400..900&display=swap"></noscript>
   <title>Nusantara Bersamaan (prototype)</title>
 </head>
 <body>
   <div id="root"></div>
   <noscript>Game ini membutuhkan JavaScript.</noscript>
+  <script>
+    // Jaring pengaman untuk browser lama (mis. Android System WebView yang tidak diperbarui): bila kode aplikasi
+    // gagal dijalankan atau belum tampil juga setelah 20 detik, tampilkan petunjuk, bukan layar kosong. React mengganti
+    // isi #root begitu aplikasi berhasil dimuat, jadi pesan ini hilang sendiri pada jaringan lambat.
+    (function () {
+      // Aplikasi memberi tanda (App.tsx) saat sudah tampil. Galat sebelum itu dicatat, supaya pesan ini bisa
+      // menyebutkan penyebab sebenarnya (dilaporkan pengguna sebagai "Aplikasi belum bisa ditampilkan").
+      var galat = "";
+      var KUNCI_ULANG = "nusantara-ulang-otomatis";
+      function catat(pesan) { if (!galat) galat = pesan; }
+      function sudahSiap() { return !!document.documentElement.dataset.siap; }
+      function tampilkan() {
+        var akar = document.getElementById("root");
+        if (!akar || sudahSiap() || akar.firstChild) return;
+        var kotak = document.createElement("div");
+        kotak.setAttribute("style", "min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;box-sizing:border-box;background:#050606;color:#f4eddd;font:16px/1.5 system-ui,sans-serif;text-align:center");
+        var teks = document.createElement("p");
+        teks.setAttribute("style", "max-width:28em;margin:0");
+        teks.textContent = "Aplikasi belum bisa ditampilkan. Sambunganmu mungkin lambat atau terputus. Coba muat ulang. Jika tetap begini, perbarui Google Chrome atau Android System WebView dari Play Store.";
+        var detail = document.createElement("p");
+        detail.setAttribute("style", "max-width:36em;margin:0;font:12px/1.4 ui-monospace,monospace;color:#9eafa4;word-break:break-word");
+        detail.textContent = "Detail teknis: " + (galat || "tidak ada galat tercatat (kemungkinan pemuatan belum selesai)");
+        var tombol = document.createElement("button");
+        tombol.type = "button";
+        tombol.setAttribute("style", "padding:10px 22px;border:0;border-radius:999px;background:#5fa8a3;color:#0f2420;font:600 14px system-ui,sans-serif;cursor:pointer");
+        tombol.textContent = "Muat ulang";
+        tombol.onclick = function () { location.reload(); };
+        kotak.appendChild(teks); kotak.appendChild(detail); kotak.appendChild(tombol);
+        akar.innerHTML = "";
+        akar.appendChild(kotak);
+      }
+      // Galat pertama sebelum aplikasi tampil (mis. modul gagal dimuat) dicoba ulang otomatis satu kali per sesi.
+      function galatAwal(pesan) {
+        catat(pesan);
+        if (sudahSiap()) return;
+        var sudahCoba = false;
+        try { sudahCoba = sessionStorage.getItem(KUNCI_ULANG) === "1"; } catch (e) { /* abaikan */ }
+        if (!sudahCoba) {
+          try { sessionStorage.setItem(KUNCI_ULANG, "1"); } catch (e) { /* abaikan */ }
+          setTimeout(function () { if (!sudahSiap()) location.reload(); }, 2500);
+          return;
+        }
+        setTimeout(tampilkan, 4000);
+      }
+      window.addEventListener("error", function (ev) {
+        var asal = ev.filename ? " @ " + ev.filename.split("/").pop() + ":" + ev.lineno : "";
+        galatAwal((ev.message || (ev.error && ev.error.message) || "galat tidak dikenal") + asal);
+      });
+      window.addEventListener("unhandledrejection", function (ev) {
+        var r = ev.reason;
+        galatAwal("promise: " + (r && r.message ? r.message : String(r)));
+      });
+      setTimeout(tampilkan, 45000);
+    })();
+  </script>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

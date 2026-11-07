@@ -5,6 +5,7 @@ import { EVENTS2 } from "../data/events2";
 import { EVENTS3 } from "../data/events3";
 import { RELASI, type Relasi } from "../data/sebabAkibat";
 import { Icon } from "./Icon";
+import { useLayarKecil } from "../lib/layar";
 import Lightfall from "./reactbits/Lightfall";
 import { CardBody, CardContainer, CardItem } from "./Card3D";
 import { GAMBAR_NODE } from "../data/gambarNode";
@@ -77,6 +78,10 @@ const TAU = Math.PI * 2;
 
 const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 1.6;
+/* Layar sempit (ponsel): graf dimulai lebih kecil supaya cabang akibat langsung terlihat tanpa menggeser ke kanan,
+ * dan zoom boleh turun lebih jauh. */
+const ZOOM_MIN_KECIL = 0.25;
+const ZOOM_AWAL_KECIL = 0.5;
 
 
 /** Tahun untuk urutan dan lingkaran: empat angka pertama pada teks tahun, atau awal rentang tampil. */
@@ -295,13 +300,20 @@ export function ExamReview({ onBack }: Props) {
   const [panelBuka, setPanelBuka] = useState(false);
   const [level, setLevel] = useState<LevelBahasa>(2);
   const [latarGagal, setLatarGagal] = useState(false);
-  const [zoom, setZoom] = useState(1);
+  const kecil = useLayarKecil();
+  const zoomMin = kecil ? ZOOM_MIN_KECIL : ZOOM_MIN;
+  const [zoom, setZoom] = useState(() => (typeof window !== "undefined" && window.matchMedia("(max-width: 860px)").matches ? ZOOM_AWAL_KECIL : 1));
   const [menggeser, setMenggeser] = useState(false);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [viewport, setViewport] = useState({ w: 1000, h: 600 });
   const kameraRef = useRef(0); // id requestAnimationFrame kamera yang sedang berjalan
   const kameraData = useRef<{ pos: Record<string, Titik>; offX: number; offY: number; zoom: number; w: number; h: number }>({ pos: {}, offX: 0, offY: 0, zoom: 1, w: 1000, h: 600 });
   const geserRef = useRef<{ x: number; y: number; kiri: number; atas: number } | null>(null);
+  // Cubit dua jari: posisi semua penunjuk, dan keadaan awal cubitan (jarak jari, zoom, titik di tengah dua jari)
+  const penunjukRef = useRef(new Map<number, { x: number; y: number }>());
+  const cubitRef = useRef<{ jarak: number; zoom: number; konX: number; konY: number } | null>(null);
+  // posisi gulir yang harus dipasang setelah zoom baru sudah tampil (lihat useLayoutEffect di bawah)
+  const pindahGulirRef = useRef<{ x: number; y: number } | null>(null);
   const offsetRef = useRef<Titik | null>(null);
   const kunciRef = useRef(0);
   const tourRef = useRef(0); // naik setiap kali penelusuran jalur dibatalkan/diganti
@@ -396,7 +408,7 @@ export function ExamReview({ onBack }: Props) {
       const lebar = Math.max(...xs) - Math.min(...xs) + 2 * (R + LABEL_W);
       const tinggi = Math.max(...ys) - Math.min(...ys) + 2 * (R + 60);
       const muat = Math.min(viewport.w / lebar, viewport.h / tinggi, 1);
-      setZoom(Math.max(ZOOM_MIN, Math.round(muat * 100) / 100));
+      setZoom(Math.max(zoomMin, Math.round(muat * 100) / 100));
     }
   };
 
@@ -483,6 +495,17 @@ export function ExamReview({ onBack }: Props) {
     offsetRef.current = { x: offX, y: offY };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offX, offY, akarId]);
+
+  // setelah cubitan: gulir dipasang ke titik yang sama di bawah dua jari, dengan zoom yang baru
+  useLayoutEffect(() => {
+    const el = scrollerRef.current;
+    const pindah = pindahGulirRef.current;
+    if (el && pindah) {
+      el.scrollLeft = Math.max(0, pindah.x);
+      el.scrollTop = Math.max(0, pindah.y);
+      pindahGulirRef.current = null;
+    }
+  }, [zoom]);
 
   const terbukaSet = useMemo(() => new Set(graf.terbuka), [graf.terbuka]);
   const edgeTampil = useMemo(() => edges.filter((e) => terbukaSet.has(e.dari) && terbukaSet.has(e.ke)), [edges, terbukaSet]);
@@ -620,7 +643,7 @@ export function ExamReview({ onBack }: Props) {
     const lebar = maxX - minX + LABEL_W + 120;
     const tinggi = maxY - minY + 2 * R + 140;
     const fit = Math.min(viewport.w / lebar, viewport.h / tinggi);
-    return { zoom: Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, fit)), cx: (minX + maxX) / 2, cy: (minY + maxY) / 2 };
+    return { zoom: Math.max(zoomMin, Math.min(ZOOM_MAX, fit)), cx: (minX + maxX) / 2, cy: (minY + maxY) / 2 };
   };
 
   /** Ubah zoom perlahan dari `dari` ke `ke`; berhenti bila tur sudah dibatalkan. */
@@ -786,27 +809,65 @@ export function ExamReview({ onBack }: Props) {
   };
 
   const mulaiGeser = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const t = event.target as HTMLElement;
-    if (t.closest(".exam-node") || t.closest(".exam-kar")) return;
     const el = scrollerRef.current;
     if (!el) return;
+    penunjukRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    // dua jari: cubitan zoom, bahkan kalau jari pertama ada di atas node
+    if (penunjukRef.current.size >= 2) {
+      geserRef.current = null;
+      setMenggeser(false);
+      return;
+    }
+    const t = event.target as HTMLElement;
+    if (t.closest(".exam-node") || t.closest(".exam-kar")) return;
     geserRef.current = { x: event.clientX, y: event.clientY, kiri: el.scrollLeft, atas: el.scrollTop };
     el.setPointerCapture(event.pointerId);
     setMenggeser(true);
   };
   const gerakGeser = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const g = geserRef.current;
     const el = scrollerRef.current;
-    if (!g || !el) return;
+    if (!el || !penunjukRef.current.has(event.pointerId)) return;
+    penunjukRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+    if (penunjukRef.current.size >= 2) {
+      // Cubitan: zoom mengikuti perubahan jarak dua jari, dan titik di tengah keduanya tetap di tempatnya.
+      const [a, b] = [...penunjukRef.current.values()];
+      if (!a || !b) return;
+      const rect = el.getBoundingClientRect();
+      const tengahX = (a.x + b.x) / 2 - rect.left;
+      const tengahY = (a.y + b.y) / 2 - rect.top;
+      const jarak = Math.hypot(a.x - b.x, a.y - b.y);
+      if (!cubitRef.current) {
+        const zoomAwal = kameraData.current.zoom;
+        cubitRef.current = {
+          jarak: Math.max(1, jarak),
+          zoom: zoomAwal,
+          konX: (el.scrollLeft + tengahX) / zoomAwal,
+          konY: (el.scrollTop + tengahY) / zoomAwal,
+        };
+      }
+      const awal = cubitRef.current;
+      const baru = Math.min(ZOOM_MAX, Math.max(zoomMin, Math.round(awal.zoom * (jarak / awal.jarak) * 100) / 100));
+      pindahGulirRef.current = { x: awal.konX * baru - tengahX, y: awal.konY * baru - tengahY };
+      setZoom(baru);
+      return;
+    }
+
+    const g = geserRef.current;
+    if (!g) return;
     el.scrollLeft = g.kiri - (event.clientX - g.x);
     el.scrollTop = g.atas - (event.clientY - g.y);
   };
-  const akhiriGeser = () => {
-    geserRef.current = null;
-    setMenggeser(false);
+  const akhiriGeser = (event?: ReactPointerEvent<HTMLDivElement>) => {
+    if (event) penunjukRef.current.delete(event.pointerId);
+    if (penunjukRef.current.size < 2) cubitRef.current = null;
+    if (penunjukRef.current.size === 0) {
+      geserRef.current = null;
+      setMenggeser(false);
+    }
   };
 
-  const ubahZoom = (delta: number) => setZoom((z) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, Math.round((z + delta) * 100) / 100)));
+  const ubahZoom = (delta: number) => setZoom((z) => Math.min(ZOOM_MAX, Math.max(zoomMin, Math.round((z + delta) * 100) / 100)));
 
   const jumlahTerbuka = graf.terbuka.length;
 
@@ -826,7 +887,8 @@ export function ExamReview({ onBack }: Props) {
   return (
     <main className={"exam-page" + (selected && panelBuka ? " has-detail" : "")}>
       <div className="exam-bg" aria-hidden="true">
-        {!latarGagal && <Lightfall
+        {/* Di layar sempit cahaya Lightfall terlalu lebar dan jatuhnya tampak seperti garis, jadi dimatikan. */}
+        {!latarGagal && !kecil && <Lightfall
           onError={(error) => {
             console.error("[Materi Evaluasi] Latar Lightfall gagal dimuat, latar dimatikan:", error);
             setLatarGagal(true);
@@ -961,6 +1023,7 @@ export function ExamReview({ onBack }: Props) {
         onPointerMove={gerakGeser}
         onPointerUp={akhiriGeser}
         onPointerCancel={akhiriGeser}
+        onPointerLeave={akhiriGeser}
       >
         <div className="exam-zoomwrap" style={{ width: batas.lebar * zoom, height: batas.tinggi * zoom }}>
           <div className={"exam-stage" + (edgeTampil.length > 10 ? " exam-stage--banyak" : "") + (sorot ? " exam-stage--sorot" : "")} style={{ width: batas.lebar, height: batas.tinggi, transform: `scale(${zoom})` }}>

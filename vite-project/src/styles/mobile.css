@@ -14,8 +14,20 @@
   overscroll-behavior-y: none;
 }
 
+/* Tidak ada area putih di bawah layar (tempat tombol navigasi Android). Warna latar gelap dipakai di html dan body,
+ * dan tinggi halaman mengikuti area yang benar-benar terlihat (dvh) ketika bilah alamat Chrome naik turun. */
+html,
 body {
+  background: #050606;
   overscroll-behavior-y: none;
+}
+
+@supports (height: 100dvh) {
+  html,
+  body,
+  #root {
+    min-height: 100dvh;
+  }
 }
 
 :root:root :is(button, a, summary, label, input, select, [role="button"]) {
@@ -43,6 +55,20 @@ body {
   :root:root .topbar {
     top: max(10px, env(safe-area-inset-top, 0px));
     right: max(10px, env(safe-area-inset-right, 0px));
+  }
+}
+
+/* ——— Ponsel: tanpa blur latar belakang pada kartu di atas peta ———
+ * Blur harus dihitung ulang setiap kali peta bergeser, dan itu berat bagi GPU ponsel lama. Permukaannya
+ * dibuat lebih pekat sebagai gantinya; di layar sekecil ini selisih tampilannya nyaris tidak terlihat. */
+@media (max-width: 860px) {
+  :root:root :is(.levels, .menu-return, .event-explorer) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  :root:root :is(.levels, .menu-return) {
+    background: rgba(255, 255, 255, 0.9);
   }
 }
 

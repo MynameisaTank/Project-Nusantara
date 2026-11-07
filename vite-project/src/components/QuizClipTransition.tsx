@@ -10,7 +10,12 @@ interface Props {
   onCover: () => void;
   /** dipanggil saat animasi selesai dan overlay boleh dilepas */
   onDone: () => void;
+  /** dua kata yang naik di tengah layar; bawaannya "MODE QUIZ" */
+  kata?: [string, string];
 }
+
+/** Ukuran huruf per kata supaya kata panjang (mis. MATERI) tetap muat di kanvas 640 satuan. */
+const ukuranKata = (kata: string): number => Math.min(190, Math.floor(600 / (kata.length * 0.62)));
 
 /** foto yang mengisi huruf "MODE QUIZ" */
 const FOTO = "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Candi_Bajangratu_Majapahit_%2838451474292%29.jpg/1920px-Candi_Bajangratu_Majapahit_%2838451474292%29.jpg";
@@ -24,7 +29,7 @@ const TINGGI = 400;
  * kotak kecil di posisi tombol tumbuh menjadi layar penuh, teks "MODE QUIZ" yang diisi foto naik satu per satu,
  * lalu layar kuis diganti dan overlay menyusut kembali ke pusat sebelum hilang.
  */
-export function QuizClipTransition({ asal, onCover, onDone }: Props) {
+export function QuizClipTransition({ asal, onCover, onDone, kata = ["MODE", "QUIZ"] }: Props) {
   const layarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -80,8 +85,8 @@ export function QuizClipTransition({ asal, onCover, onDone }: Props) {
           </clipPath>
         </defs>
         <g clipPath="url(#qzc-kanvas)">
-          <text className="qzc-kata" x={LEBAR / 2} y={160} textAnchor="middle" fill="url(#qzc-foto)">MODE</text>
-          <text className="qzc-kata" x={LEBAR / 2} y={340} textAnchor="middle" fill="url(#qzc-foto)">QUIZ</text>
+          <text className="qzc-kata" x={LEBAR / 2} y={160} textAnchor="middle" fill="url(#qzc-foto)" fontSize={ukuranKata(kata[0])}>{kata[0]}</text>
+          <text className="qzc-kata" x={LEBAR / 2} y={340} textAnchor="middle" fill="url(#qzc-foto)" fontSize={ukuranKata(kata[1])}>{kata[1]}</text>
         </g>
       </svg>
     </div>

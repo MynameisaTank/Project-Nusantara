@@ -4,10 +4,13 @@
   "version": "0.3.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "dev": "npm --prefix vite-project run dev",
+    "dev:lan": "npm --prefix vite-project run dev:lan",
+    "build": "npm --prefix vite-project run build",
+    "preview": "npm --prefix vite-project run preview",
+    "preview:lan": "npm --prefix vite-project run preview:lan",
+    "coba:ponsel": "npm --prefix vite-project run coba:ponsel",
+    "typecheck": "npm --prefix vite-project run typecheck"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.4",

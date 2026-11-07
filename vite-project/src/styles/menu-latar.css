@@ -18,7 +18,7 @@
   transform-origin: 50% 50%;
 }
 
-/* Layar potret: wadah dibuat selebar tinggi layar dan setinggi lebar layar, lalu diputar 90 derajat. */
+/* Layar potret (khusus tingkat Tinggi): wadah dibuat selebar tinggi layar dan setinggi lebar layar, lalu diputar 90 derajat. */
 .menu-marquee__isi.is-putar {
   inset: auto;
   top: 50%;

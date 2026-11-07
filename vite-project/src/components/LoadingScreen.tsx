@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import DriftWall from "./reactbits/DriftWall";
 import { FAKTA_SEJARAH } from "../data/faktaSejarah";
+import { useGrafisHemat } from "../lib/grafis";
+import { useLayarKecil } from "../lib/layar";
 import "../styles/loading-screen.css";
 
 /** Gambar bersejarah yang sama dengan galeri menu utama, dipakai sebagai latar yang bergerak. */
@@ -26,13 +28,21 @@ interface Props {
   progres?: { selesai: number; total: number; keterangan: string } | null;
   /** baris keterangan kecil di bawah label, mis. mode grafis yang dipakai */
   detail?: string;
+  /**
+   * Tanpa dinding gambar bergerak, hanya latar gradien. Bawaannya mengikuti tingkat grafis: perangkat lemah tidak
+   * memakai dinding itu karena ±100 gambar 3D beranimasi berebut CPU dengan pengunduhan data yang sedang berjalan.
+   */
+  polos?: boolean;
 }
 
 /** Lama minimum layar ini tampil; `App.tsx` menunda impor peta selama durasi yang sama. */
 export const MIN_LOADING_MS = 8000;
 const GANTI_FAKTA_MS = 2200;
 
-export function LoadingScreen({ label = "Memuat peta Nusantara…", progres = null, detail }: Props) {
+export function LoadingScreen({ label = "Memuat peta Nusantara…", progres = null, detail, polos }: Props) {
+  const hemat = useGrafisHemat();
+  const kecil = useLayarKecil();
+  const tanpaLatar = polos ?? hemat;
   const [index, setIndex] = useState(() => Math.floor(Math.random() * FAKTA_SEJARAH.length));
   const [tampak, setTampak] = useState(true);
 
@@ -49,11 +59,12 @@ export function LoadingScreen({ label = "Memuat peta Nusantara…", progres = nu
   }, []);
 
   return (
-    <div className="loading-screen" role="status" aria-live="polite">
-      <div className="loading-backdrop" aria-hidden="true">
+    <div className={tanpaLatar ? "loading-screen loading-screen--polos" : "loading-screen"} role="status" aria-live="polite">
+      {!tanpaLatar && <div className="loading-backdrop" aria-hidden="true">
         <DriftWall
           items={LATAR_ITEMS}
-          columns={8}
+          // Layar sempit: lebih sedikit kolom (kira-kira sepertiga gambar lebih sedikit) dan tanpa filter abu-abu per gambar
+          columns={kecil ? 5 : 8}
           tileWidth={140}
           tileHeight={98}
           gap={12}
@@ -68,10 +79,10 @@ export function LoadingScreen({ label = "Memuat peta Nusantara…", progres = nu
           lift={28}
           fade={0.7}
           dim={0.4}
-          grayscale
+          grayscale={!kecil}
           overlayColor="#0f1715"
         />
-      </div>
+      </div>}
       <div className="loading-voyage" aria-hidden="true">
         <svg className="loading-ship" viewBox="0 0 32 32">
           <path d="M4 20h24l-3.5 6H7.5Z" fill="currentColor" />

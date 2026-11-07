@@ -77,3 +77,10 @@
   opacity: 0;
   transition: opacity 0.4s ease;
 }
+
+/* Ponsel: judul era lebih kecil supaya tidak menutupi bagian bawah globe */
+@media (max-width: 700px) {
+  .sphere-gallery__info { bottom: 4%; width: 88vw; gap: 6px; }
+  .sphere-gallery__title { font-size: 1.3rem; line-height: 1.15; }
+  .sphere-gallery__description { font-size: 13px; }
+}

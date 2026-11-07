@@ -170,13 +170,20 @@ type SphereProps = {
   orientation: MutableRefObject<Orientation>;
   onFront: (item: number) => void;
   onFocus: (tile: LayoutTile) => void;
+  /** render hanya saat ada gerakan (untuk perangkat lemah); bola yang diam tidak digambar ulang */
+  sesuaiKebutuhan: boolean;
 };
 
-function Sphere({ urls, tiles, orientation, onFront, onFocus }: SphereProps) {
+function Sphere({ urls, tiles, orientation, onFront, onFocus, sesuaiKebutuhan }: SphereProps) {
   const textures = useTexture(urls);
   const camera = useThree((state) => state.camera);
+  const invalidate = useThree((state) => state.invalidate);
   const groupRef = useRef<THREE.Group>(null);
   const frontRef = useRef(-1);
+  // Objek kerja dipakai ulang di setiap bingkai. Sebelumnya dibuat baru 60 kali per detik, dan sampah memorinya
+  // terasa di ponsel dengan RAM kecil.
+  const dunia = useMemo(() => new THREE.Vector3(), []);
+  const sudut = useMemo(() => new THREE.Euler(), []);
 
   useFrame((_, delta) => {
     const state = orientation.current;
@@ -196,12 +203,11 @@ function Sphere({ urls, tiles, orientation, onFront, onFocus }: SphereProps) {
 
     let best = 0;
     let bestZ = -Infinity;
-    const world = new THREE.Vector3();
-    const euler = new THREE.Euler(state.tilt, state.spin, 0);
+    sudut.set(state.tilt, state.spin, 0);
     tiles.forEach((tile, index) => {
-      world.copy(tile.position).applyEuler(euler);
-      if (world.z > bestZ) {
-        bestZ = world.z;
+      dunia.copy(tile.position).applyEuler(sudut);
+      if (dunia.z > bestZ) {
+        bestZ = dunia.z;
         best = index;
       }
     });
@@ -209,6 +215,16 @@ function Sphere({ urls, tiles, orientation, onFront, onFocus }: SphereProps) {
     if (front !== frontRef.current) {
       frontRef.current = front;
       onFront(front);
+    }
+
+    // Mode sesuai kebutuhan: minta bingkai berikutnya hanya selama bola masih bergerak.
+    if (sesuaiKebutuhan) {
+      const bergerak =
+        state.dive ||
+        state.autoSpin ||
+        Math.abs(state.targetSpin - state.spin) > 1e-4 ||
+        Math.abs(state.targetTilt - state.tilt) > 1e-4;
+      if (bergerak) invalidate();
     }
   });
 
@@ -262,7 +278,42 @@ type SphereGalleryProps = {
   className?: string;
   /** dipanggil setelah semua tekstur globe selesai dimuat */
   onReady?: () => void;
+  /** resolusi render: satu angka, atau [terkecil, terbesar] mengikuti rasio piksel layar (bawaan [1, 2]) */
+  dpr?: number | [number, number];
+  /** penghalusan tepi; mematikannya menghemat banyak kerja GPU di ponsel lemah (bawaan true) */
+  antialias?: boolean;
+  /** render hanya saat ada gerakan, bukan 60 kali per detik terus-menerus (bawaan false) */
+  sesuaiKebutuhan?: boolean;
 };
+
+/**
+ * Jarak kamera disesuaikan dengan bentuk layar. Bola berjari-jari 1 dan FOV vertikal tetap, jadi di layar tegak
+ * (ponsel) bola akan melebihi lebar layar. Di sini jaraknya dinaikkan sampai bola muat di lebar dengan sedikit tepi.
+ * Di layar lebar, jarak bawaan (CAMERA_DISTANCE) tetap dipakai.
+ */
+function SesuaikanKamera() {
+  const camera = useThree((state) => state.camera);
+  const size = useThree((state) => state.size);
+  useEffect(() => {
+    const aspek = size.width / Math.max(1, size.height);
+    const jarakMuat = 1.8 / aspek;
+    camera.position.z = Math.max(CAMERA_DISTANCE, jarakMuat);
+  }, [camera, size]);
+  return null;
+}
+
+// Menyimpan fungsi invalidate milik Canvas supaya penangan sentuhan di luar Canvas bisa meminta bingkai baru
+// pada mode sesuai kebutuhan.
+function JembatanInvalidasi({ tujuan }: { tujuan: MutableRefObject<(() => void) | null> }) {
+  const invalidate = useThree((state) => state.invalidate);
+  useEffect(() => {
+    tujuan.current = () => invalidate();
+    return () => {
+      tujuan.current = null;
+    };
+  }, [invalidate, tujuan]);
+  return null;
+}
 
 // Dipasang di dalam Suspense setelah Sphere: efeknya baru jalan saat semua tekstur sudah termuat
 function ReadyNotifier({ onReady }: { onReady?: () => void }) {
@@ -273,9 +324,11 @@ function ReadyNotifier({ onReady }: { onReady?: () => void }) {
 }
 
 const SphereGallery = forwardRef<SphereGalleryHandle, SphereGalleryProps>(function SphereGallery(
-  { items, onItemClick, onActiveChange, autoSpin = true, className = "", onReady },
+  { items, onItemClick, onActiveChange, autoSpin = true, className = "", onReady, dpr = [1, 2], antialias = true, sesuaiKebutuhan = false },
   ref,
 ) {
+  const invalidasi = useRef<(() => void) | null>(null);
+  const mintaBingkai = () => invalidasi.current?.();
   const tiles = useMemo(() => buildLayout(items.length), [items.length]);
   const urls = useMemo(() => items.map((item) => item.src), [items]);
   const orientation = useRef<Orientation>({ spin: 0, tilt: 0, targetSpin: 0, targetTilt: 0, autoSpin, dive: false, moved: false });
@@ -290,12 +343,14 @@ const SphereGallery = forwardRef<SphereGalleryHandle, SphereGalleryProps>(functi
       if (orientation.current.dive) return;
       orientation.current.autoSpin = false;
       orientation.current.targetSpin -= (direction * TAU) / COLUMNS;
+      mintaBingkai();
     },
   }));
 
   const open = (index: number) => {
     if (orientation.current.dive) return;
     orientation.current.dive = true;
+    mintaBingkai();
     setDiving(true);
     const item = items[index];
     window.clearTimeout(diveTimer.current);
@@ -315,6 +370,7 @@ const SphereGallery = forwardRef<SphereGalleryHandle, SphereGalleryProps>(functi
     state.autoSpin = false;
     state.targetSpin = spin + turns;
     state.targetTilt = tilt;
+    mintaBingkai();
   };
 
   const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
@@ -334,6 +390,7 @@ const SphereGallery = forwardRef<SphereGalleryHandle, SphereGalleryProps>(functi
     const width = surface.current.offsetWidth;
     orientation.current.targetSpin = current.spin - (deltaX / width) * TAU;
     orientation.current.targetTilt = THREE.MathUtils.clamp(current.tilt - (deltaY / width) * Math.PI, -MAX_TILT, MAX_TILT);
+    mintaBingkai();
   };
 
   const onPointerUp = () => {
@@ -360,10 +417,24 @@ const SphereGallery = forwardRef<SphereGalleryHandle, SphereGalleryProps>(functi
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      <Canvas camera={{ position: [0, 0, CAMERA_DISTANCE], fov: FOV, near: 0.01 }} dpr={[1, 2]} gl={{ alpha: true, antialias: true }}>
+      <Canvas
+        camera={{ position: [0, 0, CAMERA_DISTANCE], fov: FOV, near: 0.01 }}
+        dpr={dpr}
+        frameloop={sesuaiKebutuhan ? "demand" : "always"}
+        gl={{ alpha: true, antialias }}
+      >
+        <SesuaikanKamera />
+        <JembatanInvalidasi tujuan={invalidasi} />
         <Suspense fallback={null}>
           {items.length > 0 && (
-            <Sphere urls={urls} tiles={tiles} orientation={orientation} onFront={handleFront} onFocus={focusTile} />
+            <Sphere
+              urls={urls}
+              tiles={tiles}
+              orientation={orientation}
+              onFront={handleFront}
+              onFocus={focusTile}
+              sesuaiKebutuhan={sesuaiKebutuhan}
+            />
           )}
           <ReadyNotifier onReady={onReady} />
         </Suspense>

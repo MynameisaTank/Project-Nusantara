@@ -86,6 +86,8 @@ function EraGridFallback({ items, onItemClick, onReady }: { items: ItemEra[]; on
 
 export function EraSelect({ onBack, onSelectEra, onReady, tingkat = "tinggi" }: Props) {
   const menuRef = useRef<SphereGalleryHandle>(null);
+  // Tingkat Ringan (perangkat lemah): tanpa shader latar, bola 3D 1x tanpa antialias, dan hanya digambar saat bergerak.
+  const ringan = tingkat === "ringan";
   // Di layar sempit tekstur galeri cukup berukuran 500px (hemat data dan memori GPU ponsel).
   const kecil = useLayarKecil();
   const items = useMemo(
@@ -100,8 +102,8 @@ export function EraSelect({ onBack, onSelectEra, onReady, tingkat = "tinggi" }: 
 
   return (
     <main className="era-select-screen era-select-screen--tunnel">
-      {tingkat === "dasar" && <div className="era-grafis-fallback" aria-hidden="true" />}
-      {tingkat !== "dasar" && <div className="era-ascii-bg" aria-hidden="true">
+      {(tingkat === "dasar" || ringan) && <div className="era-grafis-fallback" aria-hidden="true" />}
+      {(tingkat === "sedang" || tingkat === "tinggi") && <div className="era-ascii-bg" aria-hidden="true">
         <GradientASCII shape="rise" sunSize={0.7} colors={["#5a3d22", "#d8b78c", "#f4eddd"]} characters=" ░▒▓█" cellSize={15} density={0.8} glow={0.25} flow={0.4} speed={0.8} scrambleRadius={0.08} />
       </div>}
       <div className="landing-grain" aria-hidden="true" />
@@ -119,6 +121,10 @@ export function EraSelect({ onBack, onSelectEra, onReady, tingkat = "tinggi" }: 
             onReady={onReady}
             items={items}
             onItemClick={(_item, index) => pilihItem(index)}
+            autoSpin={!ringan}
+            dpr={ringan ? 1 : [1, 2]}
+            antialias={!ringan}
+            sesuaiKebutuhan={ringan}
           />
           <NoiseBackground containerClassName={`${ERA_FRAME_ARROW} era-noise-arrow era-noise-arrow--left`} gradientColors={ERA_GLOW}><button type="button" className="era-carousel__arrow" aria-label="Era sebelumnya" onClick={() => menuRef.current?.step(-1)}>←</button></NoiseBackground>
           <NoiseBackground containerClassName={`${ERA_FRAME_ARROW} era-noise-arrow era-noise-arrow--right`} gradientColors={ERA_GLOW}><button type="button" className="era-carousel__arrow" aria-label="Era berikutnya" onClick={() => menuRef.current?.step(1)}>→</button></NoiseBackground>

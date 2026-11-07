@@ -799,7 +799,37 @@
 .exam-edge.is-lit .exam-edge-flow { filter: drop-shadow(0 0 3px var(--edge)); }
 
 
-/* Perangkat sentuh: chip filter dan tombol kontrol lebih mudah diketuk. */
+/* Perangkat sentuh: chip filter dan tombol kontrol lebih mudah diketuk.
+ * Graf digeser dan dicubit oleh kode sendiri (lihat mulaiGeser), jadi browser tidak boleh ikut mengambil gestur itu. */
 @media (pointer: coarse) {
   .exam-chip { min-height: 40px; }
+  .exam-scroller { touch-action: none; }
+}
+
+/* ——— Ponsel: kontrol dipadatkan supaya graf mendapat ruang ———
+ * Sebelumnya judul, filter era, kategori, tombol, zoom, dan pencarian memakan sekitar 400px (lima baris),
+ * sehingga graf terdorong ke bawah layar. */
+@media (max-width: 700px) {
+  .exam-header { flex-direction: row; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .exam-heading h1 { font-size: 1.45rem; margin: 0; }
+  .exam-controls { gap: 8px; margin-bottom: 6px; }
+  /* filter era: satu baris yang bisa digeser ke samping */
+  .exam-chip-row {
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+  }
+  .exam-chip-row::-webkit-scrollbar { display: none; }
+  .exam-chip-row .exam-chip { flex: none; }
+  .exam-chip { padding: 6px 12px; font-size: 12px; min-height: 36px; }
+  .exam-select { min-height: 36px; font-size: 13px; }
+  .exam-zoom { gap: 4px; }
+  .exam-zoom .exam-chip { min-width: 36px; }
+  .exam-cari { flex: 1 1 100%; min-width: 0; max-width: none; }
+  .exam-cari-input { min-width: 0; }
+  .exam-count { font-size: 11px; margin: 0; }
+  .exam-scroller { height: calc(100dvh - 250px); min-height: 340px; }
 }

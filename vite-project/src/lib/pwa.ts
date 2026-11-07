@@ -3,6 +3,7 @@
  * Service worker hanya didaftarkan pada build produksi, karena di mode dev ia mengganggu hot reload.
  */
 import { useSyncExternalStore } from "react";
+import { saatSenggang } from "./senggang";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -64,7 +65,9 @@ export function mulaiPwa(): void {
   const koneksi = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
   if (koneksi?.saveData || koneksi?.effectiveType === "slow-2g" || koneksi?.effectiveType === "2g") return;
 
-  window.addEventListener("load", () => {
+  // Didaftarkan saat browser menganggur setelah halaman selesai dimuat: unduhan puluhan berkas di latar tidak boleh
+  // berebut bandwidth dan CPU dengan menu pertama, terutama di ponsel lama.
+  const daftar = () => {
     navigator.serviceWorker
       .register(`${import.meta.env.BASE_URL}sw.js`)
       .then((reg) => {
@@ -84,7 +87,8 @@ export function mulaiPwa(): void {
         void navigator.serviceWorker.ready.then(() => ubah({ tersimpan: true }));
       })
       .catch((galat) => console.warn("[pwa] service worker gagal didaftarkan:", galat));
-  });
+  };
+  window.addEventListener("load", () => saatSenggang(daftar, 4000));
 }
 
 /** Terapkan versi baru yang sudah menunggu: halaman dimuat ulang setelah service worker baru aktif. */

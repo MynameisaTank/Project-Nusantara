@@ -1,0 +1,67 @@
+/* Latar menu yang mengalir vertikal (lihat components/ui/vertical-flow.tsx). Hanya transform, tanpa 3D. */
+.vflow {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  gap: 10px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.vflow__kolom {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.vflow__track {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.vflow__track--naik {
+  animation-name: vflow-naik;
+}
+
+.vflow__track--turun {
+  animation-name: vflow-turun;
+}
+
+.vflow__track img {
+  display: block;
+  flex: none;
+  width: 100%;
+  height: var(--vflow-tinggi, 180px);
+  margin-bottom: 10px;
+  object-fit: cover;
+  border-radius: 8px;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@keyframes vflow-naik {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, -50%, 0); }
+}
+
+@keyframes vflow-turun {
+  from { transform: translate3d(0, -50%, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+/* Tanpa gerak: perangkat lemah (tingkat Ringan) atau pengaturan "kurangi gerakan" di sistem */
+.vflow--beku .vflow__track {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vflow__track {
+    animation: none;
+  }
+}

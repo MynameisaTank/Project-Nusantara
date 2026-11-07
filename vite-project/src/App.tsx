@@ -2,8 +2,9 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react
 import { CloudTransition } from "./components/CloudTransition";
 import { Header } from "./components/Header";
 import { LoadingScreen, MIN_LOADING_MS } from "./components/LoadingScreen";
-import { bacaMode, deteksiPerangkat, LABEL_TINGKAT, simpanMode, tingkatAktif, tingkatOtomatis, type Deteksi, type ModeGrafis, type Tingkat } from "./lib/perangkat";
+import { bacaMode, deteksiPerangkat, LABEL_TINGKAT, ringkasanDeteksi, simpanMode, tingkatAktif, tingkatHemat, tingkatOtomatis, type Deteksi, type ModeGrafis, type Tingkat } from "./lib/perangkat";
 import { siapkanGrafis, type Kemajuan } from "./lib/persiapan";
+import { GrafisHematContext } from "./lib/grafis";
 import "./styles/perangkat.css";
 import "./styles/overlay-peta.css";
 import { LevelDock } from "./components/LevelDock";
@@ -18,7 +19,8 @@ import { ScreenCurtain } from "./components/ScreenCurtain";
 const QuizMode = lazy(() => import("./components/QuizMode").then((module) => ({ default: module.QuizMode })));
 import { QuizClipTransition } from "./components/QuizClipTransition";
 const ExamReview = lazy(() => import("./components/ExamReview").then((module) => ({ default: module.ExamReview })));
-import { useScreenTransition } from "./hooks/useScreenTransition";
+import { useScreenTransition, type Screen } from "./hooks/useScreenTransition";
+import { layarKecil } from "./lib/layar";
 const MapView = lazy(() => import("./components/MapView").then((module) => ({ default: module.MapView })));
 import { KingdomPanel } from "./components/KingdomPanel";
 import { NowList } from "./components/NowList";
@@ -40,8 +42,18 @@ import { isActive } from "./lib/events";
 
 export default function App() {
   const { screen, goTo, cut, curtainPhase, curtainVariant } = useScreenTransition("menu");
+  // Tanda untuk watchdog di index.html: aplikasi sudah berhasil tampil, jadi pesan cadangan tidak perlu muncul.
+  useEffect(() => {
+    document.documentElement.dataset.siap = "1";
+    try { sessionStorage.removeItem("nusantara-ulang-otomatis"); } catch { /* abaikan */ }
+  }, []);
   // transisi clip ke mode kuis: kotak tombol asal, atau null bila tidak sedang berjalan
-  const [klip, setKlip] = useState<DOMRect | null>(null);
+  const [klip, setKlip] = useState<{ asal: DOMRect; tujuan: Screen; kata: [string, string] } | null>(null);
+  /** Di ponsel, tombol menu memakai transisi clip yang sama dengan Mode kuis; di layar lebar tetap transisi piksel. */
+  const bukaDariMenu = (tujuan: Screen, kata: [string, string], asal?: DOMRect) => {
+    if (asal && layarKecil()) setKlip({ asal, tujuan, kata });
+    else goTo(tujuan, "pixel");
+  };
   const { level, setLevel, done, choices, markQuizDone, choose, resetChoice } = useProgress();
   const [eraId, setEraId] = useState(ERA.id);
   // Data satu era baru diunduh ketika era itu dipilih (lihat data/muatEra.ts); sebelum itu dipakai data kosong.
@@ -79,6 +91,11 @@ export default function App() {
     })();
     return () => { batal = true; };
   }, []);
+  /* Tingkat Ringan dan Dasar: tanpa animasi dekoratif dan efek GPU yang mahal (lihat styles/ringan.css) */
+  const hemat = tingkat !== null && tingkatHemat(tingkat);
+  useEffect(() => {
+    document.documentElement.classList.toggle("grafis-ringan", hemat);
+  }, [hemat]);
   const [tampilkanWilayah, setTampilkanWilayah] = useState(true);
   const [darkMap, setDarkMap] = useState<boolean>(() => {
     try { return window.localStorage.getItem("peta-gelap") === "1"; } catch { return false; }
@@ -103,9 +120,10 @@ export default function App() {
   useEffect(() => {
     if (!mapLoading || !mapMinDone || !eraSiap) return;
     setMapLoading(false);
-    setShowClouds(true);
+    // Perangkat lemah melewati tirai awan: ratusan lapisan transparan yang beranimasi membuat peta tersendat saat muncul.
+    setShowClouds(!hemat);
     setMapMinDone(false);
-  }, [mapLoading, mapMinDone, eraSiap]);
+  }, [mapLoading, mapMinDone, eraSiap, hemat]);
 
   // Pilihan keputusan tersimpan yang id-nya tidak lagi ada di peristiwanya dibuang saat data era dimuat.
   useEffect(() => {
@@ -215,7 +233,7 @@ export default function App() {
 
   let content;
   if (screen === "menu") {
-    content = <MainMenu onStart={() => goTo("eras", "pixel")} onChooseEra={() => goTo("eras", "pixel")} onOpenMateri={() => goTo("materi", "pixel")} onOpenKuis={(asal) => setKlip(asal)} tingkat={tingkat ?? "dasar"} mode={modeGrafis} terdeteksi={deteksi ? tingkatOtomatis(deteksi) : "dasar"} onModeChange={(m) => { setModeGrafis(m); simpanMode(m); }} />;
+    content = <MainMenu onStart={() => goTo("eras", "pixel")} onChooseEra={(asal) => bukaDariMenu("eras", ["PILIH", "ERA"], asal)} onOpenMateri={(asal) => bukaDariMenu("materi", ["MATERI", "UJIAN"], asal)} onOpenKuis={(asal) => setKlip({ asal, tujuan: "kuis", kata: ["MODE", "QUIZ"] })} tingkat={tingkat ?? "dasar"} mode={modeGrafis} terdeteksi={deteksi ? tingkatOtomatis(deteksi) : "dasar"} onModeChange={(m) => { setModeGrafis(m); simpanMode(m); }} diagnosis={deteksi ? ringkasanDeteksi(deteksi) : undefined} />;
   } else if (screen === "materi") {
     content = <ExamReview onBack={() => goTo("menu")} />;
   } else if (screen === "kuis") {
@@ -270,6 +288,7 @@ export default function App() {
             tampilkanWilayah={tampilkanWilayah}
             onKingdomSelect={pickKingdom}
             darkMap={darkMap}
+            ringan={hemat}
           />
         </Suspense>
         <NowList active={active} events={events} year={year} era={era} done={selesai} selectedId={panelId} onPick={pickEvent} onYear={changeYear} />
@@ -332,6 +351,8 @@ export default function App() {
     return (
       <LoadingScreen
         label="Menyiapkan grafik untuk perangkatmu…"
+        // Sebelum tingkat diketahui, dan di perangkat lemah, tidak ada dinding gambar yang berebut unduhan penting
+        polos={tingkat === null || hemat}
         progres={kemajuanGrafis}
         detail={tingkat ? `Mode grafis: ${LABEL_TINGKAT[tingkat]}${kemajuanGrafis ? ` · ${kemajuanGrafis.keterangan}` : ""}` : "Memeriksa kemampuan perangkat…"}
       />
@@ -339,14 +360,14 @@ export default function App() {
   }
 
   return (
-    <>
+    <GrafisHematContext.Provider value={hemat}>
       <ScreenCurtain phase={curtainPhase} variant={curtainVariant} />
       <PembaruanVersi />
-      {klip && <QuizClipTransition asal={klip} onCover={() => cut("kuis")} onDone={() => setKlip(null)} />}
+      {klip && <QuizClipTransition asal={klip.asal} kata={klip.kata} onCover={() => cut(klip.tujuan)} onDone={() => setKlip(null)} />}
       {screen === "eras" && !(eraReady && eraMinDone) && <LoadingScreen />}
       <Suspense fallback={<div style={{ position: "fixed", inset: 0, background: "#050606" }} />}>
         {content}
       </Suspense>
-    </>
+    </GrafisHematContext.Provider>
   );
 }
