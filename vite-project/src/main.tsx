@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import "./styles/tailwind.css";
 import "./styles/style.css";
 import "./styles/noise-frames.css";
@@ -19,5 +20,6 @@ mulaiSuara();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
+    <SpeedInsights />
   </StrictMode>
 );

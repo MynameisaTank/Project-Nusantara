@@ -19,6 +19,7 @@
     "@react-three/fiber": "^9.8.2",
     "@tabler/icons-react": "^3.50.0",
     "@types/three": "^0.186.0",
+    "@vercel/speed-insights": "^2.1.0",
     "clsx": "^2.1.1",
     "gsap": "^3.15.1",
     "leaflet": "^1.9.4",
