@@ -163,8 +163,8 @@ export default function App() {
   }, [panelEvent, events]);
 
   const stop = useCallback(() => setPlaying(false), []);
-  // 1x = 4 tahun per detik, 0.25x = 1 tahun per detik
-  useAutoplay(playing, year, era.akhir, setYear, stop, 250 / speed, 1);
+  // 1x = 1 tahun per 2 detik, 0.5x = 4 detik, 0.25x = 8 detik
+  useAutoplay(playing, year, era.akhir, setYear, stop, 2000 / speed, 1);
 
   const changeYear = (y: number) => {
     setPlaying(false);
