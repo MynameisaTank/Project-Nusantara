@@ -6,3 +6,4 @@ dist
 # musik lokal (mis. soundtrack game), tidak boleh ikut ke repo
 src/audio-lokal/
 public/audio/
+*.tsbuildinfo

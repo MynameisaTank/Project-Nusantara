@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { cadanganGambar, gambarResponsif } from "../lib/gambar";
 import { ambilSoal, jumlahTersedia, useBankSoalSiap, type EraKuis, type Kesulitan, type Soal } from "../lib/kuis";
 import { QuizCover, ERA_OPSI } from "./QuizCover";
 import { PergantianSoal, type Arah, type PergantianHandle } from "./QuizPageTransition";
@@ -217,7 +218,7 @@ function QuizKuis({ onBack, pergantian }: PropsKuis) {
             <div className="qz-timer" aria-hidden="true"><span style={{ width: `${persen}%` }} /></div>
           )}
           <h2 className="qz-event">{aktif.judul}</h2>
-          {aktif.gambar && <img className="qz-img" src={aktif.gambar} alt="" loading="lazy" />}
+          {aktif.gambar && <img className="qz-img" src={gambarResponsif(aktif.gambar, Math.min(window.innerWidth, 720))} alt="" loading="lazy" decoding="async" onError={cadanganGambar(aktif.gambar)} />}
           <p className="qz-question">{aktif.tanya}</p>
 
           <div className="qz-answers">

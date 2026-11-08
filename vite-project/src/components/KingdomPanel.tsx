@@ -1,4 +1,5 @@
 import { useState, type CSSProperties } from "react";
+import { cadanganGambar, gambarResponsif } from "../lib/gambar";
 import { DETAIL_KERAJAAN, KOLONIAL_RINGKAS, penguasaPadaTahun, type DetailKerajaan, type Penguasa } from "../data/kerajaanDetail";
 import { detailPenguasa, inisialNama } from "../data/penguasaDetail";
 import type { Kerajaan } from "../data/kerajaan";
@@ -131,7 +132,7 @@ function PenguasaView({ kerajaanId, kerajaanNama, penguasa, onKembali }: Penguas
       <section className="step">
         {bio?.foto ? (
           <figure className="kingdom-foto">
-            <img src={bio.foto.src} alt={penguasa.nama} loading="lazy" />
+            <img src={gambarResponsif(bio.foto.src, 340)} alt={penguasa.nama} loading="lazy" decoding="async" onError={cadanganGambar(bio.foto.src)} />
             <figcaption>
               {bio.foto.keterangan}
               <span className="kingdom-foto-sumber">

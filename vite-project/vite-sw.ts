@@ -47,6 +47,36 @@ const CACHE_SHELL = "nusantara-shell-" + VERSI;
 /* harus sama dengan NAMA_CACHE di src/lib/persiapan.ts */
 const CACHE_GRAFIS = "nusantara-grafis-v2";
 const CACHE_FONT = "nusantara-font-v1";
+const CACHE_PETA = "nusantara-peta-v1";
+const CACHE_GAMBAR = "nusantara-gambar-v1";
+
+/* simpan ke cache dengan batas jumlah; yang paling lama disimpan dibuang lebih dulu */
+function simpanTerbatas(nama, kunci, res, maks) {
+  return caches.open(nama).then((cache) =>
+    cache
+      .put(kunci, res)
+      .then(() => cache.keys())
+      .then((semua) => Promise.all(semua.slice(0, Math.max(0, semua.length - maks)).map((k) => cache.delete(k)))),
+  );
+}
+
+/* cache dulu; kalau belum ada, unduh dengan CORS supaya responsnya bisa disimpan tanpa memboroskan kuota */
+function cacheDulu(event, nama, maks) {
+  const url = event.request.url;
+  event.respondWith(
+    caches
+      .match(url)
+      .then((hit) => {
+        if (hit) return hit;
+        return fetch(url, { mode: "cors", credentials: "omit" })
+          .then((res) => {
+            if (res.ok) event.waitUntil(simpanTerbatas(nama, url, res.clone(), maks));
+            return res;
+          })
+          .catch(() => fetch(event.request));
+      }),
+  );
+}
 const PRECACHE = ${JSON.stringify(daftar)};
 
 self.addEventListener("install", (event) => {
@@ -83,6 +113,8 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
+  /* skrip analitik Vercel dibiarkan lewat jaringan */
+  if (url.pathname.startsWith("/_vercel/")) return;
 
   /* navigasi: jaringan dulu (maks. 4 detik), lalu cache */
   if (req.mode === "navigate") {
@@ -130,11 +162,15 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  /* gambar Wikimedia: pakai yang sudah disimpan halaman; respons opaque tidak disimpan karena boros kuota */
+  /* gambar Wikimedia: cari di semua cache (termasuk unduhan awal), simpan paling banyak 300 gambar */
   if (/\\.wikimedia\\.org$/.test(url.hostname) && req.destination === "image") {
-    event.respondWith(
-      caches.open(CACHE_GRAFIS).then((cache) => cache.match(req.url).then((hit) => hit || fetch(req))),
-    );
+    cacheDulu(event, CACHE_GAMBAR, 300);
+    return;
+  }
+
+  /* ubin peta Esri: cache dulu, paling banyak 600 ubin, supaya peta yang dibuka lagi cepat dan hemat kuota */
+  if (url.hostname === "server.arcgisonline.com" && url.pathname.indexOf("/tile/") !== -1) {
+    cacheDulu(event, CACHE_PETA, 600);
   }
 });
 `;

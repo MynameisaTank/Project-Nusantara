@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Icon } from "./Icon";
 
-export const SPEEDS = [0.25, 0.5, 1, 2, 4, 8];
+export const SPEEDS = [1, 0.5, 0.25];
 
 interface Props {
   era: { mulai: number; akhir: number };

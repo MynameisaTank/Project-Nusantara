@@ -1,4 +1,5 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { gambarResponsif } from "../lib/gambar";
 import type { KategoriId, SejarahEvent } from "../types";
 import { EVENTS } from "../data/events";
 import { EVENTS2 } from "../data/events2";
@@ -256,13 +257,22 @@ const NodeView = memo(function NodeView({ id, n, left, top, dx, dy, aktif, mundu
           {gambar && (
             <img
               className="exam-node-img"
-              src={gambar}
+              src={gambarResponsif(gambar, R * 2)}
               alt=""
               loading="lazy"
               decoding="async"
               draggable={false}
               referrerPolicy="no-referrer"
-              onError={(event) => { event.currentTarget.style.display = "none"; }}
+              onError={(event) => {
+                // thumbnail gagal: coba sekali berkas aslinya, baru disembunyikan
+                const img = event.currentTarget;
+                if (img.dataset.cadangan !== "1" && img.src !== gambar) {
+                  img.dataset.cadangan = "1";
+                  img.src = gambar;
+                } else {
+                  img.style.display = "none";
+                }
+              }}
             />
           )}
         </span>
