@@ -4,7 +4,7 @@ import { join, relative, resolve } from "node:path";
 import type { Plugin, ResolvedConfig } from "vite";
 
 // musik tidak ikut disimpan di muka supaya pemasangan pertama tetap kecil
-const ABAIKAN = /\.map$|^sw\.js$|^audio\/|\.(ogg|mp3|m4a|wav)$/;
+const ABAIKAN = /\.map$|^sw\.js$|^audio\/|^menu\/|\.(ogg|mp3|m4a|wav)$/;
 
 /** Saat build, tulis sw.js yang menyimpan semua berkas aplikasi supaya bisa dibuka tanpa internet. */
 export function serviceWorkerPrecache(): Plugin {
