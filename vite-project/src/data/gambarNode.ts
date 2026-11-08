@@ -187,4 +187,13 @@ export const GAMBAR_NODE: Record<string, GambarNode> = {
   "evt3-087": { url: "https://upload.wikimedia.org/wikipedia/commons/c/cc/Joko_Widodo_and_the_media_crew_at_the_Garuda_Palace%2C_Nusantara.jpg", judul: "Joko Widodo and the media crew at the Garuda Palace, Nusantara" },
   "evt3-088": { url: "https://upload.wikimedia.org/wikipedia/commons/6/64/Prabowo_Subianto_delivers_first_speech_as_President_of_Indonesia_01.jpg", judul: "Prabowo Subianto delivers first speech as President of Indonesia 01" },
   "evt3-089": { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/August_2025_protests_in_Jakarta_01.jpg/1280px-August_2025_protests_in_Jakarta_01.jpg", judul: "August 2025 protests in Jakarta 01" },
+  "evt3-090": { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Indonesian_athletes_marching%2C_SEA_Games_2011_Opening.jpg/1280px-Indonesian_athletes_marching%2C_SEA_Games_2011_Opening.jpg", judul: "Indonesian athletes marching, SEA Games 2011 Opening" },
+  "evt3-091": { url: "https://upload.wikimedia.org/wikipedia/commons/d/dd/KPK_building_Kuningan.jpg", judul: "KPK building Kuningan" },
+  "evt3-092": { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Balai_Kota_2.jpg/1280px-Balai_Kota_2.jpg", judul: "Balai Kota 2" },
+  "evt3-093": { url: "https://upload.wikimedia.org/wikipedia/commons/b/b0/Mahkamah_Konstitusi.jpg", judul: "Mahkamah Konstitusi" },
+  "evt3-094": { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Satellite_image_of_2015_Southeast_Asian_haze_-_20150924.jpg/1280px-Satellite_image_of_2015_Southeast_Asian_haze_-_20150924.jpg", judul: "Satellite image of 2015 Southeast Asian haze - 20150924" },
+  "evt3-095": { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/2016_Sarinah-Starbucks_Jakarta_Attack_7.JPG/1280px-2016_Sarinah-Starbucks_Jakarta_Attack_7.JPG", judul: "2016 Sarinah-Starbucks Jakarta Attack 7" },
+  "evt3-096": { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Gedung_Dirjen_Pajak_%28November_2025%29.jpg/1280px-Gedung_Dirjen_Pajak_%28November_2025%29.jpg", judul: "Gedung Dirjen Pajak (November 2025)" },
+  "evt3-097": { url: "https://upload.wikimedia.org/wikipedia/commons/6/62/Aksi_Bela_Islam_I_2016.jpg", judul: "Aksi Bela Islam I 2016" },
+  "evt3-098": { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/Banners_of_Hizb_ut-Tahrir.JPG/1280px-Banners_of_Hizb_ut-Tahrir.JPG", judul: "Banners of Hizb ut-Tahrir" },
 };
