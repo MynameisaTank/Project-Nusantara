@@ -53,7 +53,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
 
-/* App frame: peta mengisi seluruh tinggi layar; header mengambang di atasnya */
 #root { display: grid; grid-template-rows: minmax(0, 1fr) var(--timeline-height); }
 .topbar {
   position: fixed; top: 16px; right: 20px; z-index: 1300;
@@ -81,7 +80,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .lvl:hover { color: var(--ink); background: rgba(255,255,255,.55); }
 .lvl.active { color: var(--ink); background: rgba(255,255,255,.92); box-shadow: 0 2px 8px rgba(29,41,40,.14); }
 
-/* Main cartographic canvas */
 .stage { position: relative; min-height: 0; overflow: hidden; background: #e6ece8; }
 .leaflet-control-attribution { display: none !important; }
 #map {
@@ -102,7 +100,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 }
 .leaflet-control-zoom a:hover { background: var(--surface-soft) !important; color: var(--accent) !important; }
 
-/* Compact, colorful illustrated event emblems */
 .atlas-marker-shell {
   background: transparent;
   border: 0;
@@ -154,7 +151,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   outline-offset: 2px;
 }
 
-/* Preserve category colors when completed; add a tiny green check instead. */
+/* selesai: warna kategori tetap, ditambah tanda centang kecil */
 .atlas-marker.is-complete::after {
   content: "✓";
   position: absolute;
@@ -189,7 +186,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   }
 }
 
-/* Floating event explorer */
 .event-explorer {
   position: absolute; z-index: 1000; top: 20px; left: 20px;
   width: min(330px, calc(100% - 40px)); max-height: min(70%, 650px);
@@ -248,7 +244,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .event-check { color: var(--good); font-size: 12px; font-weight: 700; }
 .event-empty { padding: 18px 12px; color: var(--muted); font-size: 11px; line-height: 1.6; }
 
-/* Story panel — keep existing StoryPanel component and its class contract */
 .panel {
   position: absolute; z-index: 1100; top: 76px; right: 20px; bottom: 20px;
   display: flex; flex-direction: column; width: min(390px, calc(100% - 40px));
@@ -275,7 +270,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .panel-image figcaption { padding: 6px 10px; color: var(--muted); font-size: 10px; line-height: 1.4; }
 .lvl-note { margin: 0 0 7px; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
 .story { color: #344440; font: 400 var(--fs-md)/1.75 var(--sans); }
-/* teks panjang dipecah menjadi beberapa paragraf (lihat Story.tsx) */
 .story p { margin: 0 0 0.95em; }
 .story p:last-child { margin-bottom: 0; }
 .term { border-bottom: 1px dotted var(--accent); color: inherit; cursor: help; }
@@ -465,7 +459,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   outline-offset: 2px;
 }
 
-/* Preserve category colors when completed; add a tiny green check instead. */
 .atlas-marker.is-complete::after {
   content: "✓";
   position: absolute;
@@ -576,7 +569,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .era-card-action:hover:not(:disabled) { background: #8f4b32; }
 .era-card-action:disabled { border-color: #ddd8ca; background: #eeeade; color: #9d9d8e; cursor: not-allowed; }
 .era-select-note { margin: 21px 0 0; color: #8b8f80; font-size: 10px; line-height: 1.6; }
-/* Menu return action in game header */
 .header-actions { display: flex; align-items: center; gap: 12px; }
 .menu-return {
   padding: 9px 14px; border-radius: 999px;
@@ -622,7 +614,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .map-loading { position: absolute; inset: 0; display: grid; place-items: center; background: #e6ece8; color: #40514f; font-size: 13px; letter-spacing: .04em; }
 
 
-/* React Bits integrations used by the main menu */
 .landing-brand-copy { min-width: 0; }
 .landing-tech-wordmark { display: block; width: 170px; height: 34px; margin: -2px 0 -1px; }
 .landing-tech-wordmark .tech-text-canvas { overflow: visible; }
@@ -653,7 +644,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   .landing-spiral-frame { height: 165px; }
 }
 
-/* Main menu: centered editorial composition with a subtle animated light tunnel */
 .landing-screen--centered,.era-select-screen--tunnel{min-height:100vh;background:#172f29;color:#f4eddd;isolation:isolate}
 .landing-screen--centered>.light-tunnel,.era-select-screen--tunnel>.light-tunnel{z-index:-2;opacity:.78}
 .landing-screen--centered>.landing-grain,.era-select-screen--tunnel>.landing-grain{z-index:-1;opacity:.22}
@@ -683,7 +673,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .landing-corner-spiral{position:absolute;z-index:1;right:0;bottom:24px;width:clamp(150px,18vw,235px);height:clamp(150px,18vw,235px);opacity:.9;pointer-events:none;filter:drop-shadow(0 0 25px #d8b78c22)}
 .landing-corner-spiral .infinite-spiral{min-height:0}
 .landing-screen--centered .landing-footer{position:relative;z-index:2;border-top-color:#ffffff1c;color:#8fa398}
-/* Era selection now uses the same deep-green and warm-brass visual language */
 .era-select-screen--tunnel{min-height:100vh;background:#172f29}
 .era-select-screen--tunnel .era-select-nav{position:relative;z-index:2;border-bottom-color:#ffffff24}
 .era-select-screen--tunnel .era-select-nav .landing-brand-copy strong{color:#f4eddd}
@@ -695,11 +684,9 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .era-select-screen--tunnel .era-select-intro h1 em{color:#d8b78c}
 .era-select-screen--tunnel .era-select-intro>p:last-child{color:#c0cdc4}
 .era-select-screen--tunnel .era-select-note{color:#9eafa4;text-align:center;font-size:10px;letter-spacing:.04em;margin-top:20px}
-/* In-era map workspace harmonizes with the menu palette without changing map semantics */
 .stage{background:#dbe3d9}
 .map-loading{background:#203a32;color:#e8dfca}
 @media(max-width:650px){.landing-center-stage{min-height:calc(100vh - 120px);padding-top:48px}.landing-title-spiral{width:240px;height:240px;opacity:.48}.landing-title-tech{height:74px}.landing-description--center{font-size:12px}.landing-corner-spiral{right:-25px;bottom:45px;width:130px;height:130px;opacity:.45}.landing-era-note{flex-wrap:wrap;justify-content:center}.era-select-content--gallery .era-select-intro h1{font-size:43px}.era-select-screen--tunnel .era-select-content{padding-top:32px}}
-/* Shared in-era chrome uses the same archive green and brass accents */
 .header{background:#203a32!important;color:#f4eddd!important;border-color:#ffffff20!important}
 .header button,.header select{border-color:#ffffff35!important;background:#29483d!important;color:#e8dfca!important}
 .timebar{background:#203a32!important;color:#f4eddd!important;border-color:#ffffff24!important}
@@ -708,7 +695,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .timebar input[type=range]{accent-color:#d8b78c}
 
 
-/* Black editorial theme: orbital gallery, generous scroll, no detached corner spiral */
 .landing-screen--centered,.era-select-screen--tunnel{background:#050606!important;color:#f4eddd;min-height:100svh;overflow:hidden}
 .landing-screen--centered>.light-tunnel,.era-select-screen--tunnel>.light-tunnel{opacity:.48;filter:grayscale(1) brightness(.7)}
 .landing-screen--centered>.landing-grain,.era-select-screen--tunnel>.landing-grain{opacity:.13}
@@ -736,7 +722,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .era-select-screen--tunnel .era-select-note{color:#969188}
 .accordion-gallery .ag-panel{background-color:#111;border:1px solid #bda77b35}
 .accordion-gallery .ag-panel__overlay{--ag-overlay:#050505}
-/* Keep the playable era in the same black-and-brass visual language. */
 .stage{background:#0b0b0a!important;color:#f4eddd}
 .header,.timebar{background:#101110!important;color:#f4eddd!important;border-color:#ffffff20!important}
 .header button,.header select,.timebar button{background:#1a1a18!important;color:#e8dfca!important;border-color:#bda77b45!important}
@@ -744,10 +729,8 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .timebar input[type=range]{accent-color:#d8b78c}
 .map-loading{background:#080909!important;color:#e8dfca!important}
 @media(max-width:650px){.landing-title-composition{padding:90px 0}.landing-title-spiral{width:min(112vw,440px);height:min(112vw,440px);opacity:.72}.landing-center-stage{padding-bottom:75px}.landing-corner-spiral{display:none!important}}
-/* Let the document scroll naturally below the hero instead of clipping the page. */
 .landing-screen--centered,.era-select-screen--tunnel{overflow:visible!important}
 
-/* ScrollExpand landing: monochrome editorial treatment */
 .landing-scroll-page{background:#050505!important;color:#f4eddd;overflow:clip!important;min-height:100vh}
 .landing-scroll-page>.light-tunnel{opacity:.22!important;filter:grayscale(1) brightness(.42)!important}
 .landing-scroll-page>.landing-grain{opacity:.1!important}
@@ -771,7 +754,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .landing-scroll-page .landing-footer{z-index:3;background:#050505;border-top-color:#ffffff18;color:#817b70}
 @media(max-width:700px){.scroll-hero-orbit{width:88vw;height:88vw;margin:-8px 0}.scroll-hero-inner>p:not(.landing-eyebrow){font-size:12px;padding:0 8px}.landing-below-fold{min-height:unset;flex-direction:column;align-items:flex-start;gap:42px;padding:82px 26px}.landing-below-index{width:100%}.scroll-expand__hint{font-size:9px}}
 
-/* Topography shader background: replaces the spiral and light-tunnel effects. */
 .landing-screen { background: #050606 !important; }
 .landing-topography { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; background: #050606; }
 .landing-topography .topography-container { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 1; }
@@ -781,7 +763,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .scroll-hero-orbit { display: none !important; }
 
 
-/* Kategori tambahan: agama dan diplomasi */
 .event-category--agama { background: #71866a; }
 .event-category--diplomasi { background: #a88a58; }
 .event-row--utama .event-title::before {
@@ -810,8 +791,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 }
 
 
-/* Jenis penanda utama dan sampingan — diselaraskan dengan sistem jenis-event */
-/* Dua jenis penanda: kejadian utama (tegas) dan peristiwa sampingan (kecil, outline putus-putus) */
 .atlas-marker.atlas-marker--utama {
   width: 42px; height: 42px; border: 2.5px solid var(--marker-color, #647b68); background: #fff;
   box-shadow: 0 0 0 3px rgb(255 255 255 / 85%), 0 2px 9px rgb(29 41 40 / 32%);
@@ -827,7 +806,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
 .atlas-marker.atlas-marker--sampingan:hover,
 .atlas-marker.atlas-marker--sampingan.is-selected { opacity: 1; }
 
-/* Indeks peristiwa: kejadian utama lebih tegas, sampingan lebih tenang */
 .event-row.is-utama .event-title { font-weight: 600; }
 .event-row.is-sampingan .event-title { font-size: .92em; opacity: .85; }
 
@@ -844,14 +822,11 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   letter-spacing: .04em;
 }
 
-/* GradientASCII (React Bits) sebagai latar layar Pilih Era (pola sama dengan .menu-aero-bg) */
 .era-select-screen--tunnel > .era-ascii-bg { position: absolute; inset: 0; z-index: -2; overflow: hidden; background: #050606; pointer-events: none; }
 .era-ascii-bg .gradient-ascii-container { position: absolute; inset: 0; }
 
-/* Kartu era: hanya nomor, judul, rentang tahun */
 .accordion-gallery .ag-panel__label>span { opacity: 1; max-height: none; font-size: 12px; letter-spacing: .1em; color: #d8b78c; }
 
-/* Garis waktu peristiwa utama yang bisa dibuka dari tepi bawah peta */
 .timeline-drawer { position: absolute; left: 0; right: 0; bottom: 0; z-index: 500; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
 .timeline-drawer-handle { pointer-events: auto; display: flex; align-items: center; gap: 8px; padding: 8px 18px; border: 1px solid var(--line); border-bottom: none; border-radius: 10px 10px 0 0; background: var(--surface); color: var(--ink-soft); font-size: 11px; font-weight: 700; letter-spacing: .03em; cursor: pointer; box-shadow: 0 -4px 14px #1d292814; }
 .timeline-drawer-handle:hover { color: var(--accent); }
@@ -874,13 +849,12 @@ button:focus-visible, input:focus-visible, summary:focus-visible {
   .timeline-drawer-panel { width: calc(100% - 16px); max-height: 52vh; }
 }
 
-/* Mode gelap peta: lapisan basemap dan hillshade dibalik warnanya, sehingga area putih menjadi gelap.
-   Poligon wilayah dan penanda tidak ikut dibalik karena berada di pane terpisah. */
+/* Mode gelap peta: lapisan peta dibalik warnanya; wilayah dan penanda tidak ikut karena ada di pane lain. */
 #map.map-dark.leaflet-container { background: #0c0f0e; }
 #map.map-dark .leaflet-tile-pane { filter: invert(0.92) hue-rotate(180deg) brightness(0.92) contrast(0.95); }
 #map.map-dark .leaflet-control-zoom a { background: #1a1f1e; color: #e8e2d2; border-color: #2c3432; }
 
-/* Mode gelap seluruh antarmuka peta (aktif bersama tombol Gelap): bar kontrol, indeks tahun, panel, dan tombol dibuat hitam. */
+/* Mode gelap antarmuka peta */
 html.ui-dark .topbar,
 html.ui-dark .timebar,
 html.ui-dark .panel,
@@ -927,7 +901,6 @@ html.ui-dark .track-marks {
   color: #9a9a9a !important;
 }
 
-/* Mode gelap: baris event dan teksnya dibuat hitam dengan tulisan terang (tanpa redup). */
 html.ui-dark .event-row,
 html.ui-dark .event-explorer,
 html.ui-dark .event-row-copy,
@@ -964,8 +937,7 @@ html.ui-dark input::placeholder {
   color: #8a8a8a !important;
 }
 
-/* Mode gelap: panel detail memakai variabel warna terang, sehingga judul (h2) dan teks lain yang memakai
-   var(--ink), var(--ink-soft), var(--muted), atau var(--line) ikut terbaca di atas latar hitam. */
+/* panel detail memakai variabel warna terang supaya teks terbaca di atas hitam */
 html.ui-dark .panel {
   --ink: #f2f2f2;
   --ink-soft: #d0d0d0;
@@ -974,7 +946,6 @@ html.ui-dark .panel {
   --surface-soft: #161616;
 }
 
-/* Mode gelap: opsi kuis, pilihan keputusan, dan tombol tutup panel dibuat hitam dengan tulisan terang. */
 html.ui-dark .panel .opt,
 html.ui-dark .panel .choice {
   background: #000 !important;
@@ -1010,7 +981,6 @@ html.ui-dark .panel .close {
 }
 html.ui-dark .panel .close:hover { background: #141414 !important; color: #ffffff !important; }
 
-/* Mode gelap: marker peristiwa dan kapal perjalanan memakai outline hitam, bukan putih. */
 html.ui-dark .atlas-marker {
   border-color: var(--marker-color, #647b68);
   background: color-mix(in srgb, var(--marker-color, #647b68) 22%, #000);
@@ -1031,7 +1001,6 @@ html.ui-dark .atlas-marker.is-selected {
 }
 html.ui-dark .atlas-marker.is-selected { outline-color: var(--marker-color, #647b68); }
 
-/* Mode gelap: daftar penguasa tidak lagi memakai kotak terang, dan teks isi panel dibuat putih. */
 html.ui-dark .panel .kingdom-rulers li { background: transparent !important; }
 html.ui-dark .panel .kingdom-rulers li.is-current {
   background: #1a1a1a !important;
@@ -1058,7 +1027,6 @@ html.ui-dark .panel .kingdom-rulers li span {
 html.ui-dark .atlas-marker.is-complete::after { border-color: #000; }
 html.ui-dark .travel-vessel svg { stroke: #000; }
 
-/* Mode gelap: judul panel indeks waktu dan bar garis waktu di bawah ikut hitam (sebelumnya masih putih). */
 html.ui-dark [class*="explorer"],
 html.ui-dark [class*="drawer"],
 html.ui-dark [class*="panel-head"],
@@ -1076,7 +1044,6 @@ html.ui-dark .timeline-drawer-count {
   border-color: #2a2a2a !important;
 }
 
-/* Mode gelap: angka dan label yang sebelumnya abu-abu dibuat putih. */
 html.ui-dark .explorer-heading-main,
 html.ui-dark .explorer-heading-main strong,
 html.ui-dark .explorer-heading-main > span:first-child,
@@ -1090,7 +1057,6 @@ html.ui-dark .year-badge-suffix {
   -webkit-text-fill-color: #ffffff !important;
 }
 
-/* Mode gelap: scrollbar daftar indeks waktu dan tombol zoom dibuat gelap. */
 html.ui-dark .event-list,
 html.ui-dark .panel-body,
 html.ui-dark .explorer-content {
@@ -1125,7 +1091,6 @@ html.ui-dark .leaflet-control-zoom a:hover {
   background: #1f1f1f !important;
 }
 
-/* Hasil pencarian di indeks waktu: deskripsi singkat, dan gaya khusus untuk peristiwa yang belum terjadi. */
 .event-desc { display: block; margin-top: 3px; font-size: 0.85em; line-height: 1.4; opacity: 0.85; }
 .event-row.is-future .event-title { font-style: italic; }
 .event-row.is-future .event-desc { font-style: italic; opacity: 0.6; }

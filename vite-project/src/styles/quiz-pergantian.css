@@ -1,4 +1,3 @@
-/* Overlay transisi antar soal: path SVG layar penuh dengan warna cyan-teal kuis */
 .qzp {
   position: fixed;
   left: 0;
@@ -12,4 +11,15 @@
 
 .qzp-path {
   fill: #5fd4cf;
+}
+
+/* versi ponsel: panel yang bergeser, di luar layar sampai dipakai */
+.qzp-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  background: #5fd4cf;
+  pointer-events: none;
+  transform: translateX(-100%);
+  will-change: transform;
 }

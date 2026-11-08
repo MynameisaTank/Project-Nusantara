@@ -4,9 +4,8 @@ const STORE_KEY = "nusantaraBersamaan.v2";
 
 export interface Saved {
   level: Level;
-  /** kuis yang sudah dijawab benar */
   done: Record<string, true>;
-  /** idEvent -> id pilihan keputusan */
+  /** id peristiwa -> id pilihan */
   choices: Record<string, string>;
 }
 
@@ -23,8 +22,7 @@ export function loadStore(): Saved {
     if (saved && typeof saved.level === "number" && saved.level >= 1 && saved.level <= 3) {
       result.level = saved.level as Level;
     }
-    // Data peristiwa tidak dimuat saat aplikasi dibuka, jadi di sini hanya bentuknya yang diperiksa.
-    // Pilihan yang id-nya tidak lagi ada di sebuah peristiwa dibuang saat data era itu dimuat (lihat App.tsx).
+    // Pilihan yang sudah tidak ada di datanya dibuang di App.tsx saat era dimuat.
     for (const [id, nilai] of Object.entries(saved?.done ?? {})) {
       if (nilai) result.done[id] = true;
     }

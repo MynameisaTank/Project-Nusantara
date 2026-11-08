@@ -31,14 +31,13 @@ interface Titik {
   y: number;
 }
 
-/** Keadaan graf yang tumbuh: peristiwa yang sudah dimunculkan, posisinya (tetap), dan asal kemunculannya. */
 interface Graf {
   terbuka: string[];
   pos: Record<string, Titik>;
   asal: Record<string, string>;
 }
 
-/** Satu "sesi" cabang internal milik sebuah node: cabang keluar saat node dibuka, menarik diri saat node lain dibuka. */
+/** Cabang internal sebuah node: keluar saat node dibuka, masuk lagi saat node lain dibuka. */
 interface Sesi {
   id: string;
   menutup: boolean;
@@ -68,33 +67,26 @@ const LEVEL_LABEL: Record<LevelBahasa, string> = { 1: "Dasar", 2: "Menengah", 3:
 const FACET_LABEL: Record<FacetJenis, string> = { ringkasan: "Ringkasan", sebab: "Penyebab", akibat: "Akibat", detail: "Detail" };
 const URUT_KARTU: KartuJenis[] = ["sebab", "ringkasan", "akibat"];
 
-// ukuran tata letak (piksel)
-const R = 34; // jari-jari lingkaran peristiwa (berisi gambar)
+const R = 34; // jari-jari node
 const LABEL_W = 116;
-const JARAK = 176; // jarak awal peristiwa baru dari peristiwa asalnya (dibuat dekat)
-const MIN_JARAK = 140; // jarak minimum antar pusat peristiwa agar label tidak bertumpuk
-const PAD = 470; // ruang kosong di sekeliling graf (muat cabang dan kartu di tepi)
+const JARAK = 176; // jarak node baru dari asalnya
+const MIN_JARAK = 140; // supaya label tidak bertumpuk
+const PAD = 470; // ruang di sekeliling graf untuk cabang dan kartu
 const TAU = Math.PI * 2;
 
 const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 1.6;
-/* Layar sempit (ponsel): graf dimulai lebih kecil supaya cabang akibat langsung terlihat tanpa menggeser ke kanan,
- * dan zoom boleh turun lebih jauh. */
+// Di ponsel graf dimulai lebih kecil supaya cabang akibat langsung kelihatan.
 const ZOOM_MIN_KECIL = 0.25;
 const ZOOM_AWAL_KECIL = 0.5;
 
 
-/** Tahun untuk urutan dan lingkaran: empat angka pertama pada teks tahun, atau awal rentang tampil. */
 function tahunNilai(ev: SejarahEvent): number {
   const m = ev.tahun.match(/\d{4}/);
   return m ? Number(m[0]) : ev.mulai;
 }
 
-/**
- * Munculkan peristiwa `baru` di sekitar `id`, dekat dan tanpa menggeser yang sudah ada.
- * Posisi dipilih di sisi yang menjauh dari peristiwa yang sudah terlihat, dan ditarik mendekat ke peristiwa
- * terhubung lain yang sudah muncul supaya garisnya tidak panjang.
- */
+/** Munculkan `baru` di sekitar `id` tanpa menggeser node lain, di sisi yang masih kosong. */
 function bukaTetangga(graf: Graf, id: string, edges: Relasi[], tahunDari: (id: string) => number, baruAsli: string[]): Graf {
   const asal = graf.pos[id];
   if (!asal) return graf;
@@ -153,10 +145,7 @@ function bukaTetangga(graf: Graf, id: string, edges: Relasi[], tahunDari: (id: s
   return { terbuka: [...graf.terbuka, ...baru], pos, asal: asalBaru };
 }
 
-/**
- * Buka semua peristiwa `ids` sekaligus. Setiap peristiwa diletakkan lewat `bukaTetangga` dari tetangganya yang
- * sudah terbuka. Komponen yang tidak terhubung ke graf yang ada diletakkan di sisi kanan graf.
- */
+/** Buka semua `ids` sekaligus. Yang tidak terhubung ke graf diletakkan di sebelah kanan. */
 function bukaSemuaGraf(awal: Graf, ids: string[], edges: Relasi[], tahunDari: (id: string) => number): Graf {
   let g = awal;
   let sisa = ids.filter((id) => !g.terbuka.includes(id));
@@ -181,7 +170,6 @@ function bukaSemuaGraf(awal: Graf, ids: string[], edges: Relasi[], tahunDari: (i
   return g;
 }
 
-/** Garis dari penyebab ke akibat: dipotong di tepi lingkaran agar panah terlihat, sedikit melengkung. */
 function jalurGaris(a: Titik, b: Titik): string {
   const dx = b.x - a.x;
   const dy = b.y - a.y;
@@ -198,10 +186,7 @@ function jalurGaris(a: Titik, b: Titik): string {
   return `M ${sx} ${sy} Q ${cx} ${cy} ${ex} ${ey}`;
 }
 
-/**
- * Jalur terpendek dari peristiwa awal ke peristiwa tujuan. Lebih dulu mengikuti arah sebab → akibat; bila tidak ada
- * jalur searah, boleh melewati hubungan secara mundur (akibat → sebab) supaya semua peristiwa tetap terjangkau.
- */
+/** Jalur terpendek dari awal ke tujuan. Kalau tidak ada jalur searah, boleh lewat hubungan mundur. */
 function cariJalur(dari: string, ke: string, edges: Relasi[]): string[] {
   if (dari === ke) return [dari];
   for (const searah of [true, false]) {
@@ -251,7 +236,6 @@ interface NodeViewProps {
   onKlik: (id: string) => void;
 }
 
-/** Satu node (lingkaran + tahun + judul). Di-memo agar tidak dirender ulang saat bagian lain halaman berubah. */
 const NodeView = memo(function NodeView({ id, n, left, top, dx, dy, aktif, mundur, redup, dijalur, cocok, masihAda, gambar, onKlik }: NodeViewProps) {
   return (
     <button
@@ -306,26 +290,24 @@ export function ExamReview({ onBack }: Props) {
   const [menggeser, setMenggeser] = useState(false);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [viewport, setViewport] = useState({ w: 1000, h: 600 });
-  const kameraRef = useRef(0); // id requestAnimationFrame kamera yang sedang berjalan
+  const kameraRef = useRef(0);
   const kameraData = useRef<{ pos: Record<string, Titik>; offX: number; offY: number; zoom: number; w: number; h: number }>({ pos: {}, offX: 0, offY: 0, zoom: 1, w: 1000, h: 600 });
   const geserRef = useRef<{ x: number; y: number; kiri: number; atas: number } | null>(null);
-  // Cubit dua jari: posisi semua penunjuk, dan keadaan awal cubitan (jarak jari, zoom, titik di tengah dua jari)
+  // keadaan cubit dua jari
   const penunjukRef = useRef(new Map<number, { x: number; y: number }>());
   const cubitRef = useRef<{ jarak: number; zoom: number; konX: number; konY: number } | null>(null);
-  // posisi gulir yang harus dipasang setelah zoom baru sudah tampil (lihat useLayoutEffect di bawah)
   const pindahGulirRef = useRef<{ x: number; y: number } | null>(null);
   const offsetRef = useRef<Titik | null>(null);
   const kunciRef = useRef(0);
-  const tourRef = useRef(0); // naik setiap kali penelusuran jalur dibatalkan/diganti
+  const tourRef = useRef(0); // naik tiap kali tur dibatalkan
   const [kata, setKata] = useState("");
   const [kataAktif, setKataAktif] = useState("");
   const [jalur, setJalur] = useState<string[]>([]);
   const [langkah, setLangkah] = useState(-1);
-  const [tourAktif, setTourAktif] = useState(false); // penelusuran sedang berjalan (tombol "Lewati animasi" tampil)
-  const [sorot, setSorot] = useState(false); // seluruh jalur disorot saat kamera sudah memperkecil tampilan
+  const [tourAktif, setTourAktif] = useState(false);
+  const [sorot, setSorot] = useState(false);
   const tourInfoRef = useRef<{ path: string[]; target: string; zoomAwal: number } | null>(null);
 
-  // peristiwa yang punya hubungan sebab-akibat, dari kedua era
   const semua = useMemo(() => {
     const peta = new Map<string, Node>();
     for (const ev of EVENTS) peta.set(ev.id, { ev, era: 1 });
@@ -350,7 +332,7 @@ export function ExamReview({ onBack }: Props) {
     return n ? tahunNilai(n.ev) : 0;
   };
 
-  // peristiwa awal (node 1): yang paling awal waktunya di antara yang tampil
+  // node awal: peristiwa paling awal yang tampil
   const akarId = useMemo(() => {
     const urut = [...nodes].sort((a, b) => tahunNilai(a.ev) - tahunNilai(b.ev) || a.ev.id.localeCompare(b.ev.id));
     return urut[0]?.ev.id ?? null;
@@ -358,11 +340,18 @@ export function ExamReview({ onBack }: Props) {
 
   const [graf, setGraf] = useState<Graf>({ terbuka: [], pos: {}, asal: {} });
 
-  // pencarian kata kunci: semua kata harus ada pada judul, lokasi, ringkasan, kategori, atau tahun
-  const cocokUntuk = (kunci: string): Node[] => {
+  // semua kata harus ada di judul, lokasi, ringkasan, kategori, atau tahun
+  // semua peristiwa yang punya hubungan, tanpa filter era dan kategori
+  const nodesSemua = useMemo(() => {
+    const idTerhubung = new Set(RELASI.flatMap((r) => [r.dari, r.ke]));
+    return [...idTerhubung].map((id) => semua.get(id)).filter((n): n is Node => n !== undefined);
+  }, [semua]);
+  const [tujuanTertunda, setTujuanTertunda] = useState<string | null>(null);
+
+  const cocokUntuk = (kunci: string, daftar: Node[] = nodes): Node[] => {
     const kata = kunci.trim().toLocaleLowerCase("id").split(/\s+/).filter(Boolean);
     if (kata.length === 0) return [];
-    return nodes
+    return daftar
       .filter((n) => {
         const teks = `${n.ev.judul} ${n.ev.lokasi.nama} ${n.ev.ringkas} ${KATEGORI_LABEL[n.ev.kategori]} ${n.ev.tahun}`.toLocaleLowerCase("id");
         return kata.every((k) => teks.includes(k));
@@ -372,14 +361,12 @@ export function ExamReview({ onBack }: Props) {
   const hasilCari = useMemo(() => cocokUntuk(kataAktif), [nodes, kataAktif]); // eslint-disable-line react-hooks/exhaustive-deps
   const cocokSet = useMemo(() => new Set(hasilCari.map((n) => n.ev.id)), [hasilCari]);
 
-  /** Buka cabang internal sebuah node; cabang node yang sedang terbuka menarik diri ke dalam node itu. */
   const mulaiSesi = (id: string) => {
     const kunci = ++kunciRef.current;
     setSesi((s) => [...s.map((x) => ({ ...x, menutup: true })), { id, menutup: false, kunci }]);
     window.setTimeout(() => setSesi((s) => s.filter((x) => !x.menutup)), 520);
   };
 
-  /** Hentikan penelusuran yang sedang berjalan (timer, zoom, kamera, dan sorotan). */
   const hentikanTur = () => {
     tourRef.current++;
     tourInfoRef.current = null;
@@ -397,7 +384,6 @@ export function ExamReview({ onBack }: Props) {
     setPanelBuka(false);
   };
 
-  /** Buka semua peristiwa yang tampil (sesuai filter era dan kategori), lalu perkecil zoom agar seluruh graf terlihat. */
   const bukaSemua = () => {
     hentikanTur();
     const g = bukaSemuaGraf(graf, nodes.map((n) => n.ev.id), edges, tahunDari);
@@ -412,7 +398,6 @@ export function ExamReview({ onBack }: Props) {
     }
   };
 
-  // mulai (atau mulai ulang) dengan hanya satu peristiwa di pusat, cabang internalnya langsung terbuka
   const mulaiUlang = () => {
     hentikanTur();
     setJalur([]);
@@ -445,7 +430,6 @@ export function ExamReview({ onBack }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ukuran area gulir (berubah saat jendela atau panel detail berubah)
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
@@ -456,11 +440,10 @@ export function ExamReview({ onBack }: Props) {
     return () => observer.disconnect();
   }, []);
 
-  // ruang kosong di sekeliling graf: minimal PAD, dan cukup lebar agar node di tepi pun bisa dipusatkan
+  // cukup lebar supaya node di tepi pun bisa dipusatkan
   const padX = Math.max(PAD, viewport.w / (2 * zoom));
   const padY = Math.max(PAD, viewport.h / (2 * zoom));
 
-  // batas graf dan geseran agar semua koordinat positif
   const batas = useMemo(() => {
     const titik = Object.values(graf.pos);
     if (titik.length === 0) return { minX: 0, minY: 0, lebar: 2 * padX, tinggi: 2 * padY };
@@ -476,7 +459,7 @@ export function ExamReview({ onBack }: Props) {
   kameraData.current = { pos: graf.pos, offX, offY, zoom, w: viewport.w, h: viewport.h };
   const layar = (p: Titik): Titik => ({ x: p.x + offX, y: p.y + offY });
 
-  // jaga posisi gulir saat graf tumbuh ke kiri atau atas; pusatkan pada peristiwa awal saat mulai
+  // jaga posisi gulir saat graf tumbuh ke kiri atau atas
   useLayoutEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
@@ -496,7 +479,7 @@ export function ExamReview({ onBack }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offX, offY, akarId]);
 
-  // setelah cubitan: gulir dipasang ke titik yang sama di bawah dua jari, dengan zoom yang baru
+  // setelah cubitan, titik di bawah jari tetap di tempatnya
   useLayoutEffect(() => {
     const el = scrollerRef.current;
     const pindah = pindahGulirRef.current;
@@ -518,7 +501,6 @@ export function ExamReview({ onBack }: Props) {
     [selectedId, edgeTampil],
   );
 
-  // bagian jalur yang sudah ditempuh kamera: node dan garis di antaranya menyala
   const jalurAktif = jalur.length > 0;
   const jalurSet = useMemo(() => new Set(jalur.slice(0, Math.max(0, langkah) + 1)), [jalur, langkah]);
   const jalurEdge = useMemo(() => {
@@ -534,7 +516,7 @@ export function ExamReview({ onBack }: Props) {
     return hasil;
   }, [jalur, langkah]);
 
-  // dua garis jalur terbaru (yang baru saja ditempuh kamera) saja yang diberi animasi aliran
+  // hanya dua garis terbaru yang diberi animasi aliran
   const jalurBaru = useMemo(() => {
     const hasil = new Set<string>();
     for (let i = Math.max(0, langkah - 2); i < Math.min(langkah, jalur.length - 1); i++) {
@@ -548,11 +530,7 @@ export function ExamReview({ onBack }: Props) {
     return hasil;
   }, [jalur, langkah]);
 
-  /**
-   * Geser kamera sampai node berada tepat di tengah area gulir. Target dihitung ulang tiap frame dari data posisi
-   * (bukan dari DOM), jadi tetap akurat walau graf tumbuh atau panel detail mengubah ukuran area gulir,
-   * dan tidak memaksa browser menghitung layout berulang kali.
-   */
+  /** Geser kamera ke node. Target dihitung dari data posisi, bukan DOM, supaya tidak memaksa layout ulang. */
   const pusatkan = (id: string) => {
     cancelAnimationFrame(kameraRef.current);
     const mulai = performance.now();
@@ -572,13 +550,17 @@ export function ExamReview({ onBack }: Props) {
         el.scrollTop += dy * ikut;
         tenang = Math.abs(dx) < 1 && Math.abs(dy) < 1 ? tenang + 1 : 0;
       }
-      // berhenti bila sudah di tengah (stabil beberapa frame) atau terlalu lama (node belum ada / mentok di tepi)
-      if (tenang < 6 && now - mulai < 2500) kameraRef.current = requestAnimationFrame(langkahFrame);
+      if (tenang < 6 && now - mulai < 2500) {
+        kameraRef.current = requestAnimationFrame(langkahFrame);
+      } else if (tenang < 6 && el && p) {
+        // Waktu habis sebelum sampai (graf besar atau perangkat lambat): langsung tempatkan di target.
+        el.scrollLeft = (p.x + k.offX) * k.zoom - k.w / 2;
+        el.scrollTop = (p.y + k.offY) * k.zoom - k.h / 2;
+      }
     };
     kameraRef.current = requestAnimationFrame(langkahFrame);
   };
 
-  // klik node: node sebelumnya mundur, cabang internal node ini terbuka
   const klik = (id: string) => {
     hentikanTur();
     if (id === selectedId) {
@@ -599,23 +581,20 @@ export function ExamReview({ onBack }: Props) {
 
   useEffect(() => () => cancelAnimationFrame(kameraRef.current), []);
 
-  // callback stabil agar NodeView yang di-memo tidak dirender ulang hanya karena fungsi klik dibuat ulang
+  // supaya NodeView yang di-memo tidak ikut dirender ulang
   const klikRef = useRef(klik);
   klikRef.current = klik;
   const onKlik = useCallback((id: string) => klikRef.current(id), []);
 
-  /** Peristiwa yang terhubung langsung dengan `id` tetapi bukan bagian jalur: cabang terdekat, ikut dimuat tanpa disorot. */
   const cabangLuar = (id: string, jalurSet: Set<string>) =>
     [...new Set(edges.flatMap((e) => (e.dari === id ? [e.ke] : e.ke === id ? [e.dari] : [])))].filter((x) => !jalurSet.has(x));
 
-  /** Satu langkah tur: `id` muncul dari `dari`, bersama cabang terdekat keduanya. */
   const tambahLangkah = (g: typeof graf, dari: string, id: string, path: string[]) => {
     const jalurSet = new Set(path);
     const hasil = bukaTetangga(g, dari, edges, tahunDari, [id, ...cabangLuar(dari, jalurSet)]);
     return bukaTetangga(hasil, id, edges, tahunDari, cabangLuar(id, jalurSet));
   };
 
-  /** Keadaan awal tur: peristiwa pusat beserta cabang terdekatnya. */
   const grafAwal = (path: string[]) => {
     const akar = path[0] ?? "";
     const jalurSet = new Set(path);
@@ -623,7 +602,6 @@ export function ExamReview({ onBack }: Props) {
     return bukaTetangga(g, akar, edges, tahunDari, cabangLuar(akar, jalurSet));
   };
 
-  /** Graf lengkap untuk satu jalur (dipakai saat tur dilewati, dan untuk menghitung zoom saat jalur disorot). */
   const grafJalur = (path: string[]) => {
     let g = grafAwal(path);
     for (let i = 0; i < path.length - 1; i++) {
@@ -634,7 +612,6 @@ export function ExamReview({ onBack }: Props) {
     return g;
   };
 
-  /** Zoom yang pas untuk seluruh jalur di area tampilan, beserta titik tengahnya (koordinat graf). */
   const zoomPasJalur = (g: typeof graf, path: string[]) => {
     const titik = path.map((id) => g.pos[id]).filter((p): p is Titik => !!p);
     const xs = titik.map((p) => p.x);
@@ -646,7 +623,6 @@ export function ExamReview({ onBack }: Props) {
     return { zoom: Math.max(zoomMin, Math.min(ZOOM_MAX, fit)), cx: (minX + maxX) / 2, cy: (minY + maxY) / 2 };
   };
 
-  /** Ubah zoom perlahan dari `dari` ke `ke`; berhenti bila tur sudah dibatalkan. */
   const aniZoom = (dari: number, ke: number, ms: number, kunci: number, selesai: () => void) => {
     const mulai = performance.now();
     const frame = (now: number) => {
@@ -660,7 +636,6 @@ export function ExamReview({ onBack }: Props) {
     requestAnimationFrame(frame);
   };
 
-  /** Kamera mengikuti sebuah titik (bukan node) sampai tur dibatalkan atau fasenya diganti. */
   const ikutiTitik = (getTitik: () => Titik, kunci: number) => {
     cancelAnimationFrame(kameraRef.current);
     let terakhir = performance.now();
@@ -683,8 +658,7 @@ export function ExamReview({ onBack }: Props) {
     kameraRef.current = requestAnimationFrame(frame);
   };
 
-  /** Telusuri jalur dari peristiwa awal (pusat) ke tujuan: node muncul satu per satu, lalu seluruh jalur disorot
-   *  sambil kamera memperkecil tampilan, dan terakhir kamera kembali memperbesar ke tujuan. */
+  /** Tur dari node awal ke tujuan: node muncul satu per satu, jalur disorot, lalu kamera kembali ke tujuan. */
   const jalankanTur = (targetId: string) => {
     if (!akarId) return;
     const path = cariJalur(akarId, targetId, edges);
@@ -717,7 +691,6 @@ export function ExamReview({ onBack }: Props) {
       mulaiSesi(id);
       pusatkan(id);
     };
-    // fase akhir: perkecil ke seluruh jalur, sorot, lalu perbesar kembali ke tujuan dan buka cabangnya
     const faseAkhir = () => {
       if (tourRef.current !== kunci) return;
       const { zoom: kecil, cx, cy } = zoomPasJalur(grafJalur(path), path);
@@ -737,6 +710,8 @@ export function ExamReview({ onBack }: Props) {
       window.setTimeout(() => { if (tourRef.current === kunci) buka(targetId); }, 700);
       return;
     }
+    // jalur panjang (lintas era) dipercepat supaya seluruh tur selesai sekitar 11 detik
+    const jeda = Math.max(280, Math.min(1150, 11000 / (path.length - 1)));
     path.slice(1).forEach((id, i) => {
       window.setTimeout(() => {
         if (tourRef.current !== kunci) return;
@@ -745,11 +720,10 @@ export function ExamReview({ onBack }: Props) {
         setLangkah(i + 1);
         pusatkan(id);
         if (i === path.length - 2) window.setTimeout(faseAkhir, 700);
-      }, 800 + 1150 * (i + 1));
+      }, 800 + jeda * (i + 1));
     });
   };
 
-  /** Lewati animasi tur: langsung ke keadaan akhir (jalur lengkap, kamera di tujuan, cabang terbuka). */
   const lewatiTur = () => {
     const info = tourInfoRef.current;
     if (!info) return;
@@ -774,13 +748,30 @@ export function ExamReview({ onBack }: Props) {
       return;
     }
     const hasil = cocokUntuk(k);
-    if (hasil[0]) jalankanTur(hasil[0].ev.id);
-    else {
-      hentikanTur();
-      setJalur([]);
-      setLangkah(-1);
+    if (hasil[0]) {
+      jalankanTur(hasil[0].ev.id);
+      return;
     }
+    // Tidak ada di filter yang aktif: kalau ada di era atau kategori lain, pindah ke Gabungan dulu.
+    const diLuarFilter = cocokUntuk(k, nodesSemua)[0];
+    if (diLuarFilter && (eraFilter !== "semua" || kategori !== "semua")) {
+      setEraFilter("semua");
+      setKategori("semua");
+      setTujuanTertunda(diLuarFilter.ev.id);
+      return;
+    }
+    hentikanTur();
+    setJalur([]);
+    setLangkah(-1);
   };
+
+  // jalankan tur setelah filter berpindah ke Gabungan dan grafnya sudah diperbarui
+  useEffect(() => {
+    if (!tujuanTertunda || eraFilter !== "semua" || kategori !== "semua" || !nodeById.has(tujuanTertunda)) return;
+    jalankanTur(tujuanTertunda);
+    setTujuanTertunda(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tujuanTertunda, eraFilter, kategori, nodeById]);
 
   const batalkanCari = () => {
     hentikanTur();
@@ -790,7 +781,6 @@ export function ExamReview({ onBack }: Props) {
     setLangkah(-1);
   };
 
-  /** Munculkan peristiwa tujuan (terbang keluar dari peristiwa yang terhubung dengannya), lalu pilih. */
   const bukaDanPilih = (targetId: string) => {
     if (!terbukaSet.has(targetId)) {
       const sumber =
@@ -802,7 +792,6 @@ export function ExamReview({ onBack }: Props) {
     klik(targetId);
   };
 
-  /** Munculkan semua peristiwa pada satu sisi (penyebab atau akibat) dari node yang dibuka. */
   const munculkanSemua = (id: string, sisi: "sebab" | "akibat") => {
     const target = sisi === "sebab" ? edges.filter((e) => e.ke === id).map((e) => e.dari) : edges.filter((e) => e.dari === id).map((e) => e.ke);
     setGraf((g) => bukaTetangga(g, id, edges, tahunDari, target));
@@ -812,7 +801,6 @@ export function ExamReview({ onBack }: Props) {
     const el = scrollerRef.current;
     if (!el) return;
     penunjukRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
-    // dua jari: cubitan zoom, bahkan kalau jari pertama ada di atas node
     if (penunjukRef.current.size >= 2) {
       geserRef.current = null;
       setMenggeser(false);
@@ -830,7 +818,6 @@ export function ExamReview({ onBack }: Props) {
     penunjukRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
 
     if (penunjukRef.current.size >= 2) {
-      // Cubitan: zoom mengikuti perubahan jarak dua jari, dan titik di tengah keduanya tetap di tempatnya.
       const [a, b] = [...penunjukRef.current.values()];
       if (!a || !b) return;
       const rect = el.getBoundingClientRect();
@@ -871,7 +858,7 @@ export function ExamReview({ onBack }: Props) {
 
   const jumlahTerbuka = graf.terbuka.length;
 
-  // karusel 3D cabang internal tiap sesi: di bawah node, atau di atas bila sisi bawah lebih ramai
+  // karusel cabang di bawah node, atau di atas kalau bagian bawah lebih ramai
   const grupKar = sesi.map((s) => {
     const p0 = graf.pos[s.id];
     const node = nodeById.get(s.id);
@@ -887,7 +874,7 @@ export function ExamReview({ onBack }: Props) {
   return (
     <main className={"exam-page" + (selected && panelBuka ? " has-detail" : "")}>
       <div className="exam-bg" aria-hidden="true">
-        {/* Di layar sempit cahaya Lightfall terlalu lebar dan jatuhnya tampak seperti garis, jadi dimatikan. */}
+        {/* di ponsel cahayanya jatuh seperti garis, jadi dimatikan */}
         {!latarGagal && !kecil && <Lightfall
           onError={(error) => {
             console.error("[Materi Evaluasi] Latar Lightfall gagal dimuat, latar dimatikan:", error);
@@ -1056,7 +1043,6 @@ export function ExamReview({ onBack }: Props) {
                 );
               })}
 
-              {/* garis dari node ke karusel cabang internalnya */}
               {grupKar.map((g) => {
                 if (!g) return null;
                 const pn = layar(g.p0);
@@ -1103,7 +1089,6 @@ export function ExamReview({ onBack }: Props) {
               );
             })}
 
-            {/* karusel 3D cabang internal: satu kartu di tengah, dua kartu serong di kiri dan kanan */}
             {grupKar.map((g) => {
               if (!g) return null;
               const pn = layar(g.p0);
@@ -1127,7 +1112,7 @@ export function ExamReview({ onBack }: Props) {
                               key={jenis}
                               className={`exam-kar-kartu is-${posisi}`}
                               onClick={(event) => {
-                                // klik pada bagian kosong kartu samping membawanya ke tengah; tombol di dalamnya tetap berfungsi sendiri
+                                // klik kartu samping memindahkannya ke tengah; tombol di dalamnya tetap jalan sendiri
                                 if (posisi !== "tengah" && !(event.target as HTMLElement).closest("button, a")) setPusat(jenis);
                               }}
                               role={posisi === "tengah" ? undefined : "button"}

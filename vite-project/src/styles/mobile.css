@@ -1,21 +1,16 @@
 /*
- * Penyesuaian tampilan untuk ponsel dan layar sentuh. Dimuat paling akhir di main.tsx.
- *
- * Selektor memakai :root:root (kekhususan 0,2,0) supaya menang atas aturan satu kelas di CSS yang dimuat
- * malas (peta, pemilihan era, materi) tanpa perlu !important. Titik pindah 860px sama dengan tata letak
- * peta di style.css; 700px dipakai menu utama.
+ * Penyesuaian untuk ponsel dan layar sentuh, dimuat paling akhir.
+ * :root:root dipakai supaya menang atas CSS yang dimuat belakangan tanpa !important.
  */
 
-/* ——— Dasar layar sentuh ——— */
 :root {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  /* menggeser peta ke bawah tidak boleh memuat ulang halaman (tarik-untuk-segarkan) */
+  /* jangan muat ulang halaman saat peta ditarik ke bawah */
   overscroll-behavior-y: none;
 }
 
-/* Tidak ada area putih di bawah layar (tempat tombol navigasi Android). Warna latar gelap dipakai di html dan body,
- * dan tinggi halaman mengikuti area yang benar-benar terlihat (dvh) ketika bilah alamat Chrome naik turun. */
+/* latar gelap dan tinggi dvh supaya tidak ada area putih di bawah layar Android */
 html,
 body {
   background: #050606;
@@ -31,7 +26,6 @@ body {
 }
 
 :root:root :is(button, a, summary, label, input, select, [role="button"]) {
-  /* hilangkan jeda ketuk ganda dan zoom ketuk-ganda pada kontrol */
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
@@ -58,9 +52,7 @@ body {
   }
 }
 
-/* ——— Ponsel: tanpa blur latar belakang pada kartu di atas peta ———
- * Blur harus dihitung ulang setiap kali peta bergeser, dan itu berat bagi GPU ponsel lama. Permukaannya
- * dibuat lebih pekat sebagai gantinya; di layar sekecil ini selisih tampilannya nyaris tidak terlihat. */
+/* ——— Tanpa blur di atas peta: berat bagi GPU ponsel saat peta digeser ——— */
 @media (max-width: 860px) {
   :root:root :is(.levels, .menu-return, .event-explorer) {
     -webkit-backdrop-filter: none;
@@ -72,7 +64,7 @@ body {
   }
 }
 
-/* ——— Teks terlalu kecil untuk dibaca di layar sempit ——— */
+/* ——— Teks yang terlalu kecil ——— */
 @media (max-width: 860px) {
   :root:root .event-meta {
     font-size: 11px;
@@ -118,7 +110,7 @@ body {
   }
 }
 
-/* ——— Target sentuh dan input di perangkat sentuh ——— */
+/* ——— Target sentuh ——— */
 @media (pointer: coarse) {
   :root:root .close {
     width: 40px;
@@ -152,25 +144,22 @@ body {
     height: 32px;
   }
 
-  /* iOS memperbesar halaman saat input berukuran di bawah 16px mendapat fokus */
+  /* iOS memperbesar halaman kalau input di bawah 16px difokus */
   :root:root :is(input, select, textarea) {
     font-size: 16px;
   }
 
-  /* peta digeser dan dicubit dengan jari; tombol zoom hanya memenuhi layar */
   :root:root .leaflet-control-zoom {
     display: none !important;
   }
 }
 
-/* ——— Menu utama di layar sempit ——— */
+/* ——— Menu utama ——— */
 @media (max-width: 700px) {
-  /* judul sebelumnya lebih lebar dari kolomnya sehingga huruf terakhir terpotong */
   :root:root .menu-aero-title {
     width: 100%;
   }
 
-  /* teks galeri tidak lagi bertumpuk dengan penghitung dan tombol panah */
   :root:root .flex-carousel__caption > div:first-child {
     padding-right: 0;
     padding-bottom: 46px;

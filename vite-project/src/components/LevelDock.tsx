@@ -8,7 +8,6 @@ const LEVEL_DOCK: { value: Level; title: string; Icon: typeof IconSchool }[] = [
   { value: 3, title: "Lanjut", Icon: IconBooks },
 ];
 
-/** Pemilih tingkat bahasa di dalam peta, memakai floating dock. */
 export function LevelDock({ level, onLevel }: { level: Level; onLevel: (l: Level) => void }) {
   const items: DockItem[] = LEVEL_DOCK.map(({ value, title, Icon }) => ({
     title,

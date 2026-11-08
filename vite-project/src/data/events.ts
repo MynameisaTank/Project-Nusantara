@@ -1,14 +1,8 @@
 import type { SejarahEvent } from "../types";
 import { KEPUTUSAN } from "./keputusan";
 
-/* Versi diperluas: teks L1/L2/L3 memiliki tingkat kedalaman berbeda. Tetap periksa fakta dan sumber
-   sebelum dipakai murid; bagian interpretatif dan tradisi diberi penanda kehati-hatian.
-
-   - mulai/akhir : rentang tahun event TAMPIL di peta (bukan hanya tahun kejadian); sebagian rentang diperpanjang untuk menjaga keterbacaan visual, bukan berarti peristiwa berlangsung terus-menerus.
-   - tahun       : teks tahun yang ditampilkan ke pemain.
-   - cerita      : tiga versi bahasa dengan fakta yang sama (L1 dasar, L2 menengah, L3 lanjut).
-   - kuis        : "misi" sederhana. benar = indeks pilihan (mulai dari 0).
-   - lokasi      : koordinat perkiraan. */
+/* Peristiwa era 1. Periksa fakta dan sumber sebelum dipakai mengajar.
+   mulai/akhir adalah rentang tampil di peta, bisa lebih panjang dari peristiwanya. Lokasi berupa perkiraan. */
 const DATA: Omit<SejarahEvent, "keputusan">[] = [
 {
       id: "evt-032",

@@ -23,13 +23,12 @@ function labelKekuatan(p: number): string {
 
 export function KingdomPanel({ kerajaan: k, year, onClose }: Props) {
   const isKolonial = k.jenis === "kolonial";
-  // potongan wilayah era 3 berbagi detail lewat `grup` (mis. semua potongan Hindia Belanda)
+  // potongan wilayah era 3 berbagi detail lewat `grup`
   const detailId = k.grup ?? k.id;
   const kolonialRingkas = isKolonial ? KOLONIAL_RINGKAS[detailId] : undefined;
   const detail: DetailKerajaan | undefined = DETAIL_KERAJAAN[detailId] ?? (kolonialRingkas ? { ringkasan: kolonialRingkas, penguasa: [] } : undefined);
   const kekuatan = kekuatanPadaTahun(k, year);
   const penguasa = penguasaPadaTahun(detail, year);
-  // penguasa yang sedang dibuka detailnya; null berarti tampilan kerajaan
   const [terpilih, setTerpilih] = useState<Penguasa | null>(null);
 
   return (
@@ -120,7 +119,6 @@ interface PenguasaViewProps {
   onKembali: () => void;
 }
 
-/** Detail satu penguasa: gelar, masa berkuasa, biografi singkat, dan sorotan. */
 function PenguasaView({ kerajaanId, kerajaanNama, penguasa, onKembali }: PenguasaViewProps) {
   const bio = detailPenguasa(kerajaanId, penguasa.nama);
 

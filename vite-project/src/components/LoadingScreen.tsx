@@ -5,7 +5,6 @@ import { useGrafisHemat } from "../lib/grafis";
 import { useLayarKecil } from "../lib/layar";
 import "../styles/loading-screen.css";
 
-/** Gambar bersejarah yang sama dengan galeri menu utama, dipakai sebagai latar yang bergerak. */
 const LATAR_ITEMS = [
   { image: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Siddharta_Gautama_Borobudur.jpg/500px-Siddharta_Gautama_Borobudur.jpg", title: "Warisan Hindu-Buddha" },
   { image: "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/Avalokite%C3%A7vara%2C_Malayu_Srivijaya_style.jpg/500px-Avalokite%C3%A7vara%2C_Malayu_Srivijaya_style.jpg", title: "Sriwijaya" },
@@ -24,25 +23,20 @@ const LATAR_ITEMS = [
 
 interface Props {
   label?: string;
-  /** progres pemasangan aset grafis (lihat lib/persiapan.ts) */
   progres?: { selesai: number; total: number; keterangan: string } | null;
-  /** baris keterangan kecil di bawah label, mis. mode grafis yang dipakai */
   detail?: string;
-  /**
-   * Tanpa dinding gambar bergerak, hanya latar gradien. Bawaannya mengikuti tingkat grafis: perangkat lemah tidak
-   * memakai dinding itu karena ±100 gambar 3D beranimasi berebut CPU dengan pengunduhan data yang sedang berjalan.
-   */
+  /** Tanpa dinding gambar. Bawaannya mengikuti tingkat grafis, karena dindingnya berat di ponsel lemah. */
   polos?: boolean;
 }
 
-/** Lama minimum layar ini tampil; `App.tsx` menunda impor peta selama durasi yang sama. */
 export const MIN_LOADING_MS = 8000;
 const GANTI_FAKTA_MS = 2200;
 
 export function LoadingScreen({ label = "Memuat peta Nusantara…", progres = null, detail, polos }: Props) {
   const hemat = useGrafisHemat();
   const kecil = useLayarKecil();
-  const tanpaLatar = polos ?? hemat;
+  // Di ponsel dinding gambar digerakkan JavaScript tiap frame, sementara main thread sedang memuat layar berikutnya.
+  const tanpaLatar = polos ?? (hemat || kecil);
   const [index, setIndex] = useState(() => Math.floor(Math.random() * FAKTA_SEJARAH.length));
   const [tampak, setTampak] = useState(true);
 
@@ -63,8 +57,7 @@ export function LoadingScreen({ label = "Memuat peta Nusantara…", progres = nu
       {!tanpaLatar && <div className="loading-backdrop" aria-hidden="true">
         <DriftWall
           items={LATAR_ITEMS}
-          // Layar sempit: lebih sedikit kolom (kira-kira sepertiga gambar lebih sedikit) dan tanpa filter abu-abu per gambar
-          columns={kecil ? 5 : 8}
+          columns={8}
           tileWidth={140}
           tileHeight={98}
           gap={12}
@@ -79,7 +72,7 @@ export function LoadingScreen({ label = "Memuat peta Nusantara…", progres = nu
           lift={28}
           fade={0.7}
           dim={0.4}
-          grayscale={!kecil}
+          grayscale
           overlayColor="#0f1715"
         />
       </div>}
@@ -99,7 +92,6 @@ export function LoadingScreen({ label = "Memuat peta Nusantara…", progres = nu
         </div>
       )}
       <p className={`loading-fact ${tampak ? "is-visible" : ""}`}>{FAKTA_SEJARAH[index]}</p>
-      {/* Bilah animasi berdurasi tetap hanya untuk layar memuat biasa; saat pemasangan aset, bilah di atas yang dipakai. */}
       {!progres && (
         <div className="loading-progress" aria-hidden="true">
           <span className="loading-progress-fill" style={{ animationDuration: `${MIN_LOADING_MS}ms` }} />

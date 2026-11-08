@@ -2,19 +2,13 @@ import type { Kerajaan } from "./kerajaan";
 import { GEO_ERA3 } from "./wilayahEra3Geo";
 
 /*
- * Wilayah era 3 (1800-2026 M).
- *
- * Bentuknya memakai provinsi modern (Natural Earth admin-1) sebagai potongan kasar, karena peta era ini
- * terutama menunjukkan kapan sebuah daerah berganti penguasa: kerajaan lokal -> Hindia Belanda (atau Inggris)
- * -> pendudukan Jepang -> Republik Indonesia. Tahun peralihan adalah tahun penaklukan atau perjanjian yang
- * umum dipakai; di banyak daerah peralihannya berlangsung bertahap, sehingga kerajaan lokal dan kekuasaan
- * kolonial sengaja dibuat tumpang tindih selama masa perang. Ini gambaran kasar, bukan batas historis presisi.
+ * Wilayah era 3 (1800–2026), dari provinsi modern sebagai perkiraan kasar.
+ * Peralihan kekuasaan sering bertahap, jadi kerajaan lokal dan kolonial sengaja tumpang tindih selama perang.
  */
 
-/** [tahun mulai, tahun akhir, kekuatan awal, kekuatan akhir (opsional, bawaan sama dengan awal)] */
+/** [mulai, akhir, kekuatan awal, kekuatan akhir (opsional)] */
 type Segmen = [number, number, number, number?];
 
-/** Ubah segmen menjadi garis waktu kekuatan. Jeda antar segmen diberi kekuatan 0 supaya wilayah hilang sementara. */
 function garisWaktu(segmen: Segmen[]): [number, number][] {
   const hasil: [number, number][] = [];
   segmen.forEach(([mulai, akhir, awal, ujung = awal], i) => {
@@ -29,7 +23,6 @@ interface Fase {
   id: string;
   nama: string;
   warna: string;
-  /** kunci bentuk di GEO_ERA3, atau daftar titik manual */
   geo: string | [number, number][][];
   segmen: Segmen[];
   grup?: string;
@@ -58,7 +51,7 @@ const CHIP = {
   pbb: "Pemerintahan sementara PBB",
 };
 
-/** Potongan Hindia Belanda per daerah. Hanya potongan Jawa Barat yang diberi label, supaya peta tidak penuh tulisan. */
+/** Hanya potongan Jawa Barat yang diberi label supaya peta tidak penuh tulisan. */
 function hindiaBelanda(daerah: string, namaDaerah: string, segmen: Segmen[], catatan: string): Fase {
   return {
     id: `hb-${daerah}`,
@@ -73,7 +66,7 @@ function hindiaBelanda(daerah: string, namaDaerah: string, segmen: Segmen[], cat
   };
 }
 
-/** Pusat Kasunanan Surakarta: kotak kasar di sekitar Solo, karena provinsinya juga mencakup pesisir milik Belanda. */
+/** Kotak kasar di sekitar Solo, karena provinsinya juga mencakup pesisir milik Belanda. */
 const SURAKARTA: [number, number][][] = [[[-7.78, 110.62], [-7.78, 111.12], [-7.38, 111.12], [-7.38, 110.62], [-7.78, 110.62]]];
 
 const FASE: Fase[] = [

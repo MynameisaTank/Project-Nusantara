@@ -1,25 +1,42 @@
-/* Overlay transisi clip ke mode kuis: layar penuh cyan-teal dengan teks MODE QUIZ */
+/* Transisi layar penuh: lingkaran cyan membesar dari tombol, lalu dua kata berisi foto naik. */
 .qzc {
   position: fixed;
   inset: 0;
   z-index: 3000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #5fd4cf;
-  color: #04201e;
+  overflow: hidden;
   pointer-events: none;
-  will-change: clip-path, opacity;
+  color: #04201e;
 }
 
-/* teks SVG: lebar penuh di tengah layar, foto mengisi setiap huruf lewat <pattern> */
-.qzc-svg {
-  display: block;
+.qzc-bulat {
+  position: absolute;
+  border-radius: 50%;
+  background: #5fd4cf;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.qzc-teks {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.qzc-baris {
   width: min(92vw, 1100px);
+  overflow: hidden;
+}
+
+.qzc-kata {
+  display: block;
+  width: 100%;
   height: auto;
   font-family: "Fraunces", Georgia, serif;
   font-weight: 900;
-  font-size: 190px;
   letter-spacing: -0.02em;
+  transform: translateY(110%);
   will-change: transform;
 }

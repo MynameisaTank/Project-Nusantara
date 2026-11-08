@@ -7,17 +7,15 @@ interface Props {
   playing: boolean;
 }
 
-/** Tahun terpilih di tengah atas peta. Saat diam, angka berganti dengan efek Shuffle. */
 export function YearBadge({ year, playing }: Props) {
   const [settled, setSettled] = useState(year);
 
   useEffect(() => {
-    // Saat diputar, selalu ikuti tahun terbaru supaya tidak ada angka lama saat di-pause.
     if (playing) {
       setSettled(year);
       return;
     }
-    // Saat diam (mis. menggeser slider), tunda sedikit agar animasi tidak jalan di tiap langkah.
+    // tunda sedikit supaya animasi tidak jalan di setiap langkah slider
     const t = window.setTimeout(() => setSettled(year), 160);
     return () => window.clearTimeout(t);
   }, [year, playing]);

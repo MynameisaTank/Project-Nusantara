@@ -9,10 +9,12 @@ import "./styles/ringan.css";
 import { pasangPenangkapGalat } from "./lib/clientLog";
 import { mulaiPwa } from "./lib/pwa";
 import { pasangLayarPenuhOtomatis } from "./lib/layarPenuh";
+import { mulaiSuara } from "./lib/suara";
 
 pasangPenangkapGalat();
 mulaiPwa();
 pasangLayarPenuhOtomatis();
+mulaiSuara();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

@@ -1,94 +1,118 @@
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
 import { catatGalat } from "../lib/clientLog";
 import "../styles/quiz-clip.css";
 
 interface Props {
-  /** kotak tombol asal transisi (posisi di viewport) */
   asal: DOMRect;
-  /** dipanggil saat layar sudah tertutup penuh, untuk mengganti layar */
   onCover: () => void;
-  /** dipanggil saat animasi selesai dan overlay boleh dilepas */
   onDone: () => void;
-  /** dua kata yang naik di tengah layar; bawaannya "MODE QUIZ" */
   kata?: [string, string];
 }
 
-/** Ukuran huruf per kata supaya kata panjang (mis. MATERI) tetap muat di kanvas 640 satuan. */
+// supaya kata panjang seperti MATERI tetap muat
 const ukuranKata = (kata: string): number => Math.min(190, Math.floor(600 / (kata.length * 0.62)));
 
-/** foto yang mengisi huruf "MODE QUIZ" */
-const FOTO = "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Candi_Bajangratu_Majapahit_%2838451474292%29.jpg/1920px-Candi_Bajangratu_Majapahit_%2838451474292%29.jpg";
+const FOTO = "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Candi_Bajangratu_Majapahit_%2838451474292%29.jpg/960px-Candi_Bajangratu_Majapahit_%2838451474292%29.jpg";
 
-// ukuran kanvas SVG (satuan viewBox); teks dan foto mengikuti kanvas yang sama
 const LEBAR = 640;
-const TINGGI = 400;
+const TINGGI_BARIS = 200;
+
+const MASUK = "cubic-bezier(0.76, 0, 0.24, 1)";
+const KELUAR_TEKS = "cubic-bezier(0.16, 1, 0.3, 1)";
+
+const duaFrame = (fn: () => void) => requestAnimationFrame(() => requestAnimationFrame(fn));
 
 /**
- * Transisi clip layar penuh (terinspirasi Codrops "Fullscreen Clip Effect"):
- * kotak kecil di posisi tombol tumbuh menjadi layar penuh, teks "MODE QUIZ" yang diisi foto naik satu per satu,
- * lalu layar kuis diganti dan overlay menyusut kembali ke pusat sebelum hilang.
+ * Transisi layar penuh dari posisi tombol, terinspirasi Codrops "Fullscreen Clip Effect".
+ * Hanya transform dan opacity lewat Web Animations, jadi dijalankan compositor dan tetap mulus
+ * walaupun main thread sibuk memuat layar berikutnya.
  */
 export function QuizClipTransition({ asal, onCover, onDone, kata = ["MODE", "QUIZ"] }: Props) {
   const layarRef = useRef<HTMLDivElement>(null);
+  const bulatRef = useRef<HTMLDivElement>(null);
+
+  // Lingkaran berpusat di tombol, cukup besar untuk menutupi sudut layar terjauh.
+  const cx = asal.left + asal.width / 2;
+  const cy = asal.top + asal.height / 2;
+  const vw = typeof window !== "undefined" ? window.innerWidth : 1000;
+  const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+  const diameter = 2 * Math.ceil(Math.max(Math.hypot(cx, cy), Math.hypot(vw - cx, cy), Math.hypot(cx, vh - cy), Math.hypot(vw - cx, vh - cy))) + 4;
+  const skalaAwal = Math.max(0.01, Math.min(asal.width, asal.height) / diameter);
 
   useEffect(() => {
-    try {
-    const el = layarRef.current;
-    if (!el) return;
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const layar = layarRef.current;
+    const bulat = bulatRef.current;
+    let batal = false;
+    const animasi: Animation[] = [];
+    const selesaiSemua = () => {
+      if (batal) return;
       onCover();
       onDone();
-      return;
-    }
-
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const kecil = `inset(${asal.top}px ${vw - asal.right}px ${vh - asal.bottom}px ${asal.left}px round 999px)`;
-    const kata = el.querySelectorAll<SVGTextElement>(".qzc-kata");
-
-    const tl = gsap.timeline({ onComplete: onDone });
-    tl.set(el, { clipPath: kecil })
-      .to(el, { clipPath: "inset(0px 0px 0px 0px round 0px)", duration: 1.1, ease: "power4.inOut" })
-      .fromTo(kata, { y: 220 }, { y: 0, duration: 0.8, ease: "expo.out", stagger: 0.12 }, "-=0.75")
-      .addLabel("tertutup", "+=0.35")
-      .add(() => onCover(), "tertutup")
-      .to(kata, { y: -220, duration: 0.45, ease: "power2.in", stagger: 0.06 }, "tertutup")
-      .to(el, { clipPath: "inset(44% 47% 44% 47% round 23vw)", duration: 1.1, ease: "power4.inOut" }, "tertutup+=0.2")
-      .to(el, { opacity: 0, duration: 0.25 }, ">-0.1");
-
-    return () => {
-      tl.kill();
     };
+    try {
+      if (!layar || !bulat || typeof bulat.animate !== "function" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        selesaiSemua();
+        return;
+      }
+      const kataEl = Array.from(layar.querySelectorAll<SVGSVGElement>(".qzc-kata"));
+
+      const tutup = bulat.animate([{ transform: `scale(${skalaAwal})` }, { transform: "scale(1)" }], { duration: 750, easing: MASUK, fill: "forwards" });
+      animasi.push(tutup);
+      kataEl.forEach((el, i) => {
+        animasi.push(el.animate([{ transform: "translateY(110%)" }, { transform: "translateY(0)" }], { duration: 650, delay: 350 + i * 100, easing: KELUAR_TEKS, fill: "forwards" }));
+      });
+
+      Promise.all(animasi.map((a) => a.finished))
+        .then(() => new Promise((r) => window.setTimeout(r, 250)))
+        .then(() => {
+          if (batal) return;
+          onCover();
+          // Lepas overlay setelah layar baru sempat dirender.
+          duaFrame(() => {
+            if (batal) return;
+            const keluar: Animation[] = kataEl.map((el, i) =>
+              el.animate([{ transform: "translateY(0)" }, { transform: "translateY(-110%)" }], { duration: 380, delay: i * 60, easing: "cubic-bezier(0.5, 0, 0.75, 0)", fill: "forwards" }),
+            );
+            keluar.push(layar.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, delay: 200, easing: "ease-out", fill: "forwards" }));
+            animasi.push(...keluar);
+            Promise.all(keluar.map((a) => a.finished)).then(() => { if (!batal) onDone(); }, () => undefined);
+          });
+        }, () => undefined);
     } catch (err) {
-      // transisi gagal: layar langsung diganti agar pengguna tidak terjebak di overlay
+      // kalau gagal, langsung ganti layar supaya tidak terjebak di overlay
       catatGalat("transisi:klip-mode-kuis", err);
-      onCover();
-      onDone();
+      selesaiSemua();
     }
+    return () => {
+      batal = true;
+      animasi.forEach((a) => a.cancel());
+    };
     // transisi hanya dijalankan sekali saat overlay dibuat
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div ref={layarRef} className="qzc" aria-hidden="true">
-      <svg className="qzc-svg" viewBox={`0 0 ${LEBAR} ${TINGGI}`}>
-        <defs>
-          {/* foto mengisi seluruh kanvas, lalu tampak hanya di dalam huruf */}
-          <pattern id="qzc-foto" patternUnits="userSpaceOnUse" x="0" y="0" width={LEBAR} height={TINGGI}>
-            <image href={FOTO} x="0" y="0" width={LEBAR} height={TINGGI} preserveAspectRatio="xMidYMid slice" style={{ filter: "brightness(0.82) contrast(1.12)" }} />
-          </pattern>
-          {/* huruf yang naik dari bawah dipotong di tepi kanvas */}
-          <clipPath id="qzc-kanvas">
-            <rect x="0" y="0" width={LEBAR} height={TINGGI} />
-          </clipPath>
-        </defs>
-        <g clipPath="url(#qzc-kanvas)">
-          <text className="qzc-kata" x={LEBAR / 2} y={160} textAnchor="middle" fill="url(#qzc-foto)" fontSize={ukuranKata(kata[0])}>{kata[0]}</text>
-          <text className="qzc-kata" x={LEBAR / 2} y={340} textAnchor="middle" fill="url(#qzc-foto)" fontSize={ukuranKata(kata[1])}>{kata[1]}</text>
-        </g>
-      </svg>
+      <div
+        ref={bulatRef}
+        className="qzc-bulat"
+        style={{ left: cx - diameter / 2, top: cy - diameter / 2, width: diameter, height: diameter, transform: `scale(${skalaAwal})` }}
+      />
+      <div className="qzc-teks">
+        {kata.map((k, i) => (
+          <div className="qzc-baris" key={i}>
+            <svg className="qzc-kata" viewBox={`0 0 ${LEBAR} ${TINGGI_BARIS}`}>
+              <defs>
+                {/* satu foto dibagi ke dua baris, jadi baris kedua digeser ke atas */}
+                <pattern id={`qzc-foto-${i}`} patternUnits="userSpaceOnUse" x="0" y={-TINGGI_BARIS * i} width={LEBAR} height={TINGGI_BARIS * 2}>
+                  <image href={FOTO} x="0" y="0" width={LEBAR} height={TINGGI_BARIS * 2} preserveAspectRatio="xMidYMid slice" />
+                </pattern>
+              </defs>
+              <text x={LEBAR / 2} y={160} textAnchor="middle" fill={`url(#qzc-foto-${i})`} fontSize={ukuranKata(k)}>{k}</text>
+            </svg>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

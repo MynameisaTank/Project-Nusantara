@@ -394,7 +394,6 @@ const Lightfall = ({
       stencil: false,
       powerPreference: 'high-performance'
     });
-    // semua kegagalan dicatat ke console dengan awalan [Lightfall] dan diteruskan ke prop onError
     const gagal = (pesan, rinci) => {
       console.error(`[Lightfall] ${pesan}`, rinci ?? "");
       onErrorRef.current?.(new Error(`${pesan}${rinci ? ` — ${rinci}` : ""}`));
@@ -505,7 +504,6 @@ const Lightfall = ({
     };
     const toLinear = value => toRgb(value).map(channel => channel * channel);
 
-    // Siklus warna: tiap palet bergantian, dicampur halus ke palet berikutnya, lalu kembali ke palet pertama.
     const cyclePhase = s => {
       const total = s.colorCycle ? s.colorCycle.length : s.backgroundCycle ? s.backgroundCycle.length : 1;
       const t = (((performance.now() / 1000) / s.cycleSeconds) % 1) * total;
@@ -815,9 +813,8 @@ const Lightfall = ({
       [streakProgram, downProgram, blurProgram, compositeProgram].forEach(item => gl.deleteProgram(item.program));
       gl.deleteBuffer(buffer);
       gl.deleteVertexArray(vao);
-      // Catatan: loseContext() sengaja TIDAK dipanggil di sini. Pada React StrictMode (mode dev) efek di-mount dua kali
-      // pada elemen canvas yang sama; konteks yang sudah "dihilangkan" akan dikembalikan lagi oleh getContext() sehingga
-      // semua shader gagal compile tanpa pesan. Seluruh resource GL sudah dihapus di atas, jadi tidak ada yang bocor.
+      // loseContext() sengaja tidak dipanggil: di StrictMode efeknya dipasang dua kali di canvas yang sama,
+      // dan konteks yang sudah hilang membuat shader gagal compile tanpa pesan.
     };
   }, [generation]);
 

@@ -4,14 +4,12 @@ import { isUtama } from "../lib/jenis";
 
 interface Props {
   active: SejarahEvent[];
-  /** semua peristiwa di era ini, dipakai saat pencarian (tidak terbatas tahun sekarang) */
   events: SejarahEvent[];
   year: number;
   era: { mulai: number; akhir: number };
   done: Record<string, true>;
   selectedId: string | null;
   onPick: (id: string) => void;
-  /** lompat ke tahun tertentu (dipakai saat peristiwa masa depan dipilih dari hasil pencarian) */
   onYear: (year: number) => void;
 }
 
@@ -24,8 +22,7 @@ export function NowList({ active, events, year, era, done, selectedId, onPick, o
   const normalized = query.trim().toLocaleLowerCase("id");
   const searching = normalized.length > 0;
 
-  // Saat mencari: semua peristiwa era. Saat tidak mencari: hanya yang aktif tahun ini.
-  // Pencarian hanya mencocokkan judul, lokasi, dan kategori, supaya isi peristiwa masa depan tidak bocor.
+  // Pencarian hanya ke judul, lokasi, dan kategori supaya isi peristiwa yang belum terjadi tidak bocor.
   const filtered = useMemo(() => {
     if (!searching) return active;
     return [...events]
@@ -37,7 +34,6 @@ export function NowList({ active, events, year, era, done, selectedId, onPick, o
 
   const pick = (event: SejarahEvent) => {
     if (searching && event.mulai > year) {
-      // peristiwa belum terjadi: pindah ke tahun mulainya, lalu baru bisa dibuka
       onYear(event.mulai);
       return;
     }

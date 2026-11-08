@@ -1,6 +1,6 @@
 import FlexCarousel, { type FlexCarouselItem } from "./reactbits/FlexCarousel";
 import { lazy, Suspense, useEffect, useMemo, useState, type CSSProperties } from "react";
-// AeroShards (dan pustaka vgpu di belakangnya, sekitar 210 KB) hanya diunduh di perangkat yang menjalankannya.
+// AeroShards (sekitar 210 KB) hanya diunduh di perangkat yang memakainya.
 const AeroShards = lazy(() => import("./reactbits/AeroShards"));
 import { NoiseBackground } from "./ui/noise-background";
 import { LABEL_TINGKAT, tingkatHemat, type ModeGrafis, type Tingkat } from "../lib/perangkat";
@@ -10,35 +10,28 @@ import { useMarquee } from "../lib/marquee";
 import { pasangAplikasi, perluPetunjukIos, usePwa } from "../lib/pwa";
 import { ThreeDMarquee } from "./ui/3d-marquee";
 import { VerticalFlow } from "./ui/vertical-flow";
+import { setEfek, setMusik, usePengaturanSuara } from "../lib/suara";
 import "../styles/menu-latar.css";
 import "../styles/menu-aero.css";
 import "../styles/menu-bento.css";
 
-// Bingkai noise untuk tombol menu: warna cahaya diambil dari palet teal dan krem di latar menu
 const MENU_FRAME = "w-fit rounded-full p-[3px] bg-[#1b3b34] dark:bg-[#1b3b34] shadow-none";
-// border default: gradien hijau → teal → biru yang bergerak
 const MENU_GLOW = ["#4ade80", "#2dd4bf", "#60a5fa"];
-// tombol "Mulai!" sudah berwarna teal, jadi bordernya gradien hitam → teal
 const MENU_GLOW_PRIMARY = ["#000000", "#0b1f1c", "#2dd4bf"];
 const MENU_GLOW_STRENGTH = 2.4;
 interface Props {
   onStart: () => void;
-  /** `asal`: kotak tombol, untuk transisi clip di ponsel; tanpa `asal` dipakai transisi biasa */
+  /** `asal` dipakai untuk transisi clip di ponsel */
   onChooseEra: (asal?: DOMRect) => void;
   onOpenMateri?: (asal?: DOMRect) => void;
   onOpenKuis?: (asal: DOMRect) => void;
-  /** tingkat grafik yang dipakai sekarang (sudah dibatasi kemampuan perangkat) */
   tingkat: Tingkat;
-  /** pilihan pengguna di Pengaturan: otomatis atau tingkat tertentu */
   mode: ModeGrafis;
-  /** tingkat yang dipilih otomatis untuk perangkat ini */
   terdeteksi: Tingkat;
   onModeChange: (mode: ModeGrafis) => void;
-  /** hasil deteksi perangkat, ditampilkan di Pengaturan untuk menjelaskan pilihan Otomatis */
   diagnosis?: string;
 }
 
-// Alamat gambar galeri ada di data/asetGrafis.ts: 960px untuk layar lebar, 500px untuk layar sempit dan perangkat lemah.
 const GALERI: { kunci: keyof typeof GALERI_MENU; alt: string; title: string; subtitle: string }[] = [
   { kunci: "borobudur", alt: 'Relief Candi Borobudur dari masa Wangsa Syailendra', title: 'Warisan Hindu-Buddha', subtitle: 'Abad ke-8 hingga ke-13' },
   { kunci: "sriwijaya", alt: 'Arca Avalokiteshvara bergaya Melayu dari masa Sriwijaya', title: 'Sriwijaya', subtitle: 'Jaringan maritim Sumatra' },
@@ -52,7 +45,6 @@ const GALERI: { kunci: keyof typeof GALERI_MENU; alt: string; title: string; sub
 
 const SHARD_TOTAL_KEY = "menu-shard-total";
 const SHARD_TOTAL_DEFAULT = 1100;
-/** Default di layar sempit: lebih sedikit shard supaya ringan di GPU ponsel. */
 const SHARD_TOTAL_DEFAULT_KECIL = 450;
 const SHARD_TOTAL_MIN = 100;
 const SHARD_TOTAL_MAX = 2000;
@@ -71,12 +63,11 @@ function saveShardTotal(value: number) {
 }
 
 export function MainMenu({onChooseEra, onOpenMateri, onOpenKuis, tingkat, mode, terdeteksi, onModeChange, diagnosis}:Props){
-  // Tombol "Mulai!" menggulir halus ke bagian Jejak panjang Nusantara
   const scrollToJejak = () => {
     const target = document.getElementById("jejak");
     if (!target) return;
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
-    // cari wadah yang benar-benar bisa digulir (di proyek ini #root)
+    // yang bisa digulir di proyek ini adalah #root
     let scroller: HTMLElement | null = target.parentElement;
     while (scroller && scroller !== document.body && !(scroller.scrollHeight > scroller.clientHeight + 1 && /(auto|scroll)/.test(getComputedStyle(scroller).overflowY))) {
       scroller = scroller.parentElement;
@@ -84,7 +75,7 @@ export function MainMenu({onChooseEra, onOpenMateri, onOpenKuis, tingkat, mode, 
     const container: HTMLElement = scroller ?? (document.scrollingElement as HTMLElement);
     const start = container.scrollTop;
     const offset = target.getBoundingClientRect().top - container.getBoundingClientRect().top;
-    const end = start + offset + 90; // sedikit lebih jauh ke bawah dari batas atas Jejak panjang
+    const end = start + offset + 90;
     if (reduced) { container.scrollTop = end; return; }
     const duration = 1800;
     const t0 = performance.now();
@@ -103,8 +94,8 @@ export function MainMenu({onChooseEra, onOpenMateri, onOpenKuis, tingkat, mode, 
   const [settingsOpen, setSettingsOpen] = useState(false);
   const kecil = useLayarKecil();
   const pwa = usePwa();
+  const suara = usePengaturanSuara();
   const marquee = useMarquee();
-  // Layar penuh di browser Android: menyembunyikan bilah alamat dan tombol navigasi (tidak tersedia di iPhone).
   const [penuh, setPenuh] = useState(() => typeof document !== "undefined" && !!document.fullscreenElement);
   useEffect(() => {
     const ubah = () => setPenuh(!!document.fullscreenElement);
@@ -120,8 +111,7 @@ export function MainMenu({onChooseEra, onOpenMateri, onOpenKuis, tingkat, mode, 
       /* ditolak browser: tetap di tampilan biasa */
     }
   };
-  // Layar sempit dan perangkat lemah memakai gambar yang lebih kecil, lebih sedikit gambar latar, dan rasio piksel
-  // lebih rendah supaya ringan di ponsel. Pada tingkat hemat marquee juga dibekukan dan tombol tidak beranimasi.
+  // Ponsel dan perangkat lemah memakai gambar lebih kecil dan lebih sedikit.
   const hemat = tingkatHemat(tingkat);
   const ringkas = kecil || hemat;
   const gambarMarquee = useMemo(() => (ringkas ? GAMBAR_MARQUEE_KECIL.slice(0, MARQUEE_RINGAN) : GAMBAR_MARQUEE), [ringkas]);
@@ -172,6 +162,15 @@ export function MainMenu({onChooseEra, onOpenMateri, onOpenKuis, tingkat, mode, 
           </label>
           <p className="menu-settings-hint">Pilihan yang melebihi kemampuan perangkat otomatis diturunkan.</p>
           {diagnosis && <p className="menu-settings-hint">Deteksi: {diagnosis}</p>}
+          <h3 className="menu-settings-section">Suara</h3>
+          <label className="menu-settings-row menu-settings-centang">
+            <span>Musik</span>
+            <input type="checkbox" checked={suara.musik} onChange={(event) => setMusik(event.target.checked)} />
+          </label>
+          <label className="menu-settings-row menu-settings-centang">
+            <span>Efek suara tombol</span>
+            <input type="checkbox" checked={suara.efek} onChange={(event) => setEfek(event.target.checked)} />
+          </label>
           {layarPenuhDidukung && (
             <>
               <h3 className="menu-settings-section">Tampilan</h3>
@@ -201,10 +200,8 @@ export function MainMenu({onChooseEra, onOpenMateri, onOpenKuis, tingkat, mode, 
       )}
     </div>
     <div className="landing-shards-bg" aria-hidden="true">
-        {/* Latar tetap sebesar layar (tidak ikut menggulir) supaya selalu menutupi seluruh layar. */}
         <div className="menu-marquee">
-          {/* Layar lebar di tingkat Tinggi memakai marquee 3D. Ponsel (semua tingkat) dan tingkat Sedang ke bawah memakai
-              latar 2D dengan gambar kecil yang bergerak vertikal: di layar tegak marquee 3D terlihat bergerak menyamping. */}
+          {/* Marquee 3D hanya untuk layar lebar di tingkat Tinggi; di layar tegak geraknya terlihat menyamping. */}
           {tingkat === "tinggi" && !kecil ? (
             <div
               className={"menu-marquee__isi" + (marquee.putar ? " is-putar" : "")}

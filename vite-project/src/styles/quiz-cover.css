@@ -1,4 +1,4 @@
-/* Pemilihan era dan konfigurasi kuis: gaya cover page (grid era → halaman penuh) dengan palet cyan-teal */
+/* Pilih era dan atur kuis, gaya cover page */
 .qc {
   --qc-bg: #0a1514;
   --qc-panel: #0f1f1d;
@@ -8,12 +8,10 @@
   --qc-redup: #8aa9a4;
   --qc-aksen: #5fd4cf;
   --qc-aksen-kuat: #2ec4b6;
-  /* hierarki: judul = serif display, teks = sans, label = mono kecil */
   --qc-serif: "Instrument Serif", Georgia, serif;
   --qc-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   --qc-mono: "IBM Plex Mono", ui-monospace, monospace;
 
-  /* layar penuh yang tetap di tempat: tidak ikut bergeser saat halaman induk digulir */
   position: fixed;
   inset: 0;
   height: 100vh;
@@ -29,7 +27,6 @@
 .qc button { font: inherit; color: inherit; }
 .qc button:focus-visible { outline: 1px solid var(--qc-aksen); outline-offset: 3px; }
 
-/* scrollbar teal untuk area yang bisa digulir */
 .qc-grid-wrap, .qc-preview { scrollbar-width: thin; scrollbar-color: var(--qc-aksen-kuat) var(--qc-bg); }
 .qc-grid-wrap::-webkit-scrollbar, .qc-preview::-webkit-scrollbar { width: 10px; }
 .qc-grid-wrap::-webkit-scrollbar-track, .qc-preview::-webkit-scrollbar-track { background: var(--qc-bg); }
@@ -38,7 +35,6 @@
 
 /* ——— bilah atas ——— */
 .qc-bar {
-  /* bar atas tetap terlihat saat grid digulir; latar solid agar isi yang lewat di bawahnya tidak tembus */
   position: fixed;
   top: 0;
   left: 0;
@@ -186,7 +182,6 @@
   background-size: cover;
   background-position: 50% 40%;
   transform: translateY(-101%);
-  /* gambar naik dari bawah saat halaman era terbuka (transisi CSS, bukan GSAP) */
   transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.05s;
 }
 .qc-preview.is-open .qc-preview-img-inner { transform: translateY(0); }
@@ -202,7 +197,7 @@
 .qc-reveal { will-change: transform; }
 
 .qc-preview-judul { position: relative; z-index: 1; padding: 0 clamp(18px, 4vw, 56px); margin-top: -7vw; }
-/* ruang atas dan bawah agar huruf besar tidak terpotong oleh overflow: hidden */
+/* ruang supaya huruf besar tidak terpotong */
 .qc-preview-judul .qc-oh { padding: 0.1em 0 0.06em; }
 .qc-preview-judul h2 {
   margin: 0;
@@ -214,7 +209,6 @@
 }
 .qc-rentang { margin: 14px 0 0; font-size: 15px; color: var(--qc-aksen); }
 
-/* kontrol: dua kolom untuk jumlah dan waktu, lalu kesulitan dan tombol mulai di bawahnya */
 .qc-preview-kontrol {
   display: flex;
   flex-direction: column;
@@ -236,7 +230,6 @@
 .qc-dl dd { margin: 0; font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; }
 .qc-catatan { margin: 18px 0 0; font-size: 13px; line-height: 1.6; color: var(--qc-redup); }
 
-/* segmen persegi: jumlah dan waktu */
 .qc-seg { display: inline-flex; border: 1px solid var(--qc-line-kuat); border-radius: 6px; overflow: hidden; }
 .qc-seg-btn {
   min-width: 76px;
@@ -259,7 +252,6 @@
 .qc-seg-btn.is-on { background: var(--qc-aksen); color: #04201e; font-weight: 600; }
 .qc-seg-satuan { font-size: 11px; opacity: 0.8; }
 
-/* kesulitan: tiap pilihan punya garis atas dan warna sendiri */
 .qc-tingkat { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .qc-tingkat-btn {
   display: flex;
@@ -282,7 +274,6 @@
 .qc-tingkat-judul small { font-family: var(--qc-sans); font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--qc-redup); margin-left: 6px; }
 .qc-tingkat-desk { font-size: 13px; line-height: 1.5; color: var(--qc-redup); }
 
-/* tombol utama: persegi, cyan, tanpa bayangan */
 .qc-cta {
   display: block;
   width: 100%;
@@ -314,10 +305,8 @@
   .qc-preview-img { height: 52vh; min-height: 320px; }
 }
 
-/* hierarki judul cover: serif display hanya punya satu bobot */
 .qc h2 { font-weight: 400; }
 
-/* judul halaman "Pilih era": serif tebal (Fraunces) agar hierarkinya paling kuat */
 .qc .qc-title {
   font-family: "Fraunces", Georgia, serif;
   font-weight: 800;

@@ -3,15 +3,10 @@ import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import type { Plugin, ResolvedConfig } from "vite";
 
-/** Berkas yang tidak perlu dipasang di perangkat. */
-const ABAIKAN = /\.map$|^sw\.js$/;
+// musik tidak ikut disimpan di muka supaya pemasangan pertama tetap kecil
+const ABAIKAN = /\.map$|^sw\.js$|^audio\/|\.(ogg|mp3|m4a|wav)$/;
 
-/**
- * Saat build, tulis `sw.js` ke folder keluaran. Service worker itu "memasang" seluruh berkas aplikasi
- * (kode, gaya, ikon) ke perangkat begitu aplikasi pertama kali dibuka, sehingga kunjungan berikutnya cepat
- * dan aplikasi tetap terbuka tanpa internet. Versi cache dihitung dari isi berkas, jadi setiap build yang
- * berubah otomatis menghasilkan pembaruan.
- */
+/** Saat build, tulis sw.js yang menyimpan semua berkas aplikasi supaya bisa dibuka tanpa internet. */
 export function serviceWorkerPrecache(): Plugin {
   let config: ResolvedConfig;
   return {
@@ -49,19 +44,17 @@ function buatSw(versi: string, daftar: string[]): string {
   return `/* Service worker Project: Nusantara. Dibuat otomatis oleh vite-sw.ts saat build; jangan diedit. */
 const VERSI = ${JSON.stringify(versi)};
 const CACHE_SHELL = "nusantara-shell-" + VERSI;
-/* Nama ini harus sama dengan NAMA_CACHE di src/lib/persiapan.ts. */
+/* harus sama dengan NAMA_CACHE di src/lib/persiapan.ts */
 const CACHE_GRAFIS = "nusantara-grafis-v2";
 const CACHE_FONT = "nusantara-font-v1";
 const PRECACHE = ${JSON.stringify(daftar)};
 
-/* Pasang: simpan seluruh berkas aplikasi. Jika satu berkas gagal diunduh, pemasangan diulang pada kunjungan berikutnya. */
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_SHELL).then((cache) => cache.addAll(["./"].concat(PRECACHE.map((r) => "./" + r)))),
   );
 });
 
-/* Aktifkan: buang cache aplikasi versi lama, lalu ambil alih halaman yang sedang terbuka. */
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
@@ -71,7 +64,7 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-/* Versi baru menunggu sampai pengguna memilih "Muat ulang" (halaman mengirim pesan ini). */
+/* versi baru menunggu sampai pengguna memilih muat ulang */
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting();
 });
@@ -91,7 +84,7 @@ self.addEventListener("fetch", (event) => {
   if (req.method !== "GET") return;
   const url = new URL(req.url);
 
-  /* 1. Navigasi: jaringan dulu (paling lama 4 detik), lalu cadangan dari cache supaya aplikasi tetap terbuka tanpa internet. */
+  /* navigasi: jaringan dulu (maks. 4 detik), lalu cache */
   if (req.mode === "navigate") {
     event.respondWith(
       batasWaktu(fetch(req), 4000).catch(() =>
@@ -101,7 +94,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  /* 2. Berkas aplikasi sendiri: dari cache dulu. Nama berkas memuat hash isinya, jadi aman dipakai ulang. */
+  /* berkas aplikasi: cache dulu, aman karena namanya memuat hash */
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.match(req).then(
@@ -119,7 +112,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  /* 3. Font Google: cache dulu, perbarui di latar belakang. */
+  /* font Google: cache dulu, diperbarui di latar */
   if (url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com") {
     event.respondWith(
       caches.open(CACHE_FONT).then((cache) =>
@@ -137,8 +130,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  /* 4. Gambar Wikimedia: pakai salinan yang sudah disimpan halaman (lib/persiapan.ts) bila ada.
-     Respons opaque sengaja tidak disimpan karena memakan kuota penyimpanan jauh lebih besar dari ukuran aslinya. */
+  /* gambar Wikimedia: pakai yang sudah disimpan halaman; respons opaque tidak disimpan karena boros kuota */
   if (/\\.wikimedia\\.org$/.test(url.hostname) && req.destination === "image") {
     event.respondWith(
       caches.open(CACHE_GRAFIS).then((cache) => cache.match(req.url).then((hit) => hit || fetch(req))),

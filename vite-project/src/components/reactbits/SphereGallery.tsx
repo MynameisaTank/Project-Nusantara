@@ -100,7 +100,6 @@ const TileMaterial = shaderMaterial(
     void main() {
       vec2 point = (vUv - 0.5) * uTileSize;
       vec2 halfTile = uTileSize * 0.5 - uGap;
-      // cover: gambar mengisi seluruh tile (dipotong), tanpa celah gelap
       vec2 imageUv = vUv;
       float tileAspect = uTileSize.x / uTileSize.y;
       if (uImageAspect > tileAspect) {
@@ -170,7 +169,6 @@ type SphereProps = {
   orientation: MutableRefObject<Orientation>;
   onFront: (item: number) => void;
   onFocus: (tile: LayoutTile) => void;
-  /** render hanya saat ada gerakan (untuk perangkat lemah); bola yang diam tidak digambar ulang */
   sesuaiKebutuhan: boolean;
 };
 
@@ -180,8 +178,7 @@ function Sphere({ urls, tiles, orientation, onFront, onFocus, sesuaiKebutuhan }:
   const invalidate = useThree((state) => state.invalidate);
   const groupRef = useRef<THREE.Group>(null);
   const frontRef = useRef(-1);
-  // Objek kerja dipakai ulang di setiap bingkai. Sebelumnya dibuat baru 60 kali per detik, dan sampah memorinya
-  // terasa di ponsel dengan RAM kecil.
+  // dipakai ulang tiap frame supaya tidak menumpuk sampah memori
   const dunia = useMemo(() => new THREE.Vector3(), []);
   const sudut = useMemo(() => new THREE.Euler(), []);
 
@@ -217,7 +214,6 @@ function Sphere({ urls, tiles, orientation, onFront, onFocus, sesuaiKebutuhan }:
       onFront(front);
     }
 
-    // Mode sesuai kebutuhan: minta bingkai berikutnya hanya selama bola masih bergerak.
     if (sesuaiKebutuhan) {
       const bergerak =
         state.dive ||
@@ -276,21 +272,14 @@ type SphereGalleryProps = {
   onActiveChange?: (item: SphereGalleryItem, index: number) => void;
   autoSpin?: boolean;
   className?: string;
-  /** dipanggil setelah semua tekstur globe selesai dimuat */
   onReady?: () => void;
-  /** resolusi render: satu angka, atau [terkecil, terbesar] mengikuti rasio piksel layar (bawaan [1, 2]) */
   dpr?: number | [number, number];
-  /** penghalusan tepi; mematikannya menghemat banyak kerja GPU di ponsel lemah (bawaan true) */
   antialias?: boolean;
-  /** render hanya saat ada gerakan, bukan 60 kali per detik terus-menerus (bawaan false) */
+  /** gambar ulang hanya saat ada gerakan */
   sesuaiKebutuhan?: boolean;
 };
 
-/**
- * Jarak kamera disesuaikan dengan bentuk layar. Bola berjari-jari 1 dan FOV vertikal tetap, jadi di layar tegak
- * (ponsel) bola akan melebihi lebar layar. Di sini jaraknya dinaikkan sampai bola muat di lebar dengan sedikit tepi.
- * Di layar lebar, jarak bawaan (CAMERA_DISTANCE) tetap dipakai.
- */
+/** Mundurkan kamera di layar tegak supaya bola muat di lebar layar. */
 function SesuaikanKamera() {
   const camera = useThree((state) => state.camera);
   const size = useThree((state) => state.size);
@@ -302,8 +291,7 @@ function SesuaikanKamera() {
   return null;
 }
 
-// Menyimpan fungsi invalidate milik Canvas supaya penangan sentuhan di luar Canvas bisa meminta bingkai baru
-// pada mode sesuai kebutuhan.
+// supaya sentuhan di luar Canvas bisa meminta frame baru di mode sesuai kebutuhan
 function JembatanInvalidasi({ tujuan }: { tujuan: MutableRefObject<(() => void) | null> }) {
   const invalidate = useThree((state) => state.invalidate);
   useEffect(() => {
@@ -315,7 +303,6 @@ function JembatanInvalidasi({ tujuan }: { tujuan: MutableRefObject<(() => void) 
   return null;
 }
 
-// Dipasang di dalam Suspense setelah Sphere: efeknya baru jalan saat semua tekstur sudah termuat
 function ReadyNotifier({ onReady }: { onReady?: () => void }) {
   useEffect(() => {
     onReady?.();
@@ -363,7 +350,6 @@ const SphereGallery = forwardRef<SphereGalleryHandle, SphereGalleryProps>(functi
     const state = orientation.current;
     if (state.dive) return;
     const { x, y, z } = tile.position;
-    // Putar bola sampai tile yang diklik menghadap kamera (tanpa masuk)
     const spin = -Math.atan2(x, z);
     const tilt = THREE.MathUtils.clamp(Math.atan2(y, Math.hypot(x, z)), -MAX_TILT, MAX_TILT);
     const turns = Math.round((state.spin - spin) / TAU) * TAU;

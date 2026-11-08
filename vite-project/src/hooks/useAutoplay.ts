@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 
-/** Menambah `step` tahun tiap `intervalMs` selama `playing`, berhenti di `max`. */
 export function useAutoplay(
   playing: boolean,
   year: number,

@@ -1,4 +1,4 @@
-/* Mode kuis: arah editorial/arsip. Charcoal hangat, emas antik, sage yang diredam, garis tipis, sudut 6–8px. */
+/* Mode kuis */
 .qz {
   --qz-bg: #0a1514;
   --qz-panel: #0f1f1d;
@@ -129,7 +129,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* segmen persegi: jumlah pertanyaan dan waktu */
 .qz-seg { display: inline-flex; border: 1px solid var(--qz-line-kuat); border-radius: 8px; overflow: hidden; }
 .qz-seg-btn {
   min-width: 76px;
@@ -153,7 +152,6 @@
 .qz-seg-btn.is-on { background: var(--qz-aksen); color: #04201e; font-weight: 600; }
 .qz-seg-satuan { font-size: 11px; font-weight: 500; opacity: 0.8; }
 
-/* kartu era: garis, bukan pill */
 .qz-eras { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .qz-era {
   position: relative;
@@ -184,7 +182,6 @@
 }
 .qz-era.is-on .qz-tanda { background: var(--qz-aksen); border-color: var(--qz-aksen); }
 
-/* tingkat kesulitan: tiap pilihan punya tanda visual sendiri */
 .qz-tingkat { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .qz-tingkat-btn {
   display: flex;
@@ -232,7 +229,6 @@
 .qz-dl dd { margin: 0; font-size: 14px; font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
 .qz-tersedia { margin: 16px 0 20px; font-size: 13px; color: var(--qz-redup); line-height: 1.6; }
 
-/* tombol utama: persegi, emas, tanpa bayangan */
 .qz-cta {
   display: block;
   width: 100%;
@@ -293,7 +289,6 @@
   color: var(--qz-teks);
 }
 
-/* pilihan jawaban: baris persegi, huruf di kotak kecil, tanpa isian warna penuh */
 .qz-answers { display: flex; flex-direction: column; gap: 10px; }
 .qz-answer {
   display: flex;
@@ -333,7 +328,6 @@
 .qz-answer.is-salah .qz-answer-tanda { color: var(--qz-bata); }
 .qz-answer.is-redup { opacity: 0.4; }
 
-/* umpan balik: teks biasa dengan garis kiri, bukan kotak berwarna */
 .qz-feedback {
   margin-top: 26px;
   padding: 4px 0 0 20px;
@@ -407,11 +401,10 @@
   .qz-brand { font-size: 15px; }
 }
 
-/* scrollbar layar kuis (Chromium/Edge/Safari) */
 .qz::-webkit-scrollbar { width: 10px; }
 .qz::-webkit-scrollbar-track { background: #0a1514; }
 .qz::-webkit-scrollbar-thumb { background: #2a6f69; border-radius: 999px; border: 2px solid #0a1514; }
 .qz::-webkit-scrollbar-thumb:hover { background: #2ec4b6; }
 
-/* hierarki judul: serif display hanya punya satu bobot, jadi judul dibuat 400 */
+/* font display hanya punya satu ketebalan */
 .qz h1, .qz h2 { font-weight: 400; }

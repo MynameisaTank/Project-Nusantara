@@ -2,14 +2,13 @@ import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import "../styles/cloud-transition.css";
 
 interface Props {
-  /** true setelah peta selesai memuat ubin pertamanya */
   ready: boolean;
   onDone: () => void;
 }
 
-const MIN_HOLD = 900; // awan menutup layar sebentar supaya terasa disengaja
-const MAX_WAIT = 4500; // batas aman bila peta lambat atau offline
-const OPEN_MS = 2400; // durasi awan bubar sebelum dilepas dari DOM
+const MIN_HOLD = 900; // awan menutup layar sebentar
+const MAX_WAIT = 4500; // kalau peta lambat atau offline
+const OPEN_MS = 2400;
 
 function rng(seed: number) {
   return () => {
@@ -20,7 +19,6 @@ function rng(seed: number) {
   };
 }
 
-/** Gumpalan awan, posisinya tetap (deterministik) agar tidak berubah tiap render. */
 function makePuffs() {
   const next = rng(2024);
   const out: { style: CSSProperties; back: boolean }[] = [];
@@ -35,7 +33,6 @@ function makePuffs() {
         const y = ((r + 0.5 + (next() - 0.5) * 0.8) / layer.rows) * 100;
         const size = layer.size[0] + next() * (layer.size[1] - layer.size[0]);
         const side = x >= 50 ? 1 : -1;
-        // bubar ke arah luar dan terbelah kiri-kanan dari tengah
         const dx = (x - 50) * 2.2 + side * 28;
         const dy = (y - 50) * 1.4;
         const dist = Math.hypot(x - 50, y - 50) / 70;

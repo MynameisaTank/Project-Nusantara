@@ -1,4 +1,4 @@
-/* Transisi awan sebelum peta: menutup layar, lalu terbelah ke kiri dan kanan */
+/* Awan sebelum peta: menutup layar, lalu terbelah ke kiri dan kanan. */
 .cloud-veil { position: fixed; inset: 0; z-index: 5000; overflow: hidden; background: #e4edf5; transition: background-color 1.3s ease .5s; }
 .cloud-veil.is-open { background-color: transparent; pointer-events: none; }
 

@@ -1,13 +1,11 @@
 import type { Era, KategoriMap, Glosarium } from "../types";
 
-/* Data era. Edit file ini untuk mengganti era atau menambah kategori & istilah glosarium. */
-
 export const ERA: Era = {
   id: "era-1",
   nama: "Dari Majapahit ke Awal Perdagangan Global",
   mulai: 1200,
   akhir: 1617,
-  tahunAwal: 1400 // tahun yang tampil saat game dibuka
+  tahunAwal: 1400
 };
 
 export const KATEGORI: KategoriMap = {
@@ -19,8 +17,7 @@ export const KATEGORI: KategoriMap = {
   diplomasi:   { label: "Diplomasi", warna: "#b07d2a" }
 };
 
-/* Istilah yang bisa diklik di level Menengah dan Lanjut.
-   Kunci harus huruf kecil. Istilah otomatis ditandai di teks cerita. */
+/* Istilah yang bisa diklik di level Menengah dan Lanjut. Kuncinya huruf kecil. */
 export const GLOSARIUM: Glosarium = {
   "ekspedisi": "Perjalanan rombongan (pasukan, pedagang, atau peneliti) ke tempat yang jauh untuk tujuan tertentu.",
   "aliansi": "Persekutuan antara dua pihak atau lebih untuk saling membantu.",

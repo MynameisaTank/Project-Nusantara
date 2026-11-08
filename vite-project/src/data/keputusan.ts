@@ -1,13 +1,7 @@
 import type { Keputusan } from "../types";
 
-/* Keputusan pemain untuk tiap event, dengan konsekuensi masing-masing pilihan.
-   Aturan penulisan:
-   - Tepat satu pilihan bertanda historis: true.
-   - Konsekuensi pilihan non-historis adalah kemungkinan yang masuk akal (bukan fakta),
-     jadi dibahasakan dengan "kemungkinan", "bisa jadi".
-   - hasilHistoris hanya memuat apa yang dicatat sumber, dengan catatan jika tafsirannya diperdebatkan.
-   Versi diperluas: situasi dan konsekuensi menjelaskan pertimbangan jangka pendek/panjang.
-   Pilihan tanpa historis:true adalah skenario alternatif, bukan klaim bahwa tokoh benar-benar memilihnya. */
+/* Keputusan pemain di tiap peristiwa.
+   Tepat satu pilihan historis: true. Pilihan lain adalah skenario alternatif, jadi tulis dengan "kemungkinan" atau "bisa jadi". */
 
 export const KEPUTUSAN: Record<string, Keputusan> = {
   "evt-001": {

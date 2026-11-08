@@ -1,12 +1,7 @@
 import type { Kerajaan } from "./kerajaan";
 import { WILAYAH_PROVINSI } from "./wilayahProvinsi";
 
-/*
- * Kerajaan tambahan untuk melengkapi peta. Bentuk wilayah diambil dari provinsi modern
- * (Natural Earth admin-1) sebagai pendekatan kasar; kekuatan dan rentang tahun mengikuti
- * catatan sejarah ringkas, dan bisa diperhalus lagi bila sumber yang lebih rinci tersedia.
- * Kerajaan era 1 dan era 2 dibedakan oleh timeline kekuatan: di luar rentangnya wilayah tidak tampil.
- */
+/* Kerajaan tambahan. Bentuknya dari provinsi modern, jadi hanya perkiraan kasar. */
 export const KERAJAAN_BARU: Kerajaan[] = [
   // era 1 (1200-1617)
   {
@@ -82,7 +77,6 @@ export const KERAJAAN_BARU: Kerajaan[] = [
     labelPoint: [-0.03, 109.33],
     kekuatan: [[1771, 0.4], [1800, 0.4]],
   },
-  // tambahan dari sumber provinsi yang sama
   {
     id: "sumbawa",
     nama: "Sumbawa",

@@ -17,7 +17,6 @@ import {
 } from "motion/react";
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 
-// Helper component for gradient layers
 function GradientLayer({
   springX,
   springY,
@@ -55,7 +54,7 @@ interface NoiseBackgroundProps {
   speed?: number;
   backdropBlur?: boolean;
   animating?: boolean;
-  /** kekuatan warna gradien (1 = bawaan); di atas 1 border terlihat lebih jelas */
+  /** 1 = bawaan; lebih dari 1 membuat border lebih jelas */
   glow?: number;
 }
 
@@ -77,27 +76,20 @@ export const NoiseBackground = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  // Pengguna yang meminta reduced motion tidak melihat gerakan; gradien tetap di tengah.
-  // Hal yang sama berlaku di tingkat grafik hemat: setiap bingkai gradien membaca ukuran elemen dan menulis ulang
-  // gaya, dan menu memakai enam bingkai sekaligus, yang terasa di ponsel dengan CPU lambat.
   const reduceMotion = useReducedMotion();
   const hemat = useGrafisHemat();
-  // Di layar sempit gradien juga diam: tidak ada kursor yang menyorot tombol, dan tiga lapis gradien per kartu
-  // digambar ulang setiap bingkai.
+  // Di ponsel dan perangkat lemah gradien dibiarkan diam.
   const kecil = useLayarKecil();
   const runs = animating && !reduceMotion && !hemat && !kecil;
 
-  // Use spring animation for smooth movement
   const springX = useSpring(x, { stiffness: 100, damping: 30 });
   const springY = useSpring(y, { stiffness: 100, damping: 30 });
 
-  // Transform for top gradient strip
   const topGradientX = useTransform(springX, (val) => val * 0.1 - 50);
 
   const velocityRef = useRef({ x: 0, y: 0 });
   const lastDirectionChangeRef = useRef(0);
 
-  // Initialize position to center
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -109,17 +101,15 @@ export const NoiseBackground = ({
     y.set(centerY);
   }, [x, y]);
 
-  // Generate random velocity
   const generateRandomVelocityRef = useRef(() => {
     const angle = Math.random() * Math.PI * 2;
-    const magnitude = speed * (0.5 + Math.random() * 0.5); // Random speed between 0.5x and 1x
+    const magnitude = speed * (0.5 + Math.random() * 0.5);
     return {
       x: Math.cos(angle) * magnitude,
       y: Math.sin(angle) * magnitude,
     };
   });
 
-  // Update generateRandomVelocity when speed changes
   useEffect(() => {
     generateRandomVelocityRef.current = () => {
       const angle = Math.random() * Math.PI * 2;
@@ -132,10 +122,7 @@ export const NoiseBackground = ({
     velocityRef.current = generateRandomVelocityRef.current();
   }, [speed]);
 
-  // Perubahan dari sumber: useAnimationFrame berlangganan ke loop bingkai Motion selama komponen terpasang, walau
-  // isinya langsung kembali. Enam kartu di menu membuat halaman menyusun bingkai 60 kali per detik tanpa henti.
-  // Di sini langganan hanya ada selama gradien benar-benar bergerak (runs), sama seperti useAnimationFrame lainnya
-  // (waktu dihitung sejak langganan dimulai).
+  // Diubah: langganan frame hanya selama gradien bergerak (useAnimationFrame berjalan terus walau tidak dipakai).
   const awalWaktuRef = useRef(0);
   useEffect(() => {
     if (!runs) return;
@@ -156,23 +143,19 @@ export const NoiseBackground = ({
     const maxX = rect.width;
     const maxY = rect.height;
 
-    // Change direction randomly every 1.5-3 seconds
     if (time - lastDirectionChangeRef.current > 1500 + Math.random() * 1500) {
       velocityRef.current = generateRandomVelocityRef.current();
       lastDirectionChangeRef.current = time;
     }
 
-    // Update position based on velocity (deltaTime is ~16ms per frame at 60fps)
-    const deltaTime = 16; // Approximate frame time
+    const deltaTime = 16;
     const currentX = x.get();
     const currentY = y.get();
 
     let newX = currentX + velocityRef.current.x * deltaTime;
     let newY = currentY + velocityRef.current.y * deltaTime;
 
-    // When hitting edges, generate a completely new random direction
-    // This ensures truly random movement in all 360 degrees, not just horizontal/vertical
-    const padding = 20; // Keep some distance from edges
+    const padding = 20;
 
     if (
       newX < padding ||
@@ -180,16 +163,13 @@ export const NoiseBackground = ({
       newY < padding ||
       newY > maxY - padding
     ) {
-      // Generate completely random direction (full 360 degrees)
       const angle = Math.random() * Math.PI * 2;
       const magnitude = speed * (0.5 + Math.random() * 0.5);
       velocityRef.current = {
         x: Math.cos(angle) * magnitude,
         y: Math.sin(angle) * magnitude,
       };
-      // Reset timer to allow immediate new direction
       lastDirectionChangeRef.current = time;
-      // Clamp position to stay within bounds
       newX = Math.max(padding, Math.min(maxX - padding, newX));
       newY = Math.max(padding, Math.min(maxY - padding, newY));
     }
@@ -202,8 +182,7 @@ export const NoiseBackground = ({
     <div
       ref={containerRef}
       className={cn(
-        // Perubahan dari sumber: backdrop-blur-sm dihapus. Semua bingkai di proyek ini berlatar solid, jadi blur tidak
-        // terlihat, tetapi tetap dihitung ulang setiap kali latar di belakangnya (marquee) bergerak.
+        // Diubah: tanpa backdrop-blur; bingkainya solid jadi blurnya tidak terlihat tapi tetap berat.
         "group relative overflow-hidden rounded-2xl bg-neutral-200 p-2 dark:bg-neutral-800",
         "shadow-[0px_0.5px_1px_0px_var(--color-neutral-400)_inset,0px_1px_0px_0px_var(--color-neutral-100)]",
         "dark:shadow-[0px_1px_0px_0px_var(--color-neutral-950)_inset,0px_1px_0px_0px_var(--color-neutral-800)]",
@@ -217,7 +196,6 @@ export const NoiseBackground = ({
         } as CSSProperties
       }
     >
-      {/* Moving gradient layers */}
       <GradientLayer
         springX={springX}
         springY={springY}
@@ -240,7 +218,6 @@ export const NoiseBackground = ({
         multiplier={1.2}
       />
 
-      {/* Top gradient strip */}
       <motion.div
         className="absolute inset-x-0 top-0 h-1 rounded-t-2xl opacity-80 blur-sm"
         style={{
@@ -249,8 +226,6 @@ export const NoiseBackground = ({
         }}
       />
 
-      {/* Static Noise Pattern (berkas lokal, bukan dari CDN pihak ketiga). Perangkat lemah melewatinya: 224 KB gambar
-          dan mode campuran overlay yang memaksa setiap tombol disusun terpisah, untuk butiran yang nyaris tak terlihat. */}
       {!hemat && (
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <img
@@ -262,7 +237,6 @@ export const NoiseBackground = ({
         </div>
       )}
 
-      {/* Content */}
       <div className={cn("relative z-10", className)}>{children}</div>
     </div>
   );

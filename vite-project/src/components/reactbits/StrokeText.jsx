@@ -6,8 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import './StrokeText.css';
 
-// Perubahan dari sumber: ScrollTrigger didaftarkan hanya saat trigger="scroll" dipakai (lihat di bawah). Yang sudah
-// terdaftar menahan ticker GSAP tetap berjalan selamanya, sehingga halaman menyusun bingkai terus walau diam.
+// Diubah: ScrollTrigger hanya didaftarkan untuk trigger="scroll", supaya ticker GSAP bisa berhenti.
 
 const DEFAULT_TEXT = 'Draw Attention';
 const SHADOW_OPACITY = 0.5;

@@ -2,26 +2,20 @@ export interface Penguasa {
   nama: string;
   mulai: number;
   akhir: number;
-  /** true jika tahun berkuasa hanya perkiraan atau sumber masih berselisih. */
+  /** tahunnya perkiraan atau sumbernya berselisih */
   perkiraan?: boolean;
 }
 
 export interface DetailKerajaan {
-  /** Teks tahun berdiri; bisa berupa perkiraan atau "menurut tradisi". */
   tahunDidirikan?: string;
   ringkasan: string;
-  /** Status sebagai negara boneka/bawahan VOC, ditampilkan di panel. */
+  /** status sebagai bawahan VOC */
   negaraBoneka?: string;
-  /** Daftar penguasa yang tercatat; kosong berarti belum dilengkapi, bukan berarti tidak ada. */
+  /** kosong berarti belum dilengkapi, bukan tidak ada */
   penguasa: Penguasa[];
 }
 
-/**
- * Detail kerajaan untuk panel info. Daftar penguasa hanya diisi untuk raja-raja yang
- * tanggal naik takhtanya cukup dikenal; celah di antaranya ditampilkan apa adanya sebagai
- * "tidak tercatat". Bendera tidak disertakan untuk kerajaan pra-modern kecuali ada sumber yang
- * dapat dipastikan - sebagian besar kerajaan ini tidak memiliki bendera terdokumentasi.
- */
+/** Detail kerajaan untuk panel. Penguasa hanya diisi kalau tanggalnya cukup dikenal; bendera hanya kalau ada sumbernya. */
 export const DETAIL_KERAJAAN: Record<string, DetailKerajaan> = {
   singhasari: {
     tahunDidirikan: "1222",
@@ -237,7 +231,6 @@ export function penguasaPadaTahun(detail: DetailKerajaan | undefined, tahun: num
   return detail.penguasa.find((p) => tahun >= p.mulai && tahun <= p.akhir) ?? null;
 }
 
-/** Deskripsi singkat untuk wilayah/pos kolonial (tampil di panel saat diklik). */
 export const KOLONIAL_RINGKAS: Record<string, string> = {
   "melaka-portugis": "Portugis merebut Melaka pada 1511 dan menguasainya sebagai pos dagang dan benteng sampai 1641, ketika VOC bersama Johor merebutnya.",
   "ternate-portugis": "Portugis membangun kehadiran di Ternate sejak 1522 dan berselisih dengan kesultanan hingga pengusiran pada 1575.",
@@ -258,7 +251,6 @@ export const KOLONIAL_RINGKAS: Record<string, string> = {
   "ambon-inggris": "Inggris menduduki Ambon selama perang Eropa pada 1796 sampai 1802.",
 };
 
-/** Detail untuk kerajaan tambahan (lihat kerajaanBaru.ts). */
 Object.assign(DETAIL_KERAJAAN, {
   gelgel: { tahunDidirikan: "perkiraan abad ke-15", ringkasan: "Kerajaan Hindu-Bali yang berpusat di Gelgel dan menjadi kekuatan utama Bali sebelum runtuh pada 1686 setelah rajanya tewas.", penguasa: [] },
   palembang: { ringkasan: "Pusat politik Sumatra Selatan yang meneruskan tradisi Sriwijaya. Palembang menguasai jalur sungai Musi dan perdagangan lada serta timah.", penguasa: [] },
@@ -271,7 +263,6 @@ Object.assign(DETAIL_KERAJAAN, {
   pontianak: { tahunDidirikan: "1771", ringkasan: "Kesultanan di muara Sungai Kapuas yang berdiri pada 1771 dan tumbuh sebagai pusat dagang Kalimantan Barat.", penguasa: [] },
 });
 
-/** Detail tambahan dari sumber provinsi yang sama. */
 Object.assign(DETAIL_KERAJAAN, {
   "sumbawa": { ringkasan: "Kesultanan Sumbawa di Pulau Sumbawa. Hubungannya dengan VOC melalui perjanjian kolektif 1765 membuat kedudukannya sebagai sekutu bawahan perusahaan.", penguasa: [] },
   "nusa-tenggara-timur": { ringkasan: "Kumpulan kerajaan kecil di Flores, Sumba, Timor, dan Alor. Persaingan Portugis, Topasses, dan VOC membentuk pola kekuasaan di wilayah ini.", penguasa: [] },
@@ -285,11 +276,7 @@ Object.assign(DETAIL_KERAJAAN, {
   "bengkulu-lokal": { ringkasan: "Kawasan pesisir Bengkulu dengan kekuasaan lokal yang dikenal sebagai Sungai Lemau. Kedatangan Inggris pada 1685 mengubah jaringan lada di kawasan ini.", penguasa: [] },
 });
 
-/**
- * Detail kekuasaan era 3 (1800-2026). Kuncinya dipakai lewat `grup` di wilayahEra3.ts, sehingga semua potongan
- * wilayah satu kekuasaan berbagi ringkasan dan daftar pemimpin yang sama. Daftar pemimpin disusun dari
- * pengetahuan umum dan belum dicek satu per satu dengan sumber.
- */
+/** Detail kekuasaan era 3, dipakai lewat `grup` di wilayahEra3.ts. Daftar pemimpin belum dicek satu per satu. */
 Object.assign(DETAIL_KERAJAAN, {
   "hindia-belanda": {
     tahunDidirikan: "1800 (setelah VOC dibubarkan)",
@@ -475,12 +462,7 @@ Object.assign(DETAIL_KERAJAAN, {
   },
 });
 
-/**
- * Daftar penguasa lengkap untuk wilayah era 1–3. Tuple: [nama, mulai, akhir, perkiraan?].
- * Mengganti daftar penguasa wilayah yang disebut; wilayah yang belum punya detail dibuatkan entri baru.
- * Tanggal yang belum pasti dari sumber ditandai perkiraan. Daftar ini disusun dari pengetahuan umum
- * dan belum diverifikasi satu per satu dengan sumber primer.
- */
+/** Daftar penguasa lengkap: [nama, mulai, akhir, perkiraan?]. Belum dicek satu per satu dengan sumber primer. */
 type TuplePenguasa = [string, number, number, boolean?];
 function isiPenguasa(id: string, daftar: TuplePenguasa[]): void {
   const penguasa: Penguasa[] = daftar.map(([nama, mulai, akhir, perkiraan]) =>
@@ -749,7 +731,7 @@ isiPenguasa("batavia-voc", [
   ["Willem Alting", 1780, 1797],
 ]);
 
-// Timor-Leste (2002–2026): daftar presiden. Daftar perdana menteri belum dimasukkan.
+// Timor-Leste: baru daftar presiden.
 isiPenguasa("timor-leste", [
   ["Xanana Gusmão", 2002, 2007],
   ["José Ramos-Horta", 2007, 2012],

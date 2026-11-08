@@ -1,4 +1,4 @@
-/* Kartu 3D: setara dengan utilitas Tailwind pada sumbernya, ditulis sebagai CSS biasa. */
+/* Kartu 3D, versi CSS biasa dari utilitas Tailwind di sumbernya. */
 .c3d-perspective {
   display: flex;
   align-items: center;

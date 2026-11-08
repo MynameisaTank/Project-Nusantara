@@ -3,7 +3,7 @@ import type { Kerajaan } from "../data/kerajaan";
 const OPASITAS_MIN = 0.06;
 const OPASITAS_MAKS = 0.3;
 
-/** Interpolasi linear antar titik kekuatan; di luar rentang tahunnya hasilnya 0. */
+/** Interpolasi linear; di luar rentang tahun hasilnya 0. */
 export function kekuatanPadaTahun(k: Kerajaan, tahun: number): number {
   const kf = k.kekuatan;
   const first = kf[0];
@@ -23,7 +23,6 @@ export function kekuatanPadaTahun(k: Kerajaan, tahun: number): number {
   return 0;
 }
 
-/** Ubah kekuatan 0..1 jadi opasitas isi peta: tipis tapi tetap terlihat. */
 export function opasitasWilayah(power: number): number {
   if (power <= 0) return 0;
   return OPASITAS_MIN + (OPASITAS_MAKS - OPASITAS_MIN) * power;

@@ -1,13 +1,10 @@
-/* Bingkai noise untuk tombol menu utama dan pemilih era (dipakai bersama components/ui/noise-background.tsx) */
-
-/* Tombol navigasi era: pil krem dengan cincin noise di sekelilingnya */
 .era-noise-pill {
   margin-right: 0;
   padding: 12px 26px;
   border-radius: 999px;
   background: #f1eddf;
 }
-/* selector lebih spesifik: aturan global untuk .era-select-nav menimpa warna dan ukuran bawaan tombol */
+/* lebih spesifik supaya menang atas aturan global .era-select-nav */
 .era-select-nav .era-noise-pill {
   background: #f1eddf;
   color: #3d4f45;
@@ -18,12 +15,10 @@
 .era-select-nav .era-noise-pill:hover {
   color: #a75d40;
 }
-/* di layar kecil teks disembunyikan seperti sebelumnya, hanya panah yang tampil */
 @media (max-width: 700px) {
   .era-select-nav .era-noise-pill { font-size: 0; padding: 10px 16px; }
 }
 
-/* Tombol panah era: lingkaran gelap, posisi tetap di tepi kiri/kanan seperti sebelumnya */
 .era-noise-arrow {
   position: absolute;
   top: 50%;
@@ -39,5 +34,4 @@
   transform: none;
 }
 
-/* Tombol menu utama tetap memakai gaya .jelly-button; bingkainya hanya memberi cincin bercahaya */
 .menu-noise-frame .jelly-button { position: relative; }

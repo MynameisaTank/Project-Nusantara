@@ -1,10 +1,5 @@
-/**
- * Gambar untuk menu utama dan unduhan awal (lihat lib/persiapan.ts).
- * Semua alamat adalah thumbnail resmi Wikimedia Commons yang diturunkan lewat API Commons dan diperiksa satu per satu,
- * bukan berkas asli yang bisa berukuran belasan megabyte. Berkas ini dibuat oleh skrip; jangan diedit manual.
- */
+// Dibuat oleh skrip, jangan diedit manual. Semua alamat adalah thumbnail Wikimedia Commons yang sudah dicek.
 
-/** Galeri menu utama (thumbnail 960px) untuk layar lebar, dipakai MainMenu.tsx. */
 export const GALERI_MENU = {
   borobudur: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Siddharta_Gautama_Borobudur.jpg/960px-Siddharta_Gautama_Borobudur.jpg",
   sriwijaya: "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/Avalokite%C3%A7vara%2C_Malayu_Srivijaya_style.jpg/960px-Avalokite%C3%A7vara%2C_Malayu_Srivijaya_style.jpg",
@@ -16,7 +11,6 @@ export const GALERI_MENU = {
   merdeka: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Indonesian_flag_raised_17_August_1945.jpg/960px-Indonesian_flag_raised_17_August_1945.jpg",
 } as const;
 
-/** Galeri menu utama untuk layar sempit (thumbnail 500px, sekitar sepertiga lebih ringan dari 960px). */
 export const GALERI_MENU_KECIL: Record<keyof typeof GALERI_MENU, string> = {
   borobudur: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Siddharta_Gautama_Borobudur.jpg/500px-Siddharta_Gautama_Borobudur.jpg",
   sriwijaya: "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/Avalokite%C3%A7vara%2C_Malayu_Srivijaya_style.jpg/500px-Avalokite%C3%A7vara%2C_Malayu_Srivijaya_style.jpg",
@@ -28,7 +22,7 @@ export const GALERI_MENU_KECIL: Record<keyof typeof GALERI_MENU, string> = {
   merdeka: "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Indonesian_flag_raised_17_August_1945.jpg/500px-Indonesian_flag_raised_17_August_1945.jpg",
 };
 
-/** Latar menu (thumbnail 500px). Urutannya sudah diacak supaya MARQUEE_RINGAN gambar pertama tetap beragam. */
+/** Urutannya diacak supaya gambar-gambar pertama tetap beragam. */
 export const GAMBAR_MARQUEE: string[] = [
   "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Prajnaparamita_Java.jpg/500px-Prajnaparamita_Java.jpg",
   "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Lukisan_Iskandar_muda_Sultan_of_Aceh_from_1607_to1636.jpg/500px-Lukisan_Iskandar_muda_Sultan_of_Aceh_from_1607_to1636.jpg",
@@ -67,7 +61,6 @@ export const GAMBAR_MARQUEE: string[] = [
   "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Masjid_agung_banten_lama.jpg/500px-Masjid_agung_banten_lama.jpg",
 ];
 
-/** Latar menu untuk layar sempit dan perangkat lemah (thumbnail 330px), urutan sama dengan GAMBAR_MARQUEE. */
 export const GAMBAR_MARQUEE_KECIL: string[] = [
   "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Prajnaparamita_Java.jpg/330px-Prajnaparamita_Java.jpg",
   "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Lukisan_Iskandar_muda_Sultan_of_Aceh_from_1607_to1636.jpg/330px-Lukisan_Iskandar_muda_Sultan_of_Aceh_from_1607_to1636.jpg",
@@ -106,5 +99,4 @@ export const GAMBAR_MARQUEE_KECIL: string[] = [
   "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Masjid_agung_banten_lama.jpg/330px-Masjid_agung_banten_lama.jpg",
 ];
 
-/** Jumlah gambar latar di layar sempit (ponsel), supaya lebih ringan. */
 export const MARQUEE_RINGAN = 20;

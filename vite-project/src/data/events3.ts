@@ -1,10 +1,6 @@
 import type { SejarahEvent, Era } from "../types";
 
-/*
- * Peristiwa era 3 (1800-2026 M): dari Hindia Belanda sampai Reformasi dan Indonesia kontemporer.
- * Isi ditulis dari pengetahuan umum dan daftar pustaka di field `sumber`, belum ditinjau sejarawan.
- * Fakta yang masih diperdebatkan diberi catatan ketidakpastian di teks atau di field `catatan`.
- */
+/* Peristiwa era 3 (1800–2026). Belum ditinjau sejarawan; fakta yang diperdebatkan diberi catatan. */
 export const ERA3: Era = { id: "era-3", nama: "Kolonialisme dan Zaman Modern", mulai: 1800, akhir: 2026, tahunAwal: 1800 };
 
 export const EVENTS3: SejarahEvent[] = [

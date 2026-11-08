@@ -1,4 +1,4 @@
-/* Halaman Materi Evaluasi: jalur kronologis peristiwa dengan garis beranimasi. */
+/* Halaman Materi Evaluasi */
 #root:has(.exam-page) {
   display: block;
   min-height: 100%;
@@ -293,7 +293,6 @@
   .exam-detail { animation: none; }
 }
 
-/* Graf bercabang: wadah bisa digulir ke samping, garis dan kartu ikut menyorot rantai sebab-akibat. */
 .exam-scroller { max-width: 1400px; margin: 8px auto 0; overflow-x: auto; padding-bottom: 12px; scrollbar-color: #2a2a2a #050606; scrollbar-width: thin; }
 .exam-stage { max-width: none; margin: 0 auto; }
 .exam-node { transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.25s; }
@@ -323,7 +322,6 @@
 .exam-rel li small { font-size: 12px; line-height: 1.5; color: #9fb7b3; padding-left: 4px; }
 .exam-rel-kosong { font-style: italic; color: #8f8a7e !important; }
 
-/* Node berbentuk lingkaran dengan label di bawahnya (menggantikan kartu). */
 .exam-node {
   display: flex;
   flex-direction: column;
@@ -369,7 +367,6 @@
 }
 .exam-node.is-active .exam-node-title { color: #ffffff; }
 
-/* Tata letak radial: satu viewport yang bisa digeser (drag), di-zoom, dan dimulai dari pusat. */
 .exam-scroller {
   height: calc(100vh - 240px);
   min-height: 480px;
@@ -393,14 +390,13 @@
 
 .exam-node-title { font-size: 11.5px; -webkit-line-clamp: 2; }
 
-/* Graf yang tumbuh dari satu peristiwa di pusat: tanpa lapisan dekade, tanpa tirai gelap di belakang detail. */
 .exam-ring, .exam-ring-label { display: none; }
 .exam-backdrop { display: none; }
-/* saat detail terbuka, area graf menyempit supaya peristiwa yang diklik tetap terlihat di sebelah panel */
+/* saat detail terbuka, graf menyempit supaya node yang diklik tetap kelihatan */
 @media (min-width: 1000px) {
   .exam-page.has-detail .exam-scroller { margin-right: min(480px, 38vw); max-width: none; }
 }
-/* penanda lingkaran yang masih punya peristiwa terhubung yang belum muncul */
+/* node yang masih punya peristiwa terhubung yang belum muncul */
 .exam-node.has-more .exam-node-circle::after {
   content: "+";
   position: absolute;
@@ -424,7 +420,6 @@
   .exam-node.has-more .exam-node-circle { animation: none; }
 }
 
-/* Node bergambar: foto dalam lingkaran, tahun sebagai lencana di bawahnya, huruf cetak lama (bukan sans generik). */
 .exam-heading h1 { font-family: var(--serif, "IM Fell English", Georgia, serif); font-weight: 400; letter-spacing: 0.01em; }
 .exam-node { gap: 4px; }
 .exam-node-circle { background: #0c1110; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55); }
@@ -477,9 +472,9 @@
 .exam-node.is-active .exam-node-circle { transform: scale(1.1); }
 .exam-node:hover .exam-node-circle { transform: scale(1.07); }
 
-/* ===== Animasi buka node: node sebelumnya mundur, cabang internal (ringkasan, penyebab, akibat, detail) terbuka ===== */
+/* ===== Animasi buka node ===== */
 
-/* peristiwa yang baru dimunculkan terbang keluar dari peristiwa asalnya (--dx/--dy = arah ke asal) */
+/* --dx/--dy = arah ke node asal */
 .exam-node {
   opacity: 1;
   animation: exam-terbang 0.7s cubic-bezier(0.2, 0.85, 0.25, 1) both;
@@ -489,7 +484,6 @@
   to { opacity: 1; transform: none; }
 }
 
-/* node sebelumnya mundur: mengecil, meredup, dan sedikit mundur ke belakang */
 .exam-node.is-mundur { z-index: 1; }
 .exam-node.is-mundur .exam-node-circle {
   transform: scale(0.78);
@@ -620,19 +614,15 @@
   .exam-grup-garis.is-menutup .exam-facet-line { display: none; }
 }
 
-/* Latar Lightfall di belakang seluruh halaman Materi Evaluasi; konten tetap di atasnya. */
 .exam-page { position: relative; isolation: isolate; }
 .exam-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 .exam-header, .exam-controls, .exam-scroller { position: relative; z-index: 1; }
-/* area graf dibuat semi-transparan agar cahaya di belakang tetap terlihat */
 .exam-scroller { background: radial-gradient(circle at center, rgba(11, 19, 18, 0.5) 0%, rgba(5, 6, 6, 0.32) 72%); }
 
-/* Kartu cabang berbentuk 3D: terbuka dengan memutar dari atas, miring mengikuti kursor, isi melayang. */
 .exam-c3d { perspective: 1000px; }
 .exam-kartu {
   transform-origin: 50% 0%;
   animation: exam-kartu-buka 0.65s cubic-bezier(0.2, 0.9, 0.25, 1) both;
-  /* kartu tidak lagi memakai tinggi tetap; ukuran mengikuti isi */
   display: block;
 }
 @keyframes exam-kartu-buka {
@@ -648,7 +638,7 @@
   .exam-kartu { animation: none; }
 }
 
-/* ===== Karusel 3D: satu kartu di tengah, dua kartu serong di kiri dan kanan ===== */
+/* ===== Karusel cabang ===== */
 .exam-kar { position: absolute; width: 0; height: 0; z-index: 8; }
 .exam-kar-pos { position: absolute; left: 0; top: 0; transform: translate(-50%, 0); }
 .exam-kar.is-atas .exam-kar-pos { transform: translate(-50%, -100%); }
@@ -706,13 +696,12 @@
   .exam-kar-kartu { transition: none; }
 }
 
-/* Wadah karusel tidak boleh menangkap klik: kartu samping berada di belakang (translateZ negatif), jadi kotak wadah
-   di Z=0 akan menutupinya saat hit-testing. Hanya kartu yang menerima klik. */
+/* Kartu samping ada di belakang (translateZ negatif), jadi wadahnya tidak boleh menangkap klik. */
 .exam-kar, .exam-kar-pos, .exam-kar-anim, .exam-kar-panggung { pointer-events: none; }
 .exam-kar-kartu { pointer-events: auto; }
 .exam-kar.is-menutup .exam-kar-kartu { pointer-events: none; }
 
-/* ===== Pencarian kata kunci: jalur dari pusat ke hasil disorot, kamera mengikuti ===== */
+/* ===== Pencarian ===== */
 .exam-cari { display: flex; align-items: center; gap: 8px; flex: 1 1 280px; min-width: 240px; max-width: 520px; }
 .exam-cari-input {
   flex: 1;
@@ -732,7 +721,6 @@
 .exam-hasil-info { margin: 0 0 8px; font: 400 14px var(--serif, "IM Fell English", Georgia, serif); color: #d8d2c2; }
 .exam-hasil-daftar { display: flex; flex-wrap: wrap; gap: 8px; }
 
-/* jalur yang sedang ditelusuri */
 .exam-node.is-jalur .exam-node-circle {
   border-color: #f4c46a;
   box-shadow: 0 0 0 4px rgba(244, 196, 106, 0.22), 0 0 24px rgba(244, 196, 106, 0.45);
@@ -743,15 +731,14 @@
 .exam-edge.is-jalur .exam-edge-base { stroke-opacity: 0.95; stroke-width: 3.6; }
 .exam-edge.is-jalur .exam-edge-flow { stroke-width: 3.6; animation-duration: 0.6s, 0.4s; }
 
-/* ===== Optimalisasi render ===== */
-/* filter drop-shadow beranimasi pada banyak garis sangat mahal; sisakan hanya pada garis yang sedang disorot */
+/* ===== Performa ===== */
+/* drop-shadow beranimasi di banyak garis sangat berat, jadi hanya di garis yang disorot */
 .exam-edge-flow { filter: none; }
 .exam-edge.is-lit .exam-edge-flow,
 .exam-edge.is-jalur .exam-edge-flow { filter: drop-shadow(0 0 3px var(--edge)); }
-/* garis yang diredupkan tidak perlu beranimasi */
 .exam-edge.is-dim .exam-edge-flow { animation-play-state: paused; }
 
-/* denyut penanda "masih ada peristiwa terhubung": animasi transform/opacity (dikerjakan compositor), bukan box-shadow */
+/* pakai transform/opacity, bukan box-shadow, supaya dikerjakan compositor */
 .exam-node.has-more .exam-node-circle { animation: none; }
 .exam-node.has-more .exam-node-circle::before {
   content: "";
@@ -768,24 +755,20 @@
   0%, 100% { transform: scale(0.94); opacity: 0.15; }
   50% { transform: scale(1.1); opacity: 0.65; }
 }
-/* node berdiri sendiri: perubahan di dalamnya tidak memicu penghitungan ulang tata letak di luarnya */
 .exam-node { contain: layout style; }
 
 @media (prefers-reduced-motion: reduce) {
   .exam-node.has-more .exam-node-circle::before { animation: none; opacity: 0.4; }
 }
 
-/* ===== Optimalisasi tahap 2: batasi animasi main-thread ===== */
-/* Banyak garis: yang tidak disorot tampil statis (tanpa animasi aliran dan tanpa filter). */
+/* kalau garisnya banyak, yang tidak disorot dibuat statis */
 .exam-stage--banyak .exam-edge:not(.is-lit):not(.is-jalur-baru) .exam-edge-flow {
   animation: none;
   opacity: 0.5;
   filter: none;
 }
-/* Garis jalur lama: statis berwarna emas; hanya dua garis jalur terbaru dan garis node terpilih yang mengalir. */
 .exam-edge.is-jalur:not(.is-jalur-baru) .exam-edge-flow { animation: none; opacity: 0.9; filter: none; }
 
-/* Sorotan seluruh jalur: saat kamera memperkecil tampilan, semua garis dan node jalur menyala bersama. */
 .exam-stage--sorot .exam-edge.is-jalur { --edge: #fff4cf; }
 .exam-stage--sorot .exam-edge.is-jalur .exam-edge-base { stroke-opacity: 1; stroke-width: 6; }
 .exam-stage--sorot .exam-edge.is-jalur .exam-edge-flow { animation: none; opacity: 1; stroke-width: 6; filter: drop-shadow(0 0 6px #fff4cf) drop-shadow(0 0 14px rgba(244, 196, 106, 0.9)); }
@@ -799,21 +782,17 @@
 .exam-edge.is-lit .exam-edge-flow { filter: drop-shadow(0 0 3px var(--edge)); }
 
 
-/* Perangkat sentuh: chip filter dan tombol kontrol lebih mudah diketuk.
- * Graf digeser dan dicubit oleh kode sendiri (lihat mulaiGeser), jadi browser tidak boleh ikut mengambil gestur itu. */
+/* Di layar sentuh, geser dan cubit graf ditangani kode sendiri, jadi browser tidak boleh ikut. */
 @media (pointer: coarse) {
   .exam-chip { min-height: 40px; }
   .exam-scroller { touch-action: none; }
 }
 
-/* ——— Ponsel: kontrol dipadatkan supaya graf mendapat ruang ———
- * Sebelumnya judul, filter era, kategori, tombol, zoom, dan pencarian memakan sekitar 400px (lima baris),
- * sehingga graf terdorong ke bawah layar. */
+/* ——— Ponsel: kontrol dipadatkan supaya graf dapat ruang ——— */
 @media (max-width: 700px) {
   .exam-header { flex-direction: row; align-items: center; gap: 12px; margin-bottom: 10px; }
   .exam-heading h1 { font-size: 1.45rem; margin: 0; }
   .exam-controls { gap: 8px; margin-bottom: 6px; }
-  /* filter era: satu baris yang bisa digeser ke samping */
   .exam-chip-row {
     flex-wrap: nowrap;
     width: 100%;

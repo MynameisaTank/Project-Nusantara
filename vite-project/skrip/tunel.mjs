@@ -1,9 +1,5 @@
-// Coba aplikasi di ponsel lewat HTTPS: menyalakan preview build produksi dan membukanya ke internet lewat ngrok.
-// WebGPU, service worker, dan pemasangan aplikasi hanya aktif di HTTPS, jadi alamat http://192.168.x.x tidak cukup.
-//
-// Pakai:  npm run coba:https        (build dulu, lalu preview dan terowongan)
-// Token:  npx ngrok config add-authtoken <TOKEN>   (sekali saja; daftar gratis di https://dashboard.ngrok.com)
-//         atau set variabel lingkungan NGROK_AUTHTOKEN.
+// Buka preview produksi ke internet lewat ngrok supaya bisa dicoba di HP dengan HTTPS.
+// Pakai: npm run coba:https. Token ngrok: npx ngrok config add-authtoken <TOKEN>, atau NGROK_AUTHTOKEN.
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
@@ -40,7 +36,6 @@ preview.on("exit", (kode) => {
   }
 });
 
-// tunggu preview siap menjawab
 let siap = false;
 for (let i = 0; i < 40 && !siap; i++) {
   try { siap = (await fetch(`http://127.0.0.1:${PORT}/`)).ok; } catch { await tidur(500); }

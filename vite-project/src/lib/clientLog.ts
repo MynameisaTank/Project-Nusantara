@@ -1,7 +1,4 @@
-/**
- * Penangkap galat untuk pengembangan. Hanya aktif di `npm run dev`; di build produksi semua fungsi di sini no-op.
- * Galat dicetak di browser (console) dan juga dikirim ke terminal dev server lewat /__client-log.
- */
+/** Kirim galat browser ke terminal dev server. Tidak melakukan apa-apa di build produksi. */
 const DEV = import.meta.env.DEV;
 
 type Level = "error" | "warn";
@@ -19,14 +16,13 @@ function kirim(level: Level, pesan: string, stack?: string) {
   }
 }
 
-/** Catat galat dengan konteks (nama bagian) ke console dan terminal. */
 export function catatGalat(konteks: string, err: unknown) {
   const e = err instanceof Error ? err : new Error(String(err));
   console.error(`[${konteks}]`, e);
   kirim("error", `[${konteks}] ${e.message}`, e.stack);
 }
 
-/** Bungkus callback animasi: galat di dalamnya dicatat, dan alur tetap lanjut (layar tidak macet). */
+/** Bungkus callback animasi supaya galat di dalamnya tidak membuat layar macet. */
 export function amankan<T extends unknown[]>(konteks: string, fn: (...args: T) => void) {
   return (...args: T) => {
     try {
@@ -37,7 +33,6 @@ export function amankan<T extends unknown[]>(konteks: string, fn: (...args: T) =
   };
 }
 
-/** Pasang penangkap galat global (window.onerror dan promise yang gagal). Dipanggil sekali di main.tsx. */
 export function pasangPenangkapGalat() {
   if (!DEV) return;
   window.addEventListener("error", (ev) => {

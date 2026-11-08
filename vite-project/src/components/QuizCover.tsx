@@ -3,7 +3,6 @@ import gsap from "gsap";
 import { NoiseBackground } from "./ui/noise-background";
 import { amankan } from "../lib/clientLog";
 
-// border noise tombol mulai: hitam → teal, karena tombolnya sendiri sudah cyan
 const QC_FRAME_CTA = "block w-full rounded-md p-[3px] bg-[#0f1f1d] dark:bg-[#0f1f1d] shadow-none";
 const QC_GLOW_CTA = ["#000000", "#0b1f1c", "#2dd4bf"];
 import { jumlahTersedia, type EraKuis, type Kesulitan } from "../lib/kuis";
@@ -66,10 +65,7 @@ interface Props {
   onBack: () => void;
 }
 
-/**
- * Pemilihan era dan konfigurasi kuis dalam gaya "cover page": grid era, lalu setiap era dibuka sebagai
- * halaman penuh dengan gambar, judul besar, dan kontrol soal. Animasinya mengikuti pola Codrops Cover Page Transition.
- */
+/** Pilih era dan atur kuis, gaya "cover page" dari Codrops. */
 export function QuizCover({ era, onEra, kesulitan, onKesulitan, jumlah, onJumlah, waktu, onWaktu, onMulai, onBack }: Props) {
   const gridRef = useRef<HTMLDivElement>(null);
   const pratinjauRef = useRef<HTMLElement>(null);
@@ -81,13 +77,10 @@ export function QuizCover({ era, onEra, kesulitan, onKesulitan, jumlah, onJumlah
 
   const tersedia = jumlahTersedia(era, kesulitan);
   const jumlahEfektif = Math.min(jumlah, tersedia);
-  // ERA_OPSI tidak pernah kosong, jadi elemen pertama selalu ada.
   const eraAktif = ERA_OPSI.find((o) => o.nilai === era) ?? ERA_OPSI[0]!;
 
-  // teks yang masuk ke halaman era (judul, rentang, kontrol) dengan efek reveal bertahap
   const teksPratinjau = () => Array.from(pratinjauRef.current?.querySelectorAll<HTMLElement>(".qc-reveal") ?? []);
 
-  // baris huruf besar pada efek Kinetic: diisi nama era yang dipilih
   const isiGaris = (judul: string) => {
     const teks = `${judul.toUpperCase()} · `.repeat(5);
     lineRefs.current.forEach((el) => {
@@ -95,7 +88,6 @@ export function QuizCover({ era, onEra, kesulitan, onKesulitan, jumlah, onJumlah
     });
   };
 
-  // buka halaman era: overlay menutup, halaman era muncul di baliknya, lalu overlay membuka
   const buka = (pilihan: EraKuis) => {
     const grid = gridRef.current;
     const pratinjau = pratinjauRef.current;
@@ -110,8 +102,6 @@ export function QuizCover({ era, onEra, kesulitan, onKesulitan, jumlah, onJumlah
       return;
     }
 
-    // Kinetic Typography: kartu memudar dan bergeser bergantian, baris huruf era diperbesar lalu keluar,
-    // lalu halaman era masuk dengan gambar yang naik dan teks yang muncul bertahap
     const kin = kinetikRef.current as HTMLDivElement;
     const type = typeRef.current as HTMLDivElement;
     const garis = lineRefs.current.filter(Boolean);
@@ -134,7 +124,6 @@ export function QuizCover({ era, onEra, kesulitan, onKesulitan, jumlah, onJumlah
     tlRef.current = tl;
   };
 
-  // tutup halaman era: teks keluar, overlay menutup, lalu grid kembali
   const tutup = () => {
     const grid = gridRef.current;
     const pratinjau = pratinjauRef.current;
@@ -152,7 +141,6 @@ export function QuizCover({ era, onEra, kesulitan, onKesulitan, jumlah, onJumlah
       return;
     }
 
-    // kembali ke pilihan era: cukup kedipan cyan singkat; grid berganti tepat di tengah kedipan
     const kin = kinetikRef.current as HTMLDivElement;
     const type = typeRef.current as HTMLDivElement;
     const garis = lineRefs.current.filter(Boolean);
@@ -171,11 +159,9 @@ export function QuizCover({ era, onEra, kesulitan, onKesulitan, jumlah, onJumlah
     tlRef.current = tl;
   };
 
-  // galat di kedipan era dicatat ke console dan terminal, bukan membuat layar macet diam-diam
   const bukaAman = amankan("cover:buka-era", buka);
   const tutupAman = amankan("cover:tutup-era", tutup);
 
-  // Escape menutup halaman era yang sedang terbuka
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape" && terbukaRef.current) tutup();

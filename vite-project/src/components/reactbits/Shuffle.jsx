@@ -7,9 +7,7 @@ import { SplitText as GSAPSplitText } from 'gsap/SplitText';
 import { useGSAP } from '@gsap/react';
 import './Shuffle.css';
 
-// Perubahan dari sumber: ScrollTrigger tidak didaftarkan di sini. Sekali terdaftar, ia menahan ticker GSAP tetap
-// berjalan selamanya (GSAP baru tidur bila pendengarnya kurang dari dua), sehingga halaman menyusun bingkai 60 kali
-// per detik walau tidak ada yang bergerak. Ia hanya didaftarkan bila komponen benar-benar membutuhkannya (lihat `segera`).
+// Diubah: ScrollTrigger hanya didaftarkan kalau dipakai, karena ia membuat ticker GSAP tidak pernah berhenti.
 gsap.registerPlugin(GSAPSplitText, useGSAP);
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -44,7 +42,7 @@ const Shuffle = ({
   motionBlur = false,
   color,
   accentColor,
-  // Perubahan dari sumber: untuk teks yang selalu terlihat saat dipasang, mulai langsung tanpa ScrollTrigger.
+  // Diubah: mulai langsung tanpa ScrollTrigger
   segera = false
 }) => {
   const ref = useRef(null);

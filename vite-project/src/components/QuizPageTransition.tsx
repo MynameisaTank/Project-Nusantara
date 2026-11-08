@@ -2,15 +2,11 @@ import { forwardRef, useImperativeHandle, useRef } from "react";
 import gsap from "gsap";
 import "../styles/quiz-pergantian.css";
 import { amankan, catatGalat } from "../lib/clientLog";
+import { layarKecil } from "../lib/layar";
 
-/**
- * Transisi antar soal, diadaptasi dari Codrops "SVG Path Page Transition (Horizontal)".
- * Path SVG menutup layar dari satu sisi, lalu meninggalkan layar ke sisi lain. Empat arah dipakai bergantian:
- * kanan (masuk dari kiri), bawah (masuk dari atas), kiri (masuk dari kanan), atas (masuk dari bawah).
- */
+/** Transisi antarsoal, diadaptasi dari Codrops "SVG Path Page Transition". Arahnya bergantian. */
 export type Arah = "kanan" | "kiri" | "bawah" | "atas";
 
-// rotasi dan cermin untuk tiap arah; arah vertikal memutar path horizontal 90°
 const PUTAR: Record<Arah, { rotasi: number; cermin: 1 | -1 }> = {
   kanan: { rotasi: 0, cermin: 1 },
   kiri: { rotasi: 0, cermin: -1 },
@@ -27,8 +23,15 @@ const PATH = {
   keluarKosong: "M 100 0 H 100 c 0 50 0 50 0 100 h 0 V 0 Z",
 };
 
+// Di ponsel: panel bergeser lewat transform (dijalankan compositor), bukan morph path SVG yang digambar ulang tiap frame.
+const GESER: Record<Arah, [string, string, string]> = {
+  kanan: ["translateX(-100%)", "translateX(0)", "translateX(100%)"],
+  kiri: ["translateX(100%)", "translateX(0)", "translateX(-100%)"],
+  bawah: ["translateY(-100%)", "translateY(0)", "translateY(100%)"],
+  atas: ["translateY(100%)", "translateY(0)", "translateY(-100%)"],
+};
+
 export interface PergantianHandle {
-  /** mainkan transisi; `onCover` dipanggil saat layar tertutup penuh, `onSelesai` saat transisi usai */
   jalankan: (arah: Arah, onCover: () => void, onSelesai: () => void) => void;
 }
 
@@ -36,13 +39,30 @@ export const PergantianSoal = forwardRef<PergantianHandle>(function PergantianSo
   const svgRef = useRef<SVGSVGElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const panelAnimRef = useRef<Animation | null>(null);
 
   useImperativeHandle(ref, () => ({
     jalankan(arah, onCoverMentah, onSelesaiMentah) {
-      // galat di callback dicatat; alur tetap diteruskan agar kuis tidak macet
       const onCover = amankan("transisi:pergantian-soal:cover", onCoverMentah);
       const onSelesai = amankan("transisi:pergantian-soal:selesai", onSelesaiMentah);
       try {
+      const panel = panelRef.current;
+      if (panel && typeof panel.animate === "function" && layarKecil() && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        panelAnimRef.current?.cancel();
+        const [awal, tengah, akhir] = GESER[arah];
+        const masuk = panel.animate([{ transform: awal }, { transform: tengah }], { duration: 420, easing: "cubic-bezier(0.65, 0, 0.35, 1)", fill: "forwards" });
+        panelAnimRef.current = masuk;
+        masuk.finished.then(() => {
+          onCover();
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            const keluar = panel.animate([{ transform: tengah }, { transform: akhir }], { duration: 480, easing: "cubic-bezier(0.33, 1, 0.68, 1)", fill: "forwards" });
+            panelAnimRef.current = keluar;
+            keluar.finished.then(onSelesai, () => undefined);
+          }));
+        }, () => undefined);
+        return;
+      }
       const svg = svgRef.current;
       const path = pathRef.current;
       if (!svg || !path) {
@@ -54,7 +74,7 @@ export const PergantianSoal = forwardRef<PergantianHandle>(function PergantianSo
 
       const { rotasi, cermin } = PUTAR[arah];
       const vertikal = Math.abs(rotasi) === 90;
-      // kanvas diputar: untuk arah vertikal lebar dan tinggi ditukar agar layar tetap tertutup penuh
+      // untuk arah vertikal, lebar dan tinggi ditukar supaya layar tetap tertutup
       gsap.set(svg, {
         width: vertikal ? "100vh" : "100vw",
         height: vertikal ? "100vw" : "100vh",
@@ -72,7 +92,6 @@ export const PergantianSoal = forwardRef<PergantianHandle>(function PergantianSo
         return;
       }
 
-      // durasi dipersingkat dibanding versi asli (sekitar sepertiganya) agar pergantian soal terasa cepat
       const tl = gsap.timeline({ onComplete: onSelesai });
       tl.set(path, { attr: { d: PATH.kosong } })
         .to(path, { duration: 0.5, ease: "power3.in", attr: { d: PATH.masukAntara } }, 0)
@@ -90,8 +109,11 @@ export const PergantianSoal = forwardRef<PergantianHandle>(function PergantianSo
   }));
 
   return (
+    <>
+    <div ref={panelRef} className="qzp-panel" aria-hidden="true" />
     <svg ref={svgRef} className="qzp" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
       <path ref={pathRef} className="qzp-path" vectorEffect="non-scaling-stroke" d={PATH.kosong} />
     </svg>
+    </>
   );
 });

@@ -18,9 +18,7 @@ const eras = [
 ] as const;
 
 
-// Setiap tile = satu tempat. `era` mengacu ke indeks di `eras`.
-// Gambar disusun berselang-seling antar era agar era lain mudah dijangkau tanpa menggulir jauh.
-// Setiap gambar dipilih dari tempat yang tanggalnya berada dalam rentang era tersebut.
+// Gambar disusun selang-seling antarera supaya era lain gampang dijangkau.
 const ERA_FRAME_NAV = "w-fit rounded-full p-[6px] bg-[#2a2219] dark:bg-[#2a2219] shadow-none";
 const ERA_FRAME_ARROW = "w-fit rounded-full p-[2px] bg-[#111211] dark:bg-[#111211] shadow-none";
 const ERA_GLOW = ["#f4a261", "#d8b78c", "#e76f51"];
@@ -62,7 +60,7 @@ const MENU_ITEMS: ItemEra[] = MENU_SOURCES.map(source => ({
   description: `${eras[source.eraIndex].label} · ${eras[source.eraIndex].description}`
 }));
 
-/** Pengganti galeri 3D untuk perangkat tanpa WebGL2: deretan gambar biasa yang tetap bisa dipilih. */
+/** Pengganti galeri 3D untuk perangkat tanpa WebGL2. */
 function EraGridFallback({ items, onItemClick, onReady }: { items: ItemEra[]; onItemClick: (index: number) => void; onReady?: () => void }) {
   useEffect(() => {
     onReady?.();
@@ -86,9 +84,7 @@ function EraGridFallback({ items, onItemClick, onReady }: { items: ItemEra[]; on
 
 export function EraSelect({ onBack, onSelectEra, onReady, tingkat = "tinggi" }: Props) {
   const menuRef = useRef<SphereGalleryHandle>(null);
-  // Tingkat Ringan (perangkat lemah): tanpa shader latar, bola 3D 1x tanpa antialias, dan hanya digambar saat bergerak.
   const ringan = tingkat === "ringan";
-  // Di layar sempit tekstur galeri cukup berukuran 500px (hemat data dan memori GPU ponsel).
   const kecil = useLayarKecil();
   const items = useMemo(
     () => (kecil ? MENU_ITEMS.map((item) => ({ ...item, src: item.src.replace("/960px-", "/500px-") })) : MENU_ITEMS),
@@ -102,8 +98,9 @@ export function EraSelect({ onBack, onSelectEra, onReady, tingkat = "tinggi" }: 
 
   return (
     <main className="era-select-screen era-select-screen--tunnel">
-      {(tingkat === "dasar" || ringan) && <div className="era-grafis-fallback" aria-hidden="true" />}
-      {(tingkat === "sedang" || tingkat === "tinggi") && <div className="era-ascii-bg" aria-hidden="true">
+      {/* di ponsel shader ASCII layar penuh terlalu berat, jadi pakai latar gradien */}
+      {(tingkat === "dasar" || ringan || kecil) && <div className="era-grafis-fallback" aria-hidden="true" />}
+      {(tingkat === "sedang" || tingkat === "tinggi") && !kecil && <div className="era-ascii-bg" aria-hidden="true">
         <GradientASCII shape="rise" sunSize={0.7} colors={["#5a3d22", "#d8b78c", "#f4eddd"]} characters=" ░▒▓█" cellSize={15} density={0.8} glow={0.25} flow={0.4} speed={0.8} scrambleRadius={0.08} />
       </div>}
       <div className="landing-grain" aria-hidden="true" />
@@ -122,8 +119,8 @@ export function EraSelect({ onBack, onSelectEra, onReady, tingkat = "tinggi" }: 
             items={items}
             onItemClick={(_item, index) => pilihItem(index)}
             autoSpin={!ringan}
-            dpr={ringan ? 1 : [1, 2]}
-            antialias={!ringan}
+            dpr={ringan ? 1 : kecil ? [1, 1.5] : [1, 2]}
+            antialias={!ringan && !kecil}
             sesuaiKebutuhan={ringan}
           />
           <NoiseBackground containerClassName={`${ERA_FRAME_ARROW} era-noise-arrow era-noise-arrow--left`} gradientColors={ERA_GLOW}><button type="button" className="era-carousel__arrow" aria-label="Era sebelumnya" onClick={() => menuRef.current?.step(-1)}>←</button></NoiseBackground>

@@ -1,14 +1,8 @@
-/*
- * Pembungkus panel detail (peristiwa dan kerajaan) untuk efek kartu 3D (CometCard).
- * Posisi panel dipindah ke pembungkus luar: CometCard memberi transform pada lapis di dalamnya,
- * dan elemen absolute/fixed di dalam transform dihitung dari lapis itu, bukan dari peta.
- * Nilai posisi dan ukuran di bawah ini sama dengan aturan .panel di style.css.
- */
+/* Panel detail dengan efek kartu 3D (CometCard). Posisinya di pembungkus luar karena CometCard memberi transform di dalam. */
 .panel-card {
   position: absolute; z-index: 1100; top: 76px; right: 20px; bottom: 20px;
   display: flex; flex-direction: column; width: min(390px, calc(100% - 40px));
 }
-/* lapis motion.div dari CometCard, lalu panel di dalamnya, mengisi tinggi pembungkus */
 .panel-card > div { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
 .panel-card > div > .panel {
   position: relative; top: auto; right: auto; bottom: auto; left: auto;
@@ -22,7 +16,7 @@
   .panel-card { max-height: 62%; }
 }
 
-/* CometCard tidak punya penanganan reduced motion; di sini tilt dan skala dimatikan untuk pengguna yang memintanya */
+/* CometCard tidak menangani reduced motion, jadi dimatikan di sini */
 @media (prefers-reduced-motion: reduce) {
   .panel-card > div { transform: none !important; }
 }

@@ -11,16 +11,14 @@ export const ThreeDMarquee = ({
 }: {
   images: string[];
   className?: string;
-  /** Perubahan dari sumber: "always" membekukan gerakan kolom di perangkat lemah (bawaannya mengikuti pengaturan sistem). */
+  /** Diubah: "always" membekukan kolom di perangkat lemah. */
   reducedMotion?: "user" | "always";
 }) => {
-  // Split the images array into 4 equal parts
   const chunkSize = Math.ceil(images.length / 4);
   const chunks = Array.from({ length: 4 }, (_, colIndex) => {
     const start = colIndex * chunkSize;
     return images.slice(start, start + chunkSize);
   });
-  // Perubahan dari sumber: menghormati prefers-reduced-motion lewat konfigurasi Motion.
   return (
     <MotionConfig reducedMotion={reducedMotion}>
       <div

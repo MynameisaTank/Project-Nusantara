@@ -12,17 +12,12 @@ interface Jawaban { benar: boolean; pilih: number | null; poin: number; }
 
 const HURUF = ["A", "B", "C", "D"];
 
-/** urutan arah transisi: kanan, bawah, kiri, atas (berulang); soal ke-i memakai arah ke-(i mod 4) */
 const ARAH_SOAL: Arah[] = ["kanan", "bawah", "kiri", "atas"];
 const arahUntuk = (i: number): Arah => ARAH_SOAL[i % ARAH_SOAL.length] ?? "kanan";
 
-/** Label era untuk tampilan soal (era 3 sebelumnya salah tampil sebagai "II"). */
 const ERA_ROMAWI: Record<number, string> = { 1: "I", 2: "II", 3: "III" };
 
-/**
- * Pembungkus kuis: overlay transisi dirender di luar semua layar, sehingga animasinya tetap utuh
- * saat layar berganti (dari cover ke soal, antar soal, dan ke hasil).
- */
+// Overlay transisi dirender di luar semua layar supaya animasinya tidak terputus saat layar berganti.
 export function QuizMode({ onBack }: Props) {
   const pergantian = useRef<PergantianHandle>(null);
   return (
@@ -44,7 +39,6 @@ function QuizKuis({ onBack, pergantian }: PropsKuis) {
   const [hasil, setHasil] = useState<Jawaban[]>([]);
   const [sisaMs, setSisaMs] = useState(0);
   const sedangGanti = useRef(false);
-  // Bank soal diunduh saat kuis dibuka (data peristiwa tidak ikut dimuat bersama menu utama).
   const bankSiap = useBankSoalSiap();
 
   const tersedia = jumlahTersedia(era, kesulitan);
@@ -59,7 +53,6 @@ function QuizKuis({ onBack, pergantian }: PropsKuis) {
     setHasil((h) => [...h, { benar, pilih, poin }]);
   };
 
-  // jalankan transisi lalu aksi saat layar tertutup penuh; tanpa overlay, aksi langsung dijalankan
   const ganti = (arah: Arah, aksi: () => void) => {
     const p = pergantian.current;
     if (!p) {
@@ -73,7 +66,6 @@ function QuizKuis({ onBack, pergantian }: PropsKuis) {
     });
   };
 
-  // dari cover (atau hasil) ke soal pertama, lewat transisi
   const mulai = () => {
     const daftar = ambilSoal(era, kesulitan, jumlahEfektif);
     if (daftar.length === 0) return;
@@ -86,7 +78,6 @@ function QuizKuis({ onBack, pergantian }: PropsKuis) {
     });
   };
 
-  // pindah ke soal berikutnya (atau hasil) lewat transisi; arah bergantian tiap soal
   const lanjut = () => {
     const akhir = idx + 1 >= soal.length;
     ganti(arahUntuk(idx + 1), () => {
@@ -99,20 +90,19 @@ function QuizKuis({ onBack, pergantian }: PropsKuis) {
     });
   };
 
-  // timer per soal: berjalan saat soal belum dijawab
   useEffect(() => {
     if (fase !== "main" || waktu === 0 || sudahJawab) return;
     const t = window.setInterval(() => setSisaMs((s) => Math.max(0, s - 100)), 100);
     return () => window.clearInterval(t);
   }, [fase, waktu, sudahJawab, idx]);
 
-  // waktu habis dihitung sebagai jawaban kosong
+  // waktu habis dihitung jawaban kosong
   useEffect(() => {
     if (fase === "main" && waktu > 0 && !sudahJawab && sisaMs === 0) jawab(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sisaMs, fase, sudahJawab]);
 
-  // pintasan keyboard: 1–4 untuk memilih, Enter/Spasi untuk lanjut
+  // 1–4 untuk memilih, Enter atau Spasi untuk lanjut
   useEffect(() => {
     if (fase !== "main") return;
     const onKey = (e: KeyboardEvent) => {
@@ -128,10 +118,8 @@ function QuizKuis({ onBack, pergantian }: PropsKuis) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fase, sudahJawab, idx, soal]);
 
-  // Soal belum selesai diunduh: tampilkan latar kosong sebentar daripada menampilkan "0 soal".
   if (!bankSiap) return <main className="qz" aria-busy="true" aria-label="Memuat soal" />;
 
-  // ——— layar pemilihan era dan konfigurasi (cover page) ———
   if (fase === "atur") {
     return (
       <QuizCover
@@ -149,7 +137,6 @@ function QuizKuis({ onBack, pergantian }: PropsKuis) {
     );
   }
 
-  // ——— layar hasil ———
   if (fase === "hasil") {
     const total = hasil.reduce((s, h) => s + h.poin, 0);
     const benarN = hasil.filter((h) => h.benar).length;
@@ -201,7 +188,6 @@ function QuizKuis({ onBack, pergantian }: PropsKuis) {
     );
   }
 
-  // ——— layar bermain ———
   if (!aktif) return null;
   const persen = waktu > 0 ? (sisaMs / (waktu * 1000)) * 100 : 100;
   const benarSoal = sudahJawab && hasil[idx]?.benar;

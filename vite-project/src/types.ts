@@ -7,7 +7,7 @@ export interface Era {
   nama: string;
   mulai: number;
   akhir: number;
-  /** tahun yang tampil saat game dibuka */
+  /** tahun saat game dibuka */
   tahunAwal: number;
 }
 
@@ -17,13 +17,12 @@ export interface Kategori {
 }
 export type KategoriMap = Record<KategoriId, Kategori>;
 
-/** Kunci harus huruf kecil. */
+/** kunci huruf kecil */
 export type Glosarium = Record<string, string>;
 
 export interface Kuis {
   tanya: string;
   pilihan: string[];
-  /** indeks jawaban benar, mulai dari 0 */
   benar: number;
   penjelasan: string;
 }
@@ -31,57 +30,49 @@ export interface Kuis {
 export interface Pilihan {
   id: string;
   teks: string;
-  /** akibat yang masuk akal jika pemain memilih ini */
   konsekuensi: string;
-  /** tepat satu pilihan per keputusan bernilai true */
+  /** tepat satu pilihan bernilai true */
   historis?: boolean;
 }
 
 export interface Keputusan {
-  /** peran pemain, mis. "Ken Arok, penguasa Tumapel" */
+  /** mis. "Ken Arok, penguasa Tumapel" */
   peran: string;
   situasi: string;
   pilihan: Pilihan[];
-  /** apa yang benar-benar terjadi menurut sumber sejarah */
   hasilHistoris: string;
 }
 
-/** Seberapa tepat koordinat diketahui. Menentukan zoom; kosong = zoom bawaan. */
+/** Seberapa tepat lokasinya; menentukan zoom. */
 export type Presisi = "pulau" | "kawasan" | "kota" | "situs";
 
-/** Jalur perjalanan/ekspedisi/perdagangan. Isi hanya jika ada dasar sumber. */
+/** Isi hanya kalau ada dasar sumbernya. */
 export interface Rute {
   nama: string;
   titik: [number, number][];
   kepastian: "pasti" | "perkiraan";
 }
 
-/** Gambar ilustrasi yang tampil saat panel peristiwa dibuka. */
 export interface GambarEvent {
   url: string;
   alt: string;
-  /** Kredit/sumber gambar, ditampilkan kecil di bawah gambar. */
   sumber: string;
 }
 
 export interface SejarahEvent {
   id: string;
   judul: string;
-  /** teks tahun untuk pemain */
   tahun: string;
-  /** rentang tahun event tampil di peta */
+  /** rentang tahun peristiwa tampil di peta */
   mulai: number;
   akhir: number;
   lokasi: { nama: string; lat: number; lng: number; presisi?: Presisi };
   rute?: Rute[];
   kategori: KategoriId;
-  /** kendaraan perjalanan antarperistiwa di peta; jika kosong diambil dari judul dan kategori */
   moda?: Moda;
-  /** isi true untuk peristiwa penting: panel detailnya diberi border cahaya */
   penting?: boolean;
-  /** field lama era 1 ("utama" | "sampingan"); dibaca oleh isUtama di lib/jenis.ts */
+  /** field lama era 1, lihat lib/jenis.ts */
   jenis?: "utama" | "sampingan";
-  /** gambar ilustrasi, saat ini hanya diisi untuk peristiwa penting/utama */
   gambar?: GambarEvent;
   ringkas: string;
   cerita: { L1: string; L2: string; L3: string };

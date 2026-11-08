@@ -4,10 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { serviceWorkerPrecache } from "./vite-sw";
 
-/**
- * Dev only: galat dari browser (transisi, window.onerror, promise yang gagal) dikirim ke endpoint
- * /__client-log dan dicetak di terminal tempat `npm run dev` berjalan.
- */
+/** Dev saja: cetak galat browser di terminal. */
 function logGalatKeTerminal(): Plugin {
   return {
     name: "log-galat-ke-terminal",
@@ -46,10 +43,7 @@ function logGalatKeTerminal(): Plugin {
   };
 }
 
-/**
- * Nama host terowongan HTTPS yang umum dipakai untuk mencoba di ponsel (Vite memblokir host asing secara bawaan).
- * Pakai bersama `npm run preview:lan` atau `npm run dev:lan`.
- */
+// Host terowongan HTTPS untuk mencoba di HP (Vite memblokir host asing secara bawaan).
 const HOST_TEROWONGAN = [".trycloudflare.com", ".ngrok-free.app", ".ngrok-free.dev", ".ngrok.io", ".loca.lt", ".lhr.life", ".serveousercontent.com"];
 
 export default defineConfig({

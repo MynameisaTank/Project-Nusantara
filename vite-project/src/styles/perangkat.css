@@ -1,6 +1,5 @@
-/* Tingkat grafis (lihat lib/perangkat.ts): latar pengganti dan galeri gambar untuk perangkat tanpa WebGL/WebGPU. */
+/* Latar pengganti untuk tingkat grafis rendah (lib/perangkat.ts). */
 
-/* Pengganti efek kaca (AeroShards) di menu utama pada tingkat sedang dan dasar. */
 .menu-grafis-fallback {
   position: absolute;
   inset: 0;
@@ -11,7 +10,6 @@
     linear-gradient(180deg, #1f3d37 0%, #172f29 100%);
 }
 
-/* Pengganti shader latar pemilihan era pada tingkat dasar. */
 .era-grafis-fallback {
   position: absolute;
   inset: 0;
@@ -22,7 +20,6 @@
     linear-gradient(180deg, #2c2116 0%, #172f29 100%);
 }
 
-/* Pengganti galeri 3D pada tingkat dasar: deretan gambar yang tetap bisa dipilih dengan keyboard. */
 .era-grafis-grid {
   list-style: none;
   margin: 0;
@@ -73,10 +70,7 @@
   opacity: 0.75;
 }
 
-/*
- * Progres pemasangan aset di layar pemuatan. Elemennya harus berada di atas lapisan gelap ::before milik
- * .loading-screen (z-index 1), dan namanya tidak boleh sama dengan .loading-progress bawaan layar itu.
- */
+/* Progres pemasangan aset. Harus di atas lapisan ::before .loading-screen. */
 .loading-detail,
 .loading-pasang {
   position: relative;
@@ -105,7 +99,6 @@
   transition: width 0.3s ease;
 }
 
-/* Spanduk "versi baru siap" di bawah layar. */
 .pembaruan-versi {
   position: fixed;
   z-index: 3000;
@@ -136,7 +129,6 @@
   cursor: pointer;
 }
 
-/* Bagian "Aplikasi" di panel Pengaturan menu: tombol pasang dan petunjuk iPhone. */
 .menu-settings-aplikasi {
   display: grid;
   gap: 8px;
@@ -156,7 +148,6 @@
   border-color: #7fc4bf;
 }
 
-/* Pilihan mode grafis di panel Pengaturan. */
 .menu-settings-row select {
   margin-left: auto;
   padding: 4px 8px;

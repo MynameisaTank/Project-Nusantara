@@ -1,4 +1,4 @@
-/* Dua jenis penanda: kejadian utama (tegas) dan peristiwa sampingan (kecil, outline putus-putus) */
+/* Penanda utama tegas, sampingan kecil dengan garis putus-putus */
 .atlas-marker.atlas-marker--utama {
   width: 42px; height: 42px; border: 2.5px solid var(--marker-color, #647b68); background: #fff;
   box-shadow: 0 0 0 3px rgb(255 255 255 / 85%), 0 2px 9px rgb(29 41 40 / 32%);
@@ -14,7 +14,6 @@
 .atlas-marker.atlas-marker--sampingan:hover,
 .atlas-marker.atlas-marker--sampingan.is-selected { opacity: 1; }
 
-/* Indeks peristiwa: kejadian utama lebih tegas, sampingan lebih tenang */
 .event-row.is-utama .event-title { font-weight: 600; }
 .event-row.is-sampingan .event-title { font-size: .92em; opacity: .85; }
 

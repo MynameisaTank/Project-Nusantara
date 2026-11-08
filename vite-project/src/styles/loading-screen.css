@@ -18,7 +18,7 @@
   z-index: 0;
 }
 
-/* Tanpa dinding gambar (perangkat lemah): gradien statis sebagai gantinya */
+/* tanpa dinding gambar (perangkat lemah) */
 .loading-screen--polos {
   background:
     radial-gradient(ellipse 70% 55% at 50% 42%, #1d3029 0%, rgba(29, 48, 41, 0) 70%),

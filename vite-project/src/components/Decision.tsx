@@ -2,7 +2,6 @@ import type { Keputusan } from "../types";
 
 interface Props {
   keputusan: Keputusan;
-  /** kuis harus benar dulu sebelum keputusan terbuka */
   unlocked: boolean;
   choice: string | undefined;
   onChoose: (pilihanId: string) => void;

@@ -2,7 +2,6 @@ import type { KategoriId } from "../types";
 
 export type IconName = KategoriId | "tutup" | "putar" | "jeda";
 
-/* Ikon garis sederhana (viewBox 24). Tidak memakai emoji supaya tampil sama di semua perangkat. */
 export const ICONS: Record<IconName, { d: string; fill?: boolean }> = {
   politik: { d: "M3 10l9-6 9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20.5h18" },
   perang: { d: "M5 5l14 14M19 5L5 19M3.5 6.5l3-3M17.5 3.5l3 3M3.5 17.5l3 3M17.5 20.5l3-3" },
@@ -15,7 +14,7 @@ export const ICONS: Record<IconName, { d: string; fill?: boolean }> = {
   jeda: { d: "M7.5 5h3.2v14H7.5zM13.3 5h3.2v14h-3.2z", fill: true }
 };
 
-/** String SVG, dipakai untuk penanda Leaflet (HTML mentah). */
+/** Versi string, untuk penanda Leaflet. */
 export function iconSvg(name: IconName, size = 20): string {
   const ic = ICONS[name];
   const paint = ic.fill

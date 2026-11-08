@@ -5,13 +5,13 @@ import { LoadingScreen, MIN_LOADING_MS } from "./components/LoadingScreen";
 import { bacaMode, deteksiPerangkat, LABEL_TINGKAT, ringkasanDeteksi, simpanMode, tingkatAktif, tingkatHemat, tingkatOtomatis, type Deteksi, type ModeGrafis, type Tingkat } from "./lib/perangkat";
 import { siapkanGrafis, type Kemajuan } from "./lib/persiapan";
 import { GrafisHematContext } from "./lib/grafis";
+import { aturSuasana } from "./lib/suara";
 import "./styles/perangkat.css";
 import "./styles/overlay-peta.css";
 import { LevelDock } from "./components/LevelDock";
 import { LegendaEropa } from "./components/LegendaEropa";
 import { PembaruanVersi } from "./components/PembaruanVersi";
 
-/** waktu minimal layar memuat sebelum pilihan era (globe) tampil */
 const ERA_MIN_LOADING_MS = 4000;
 import { MainMenu } from "./components/MainMenu";
 const EraSelect = lazy(() => import("./components/EraSelect").then((module) => ({ default: module.EraSelect })));
@@ -34,7 +34,6 @@ import { muatEra, type DataEra } from "./data/muatEra";
 import type { Kerajaan } from "./data/kerajaan";
 
 const TANPA_WILAYAH: Kerajaan[] = [];
-/** Data kosong dipakai selama belum ada era yang dimuat (menu, pemilihan era, kuis, materi). */
 const DATA_KOSONG: DataEra = { era: ERA, events: [], wilayah: TANPA_WILAYAH };
 import { useAutoplay } from "./hooks/useAutoplay";
 import { useProgress } from "./hooks/useProgress";
@@ -42,21 +41,24 @@ import { isActive } from "./lib/events";
 
 export default function App() {
   const { screen, goTo, cut, curtainPhase, curtainVariant } = useScreenTransition("menu");
-  // Tanda untuk watchdog di index.html: aplikasi sudah berhasil tampil, jadi pesan cadangan tidak perlu muncul.
+  // musik peta saat peta tampil, musik menu di layar lain (menu, pilih era, kuis, materi)
+  useEffect(() => {
+    aturSuasana(screen === "game" ? "peta" : "menu");
+  }, [screen]);
+  // tanda untuk pesan cadangan di index.html
   useEffect(() => {
     document.documentElement.dataset.siap = "1";
     try { sessionStorage.removeItem("nusantara-ulang-otomatis"); } catch { /* abaikan */ }
   }, []);
-  // transisi clip ke mode kuis: kotak tombol asal, atau null bila tidak sedang berjalan
   const [klip, setKlip] = useState<{ asal: DOMRect; tujuan: Screen; kata: [string, string] } | null>(null);
-  /** Di ponsel, tombol menu memakai transisi clip yang sama dengan Mode kuis; di layar lebar tetap transisi piksel. */
+  // Di ponsel tombol menu memakai transisi clip seperti Mode kuis.
   const bukaDariMenu = (tujuan: Screen, kata: [string, string], asal?: DOMRect) => {
     if (asal && layarKecil()) setKlip({ asal, tujuan, kata });
     else goTo(tujuan, "pixel");
   };
   const { level, setLevel, done, choices, markQuizDone, choose, resetChoice } = useProgress();
   const [eraId, setEraId] = useState(ERA.id);
-  // Data satu era baru diunduh ketika era itu dipilih (lihat data/muatEra.ts); sebelum itu dipakai data kosong.
+  // Data era baru diunduh saat era dipilih (data/muatEra.ts).
   const [dataTermuat, setDataTermuat] = useState<DataEra | null>(null);
   const dataEra = dataTermuat && dataTermuat.era.id === eraId ? dataTermuat : DATA_KOSONG;
   const eraSiap = dataEra !== DATA_KOSONG;
@@ -74,7 +76,6 @@ export default function App() {
   const [showClouds, setShowClouds] = useState(false);
   const [eraReady, setEraReady] = useState(false);
   const [eraMinDone, setEraMinDone] = useState(false);
-  /* Pemasangan aset grafis: deteksi perangkat, lalu unduh modul dan gambar sebelum menu dibuka */
   const [deteksi, setDeteksi] = useState<Deteksi | null>(null);
   const [modeGrafis, setModeGrafis] = useState<ModeGrafis>(() => bacaMode());
   const [kemajuanGrafis, setKemajuanGrafis] = useState<Kemajuan | null>(null);
@@ -91,7 +92,6 @@ export default function App() {
     })();
     return () => { batal = true; };
   }, []);
-  /* Tingkat Ringan dan Dasar: tanpa animasi dekoratif dan efek GPU yang mahal (lihat styles/ringan.css) */
   const hemat = tingkat !== null && tingkatHemat(tingkat);
   useEffect(() => {
     document.documentElement.classList.toggle("grafis-ringan", hemat);
@@ -106,39 +106,29 @@ export default function App() {
   }, [darkMap]);
   const wilayah = dataEra.wilayah.length > 0 ? dataEra.wilayah : TANPA_WILAYAH;
 
-  /**
-   * Tampilkan layar memuat setiap kali masuk ke peta dari menu seleksi era, bukan hanya sekali.
-   * Begitu selesai, lepaskan tirai awan yang bubar ke tepi layar sebelum peta benar-benar terlihat.
-   */
   const [mapMinDone, setMapMinDone] = useState(false);
   useEffect(() => {
     if (!mapLoading) return;
     const timer = window.setTimeout(() => setMapMinDone(true), MIN_LOADING_MS);
     return () => window.clearTimeout(timer);
   }, [mapLoading]);
-  // Layar memuat baru dilepas setelah waktu minimum berlalu DAN data era selesai diunduh.
   useEffect(() => {
     if (!mapLoading || !mapMinDone || !eraSiap) return;
     setMapLoading(false);
-    // Perangkat lemah melewati tirai awan: ratusan lapisan transparan yang beranimasi membuat peta tersendat saat muncul.
-    setShowClouds(!hemat);
+    // Tirai awan dilewati di perangkat lemah dan ponsel: puluhan lapisan gradien besar membuat peta tersendat.
+    setShowClouds(!hemat && !layarKecil());
     setMapMinDone(false);
   }, [mapLoading, mapMinDone, eraSiap, hemat]);
 
-  // Pilihan keputusan tersimpan yang id-nya tidak lagi ada di peristiwanya dibuang saat data era dimuat.
+  // Buang pilihan keputusan yang id-nya sudah tidak ada.
   useEffect(() => {
     for (const ev of events) {
       const pilihan = choices[ev.id];
       if (pilihan && !ev.keputusan.pilihan.some((p) => p.id === pilihan)) resetChoice(ev.id);
     }
-    // sengaja hanya saat data era berganti
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [events]);
 
-  /**
-   * Layar pilihan era memuat globe dulu. Loading ditampilkan sampai globe siap
-   * dan minimal ERA_MIN_LOADING_MS sudah berlalu, supaya tips sempat terbaca.
-   */
   useEffect(() => {
     if (screen !== "eras") return;
     setEraReady(false);
@@ -149,7 +139,7 @@ export default function App() {
 
   const active = useMemo(() => events.filter((ev) => isActive(ev, year)), [events, year]);
 
-  /* Sebuah event selesai jika kuisnya benar DAN keputusan sudah dipilih */
+  // selesai = kuis benar dan keputusan sudah dipilih
   const selesai = useMemo(() => {
     const r: Record<string, true> = {};
     for (const ev of events) if (done[ev.id] && choices[ev.id]) r[ev.id] = true;
@@ -160,7 +150,6 @@ export default function App() {
     (ev) => ev.keputusan.pilihan.find((p) => p.id === choices[ev.id])?.historis
   ).length;
 
-  // Event yang dibuka tapi tidak lagi aktif di tahun ini -> tutup panel
   const selected = selectedId ? eventById[selectedId] : undefined;
   const panelEvent = selected && isActive(selected, year) ? selected : undefined;
   const panelId = panelEvent?.id ?? null;
@@ -181,7 +170,6 @@ export default function App() {
     setYear(Math.max(era.mulai, Math.min(era.akhir, Math.round(y))));
   };
 
-  /** Pilih peristiwa; jika belum aktif di tahun ini, linimasa ikut pindah ke awal peristiwa. */
   const pickEvent = (id: string) => {
     const ev = eventById[id];
     if (ev && !isActive(ev, year)) { setPlaying(false); setYear(ev.mulai); }
@@ -250,7 +238,6 @@ export default function App() {
       setMapLoading(true);
       setShowClouds(false);
       goTo("game");
-      // Data era diunduh sambil layar memuat tampil; tahun awal ikut diatur begitu data siap.
       janji
         .then((data) => {
           setDataTermuat(data);
@@ -264,7 +251,6 @@ export default function App() {
         });
     }} />;
   } else if (!eraSiap) {
-    // Data era masih diunduh (jaringan lambat): tahan di layar memuat sampai siap.
     content = <LoadingScreen />;
   } else {
     content = (
@@ -351,7 +337,6 @@ export default function App() {
     return (
       <LoadingScreen
         label="Menyiapkan grafik untuk perangkatmu…"
-        // Sebelum tingkat diketahui, dan di perangkat lemah, tidak ada dinding gambar yang berebut unduhan penting
         polos={tingkat === null || hemat}
         progres={kemajuanGrafis}
         detail={tingkat ? `Mode grafis: ${LABEL_TINGKAT[tingkat]}${kemajuanGrafis ? ` · ${kemajuanGrafis.keterangan}` : ""}` : "Memeriksa kemampuan perangkat…"}

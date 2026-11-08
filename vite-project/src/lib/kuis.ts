@@ -2,24 +2,19 @@ import { useEffect, useSyncExternalStore } from "react";
 import type { SejarahEvent } from "../types";
 import { isUtama } from "./jenis";
 
-/**
- * Bank soal untuk mode kuis. Setiap peristiwa membawa satu soal pilihan ganda (field `kuis`).
- * Bentuk `Soal` dibuat sama dengan yang nanti dihasilkan AI, sehingga soal baru cukup ditambahkan ke bank ini.
- */
 export type EraKuis = "semua" | 1 | 2 | 3;
 export type Kesulitan = "mudah" | "campur" | "sulit";
 
 export interface Soal {
   id: string;
   era: 1 | 2 | 3;
-  /** peristiwa sampingan = mudah, peristiwa utama = sulit (data soal belum punya tingkat kesulitan sendiri) */
+  /** Data soal belum punya tingkat kesulitan, jadi peristiwa utama dianggap sulit. */
   tingkat: "mudah" | "sulit";
   judul: string;
   tahun: string;
   lokasi: string;
   tanya: string;
   pilihan: string[];
-  /** indeks jawaban benar, mulai dari 0 */
   benar: number;
   penjelasan: string;
   gambar?: string;
@@ -41,10 +36,7 @@ function dariEvent(ev: SejarahEvent, era: 1 | 2 | 3): Soal {
   };
 }
 
-/**
- * Bank soal dari seluruh peristiwa ketiga peta. Data peristiwa besar, jadi baru diunduh saat kuis dibuka
- * (lewat muatBankSoal) dan tidak ikut dimuat bersama menu utama.
- */
+// Data peristiwa besar, jadi bank soal baru dimuat saat kuis dibuka.
 let bank: Soal[] = [];
 let bankSiap = false;
 let janjiBank: Promise<void> | null = null;
@@ -62,13 +54,12 @@ export function muatBankSoal(): Promise<void> {
       pendengarBank.forEach((beri) => beri());
     })
     .catch((galat) => {
-      janjiBank = null; // jaringan putus: coba lagi pada pemanggilan berikutnya
+      janjiBank = null; // coba lagi di pemanggilan berikutnya
       throw galat;
     });
   return janjiBank;
 }
 
-/** Memulai pemuatan bank soal dan mengembalikan true setelah siap, supaya komponen tampil ulang dengan data. */
 export function useBankSoalSiap(): boolean {
   useEffect(() => {
     void muatBankSoal().catch(() => undefined);
@@ -99,12 +90,11 @@ function saring(era: EraKuis, kesulitan: Kesulitan): Soal[] {
   return bank.filter((s) => (era === "semua" || s.era === era) && (kesulitan === "campur" || s.tingkat === kesulitan));
 }
 
-/** Jumlah soal yang tersedia untuk kombinasi era dan kesulitan. */
 export function jumlahTersedia(era: EraKuis, kesulitan: Kesulitan): number {
   return saring(era, kesulitan).length;
 }
 
-/** Ambil `jumlah` soal acak, dengan urutan pilihan jawaban juga diacak (indeks jawaban benar ikut dipetakan). */
+/** Soal acak, dengan urutan jawaban juga diacak. */
 export function ambilSoal(era: EraKuis, kesulitan: Kesulitan, jumlah: number): Soal[] {
   return kocok(saring(era, kesulitan)).slice(0, jumlah).map((s) => {
     const urutan = kocok(s.pilihan.map((_, i) => i));

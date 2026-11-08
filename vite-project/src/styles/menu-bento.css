@@ -1,5 +1,4 @@
-/* Hero menu utama bergaya bento: kartu-kartu dalam grid. Kartu fitur berupa tombol dengan gambar di dalamnya,
- * dan labelnya di pojok kanan bawah. Kartu utama dibuat tembus pandang supaya efek AeroShards di belakangnya terlihat. */
+/* Hero menu utama bergaya bento. Kartu utama dibuat tembus pandang supaya AeroShards di belakangnya kelihatan. */
 
 .menu-bento {
   display: grid;
@@ -53,7 +52,6 @@
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7);
 }
 
-/* Kartu fitur: tombol penuh gambar */
 .menu-bento__fitur {
   position: relative;
   margin: 0;
@@ -83,7 +81,7 @@
   -webkit-user-drag: none;
 }
 
-/* Gradien gelap di pojok kanan bawah supaya teks putih tetap terbaca di atas gambar apa pun */
+/* gradien gelap supaya teks putih terbaca di atas gambar apa pun */
 .menu-bento__fitur::after {
   content: "";
   position: absolute;
@@ -114,7 +112,7 @@
   }
 }
 
-/* Ponsel: dua kolom, kartu utama selebar layar */
+/* Ponsel */
 @media (max-width: 700px) {
   .menu-bento {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -139,7 +137,6 @@
   }
 }
 
-/* Tingkat grafis hemat: tanpa bayangan dan tanpa transisi */
 :root.grafis-ringan .menu-bento__kartu,
 :root.grafis-ringan .menu-bento__fitur {
   box-shadow: none;
@@ -149,26 +146,23 @@
   transition: none;
 }
 
-/* Ponsel: tombol lama di bawah bento (Mulai!, Pilih era, Materi ujian, Mode kuis) dobel dengan kotak fitur,
- * jadi disembunyikan. Di layar lebar tetap tampil. */
+/* Di ponsel tombol lama ini dobel dengan kartu fitur. */
 @media (max-width: 700px) {
   .menu-aero-content .landing-actions { display: none; }
 }
 
-/* Ponsel: tombol Pengaturan ikut tergulir bersama halaman (sebelumnya menempel di layar dan menutupi kotak fitur). */
+/* Di ponsel tombol Pengaturan ikut tergulir supaya tidak menutupi kartu. */
 @media (max-width: 700px) {
   .landing-screen > .menu-settings { position: absolute; inset: 0 0 auto 0; height: 0; }
   .landing-screen > .menu-settings .menu-settings-toggle,
   .landing-screen > .menu-settings .menu-settings-panel { position: absolute; }
 }
 
-/* Ponsel: deskripsi di kartu utama disembunyikan; judul saja sudah cukup. */
 @media (max-width: 700px) {
   .menu-bento__sub { display: none; }
 }
 
-/* Tombol menu utama lebih tebal (desktop dan ponsel). IM Fell English SC hanya punya satu ketebalan, jadi browser
- * menebalkannya sendiri (font-weight 700) dan garis tepi tipis menambah ketebalan agar terbaca di atas latar gambar. */
+/* IM Fell hanya punya satu ketebalan, jadi ditebalkan browser plus garis tepi tipis. */
 .landing-scroll-page .jelly-button {
   font-weight: 700;
   -webkit-text-stroke: 0.35px currentColor;

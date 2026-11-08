@@ -14,14 +14,13 @@ interface Props {
   onTerm: (term: string) => void;
 }
 
-const BATAS_PARAGRAF = 60; // kata; paragraf ditutup di akhir kalimat setelah melewati batas ini
-const BATAS_TEKS_PENDEK = 90; // teks yang lebih pendek dari ini tetap satu paragraf
+const BATAS_PARAGRAF = 60; // kata per paragraf, dipotong di akhir kalimat
+const BATAS_TEKS_PENDEK = 90; // di bawah ini tetap satu paragraf
 
-/** Pecah teks panjang menjadi paragraf pendek di batas kalimat agar nyaman dibaca. */
 function bagiParagraf(text: string): string[] {
   const kata = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
   if (kata(text) < BATAS_TEKS_PENDEK) return [text];
-  // pemisah kalimat: titik/tanda tanya/seru setelah huruf kecil atau angka, lalu huruf kapital (tidak memotong "M.C. Ricklefs")
+  // tidak memotong singkatan seperti "M.C. Ricklefs"
   const kalimat = text.split(/(?<=[a-z0-9)"][.!?])\s+(?=[A-Z"'])/);
   const hasil: string[] = [];
   let saatIni: string[] = [];
@@ -36,14 +35,12 @@ function bagiParagraf(text: string): string[] {
     }
   }
   if (saatIni.length) {
-    // sisa yang terlalu pendek digabung ke paragraf sebelumnya
     if (hasil.length > 0 && jumlah < BATAS_PARAGRAF / 3) hasil[hasil.length - 1] += " " + saatIni.join(" ");
     else hasil.push(saatIni.join(" "));
   }
   return hasil;
 }
 
-/** Teks cerita. Di level 2 dan 3, kemunculan pertama tiap istilah glosarium bisa diklik. */
 export function Story({ text, level, onTerm }: Props) {
   const paragraf = bagiParagraf(text);
   if (level < 2 || !termRe) {
@@ -56,11 +53,10 @@ export function Story({ text, level, onTerm }: Props) {
     );
   }
 
-  const used = new Set<string>(); // dipakai bersama semua paragraf: tiap istilah hanya jadi tombol sekali
+  const used = new Set<string>(); // tiap istilah hanya jadi tombol sekali
   return (
     <div className="story">
       {paragraf.map((p, pi) => {
-        // split dengan grup penangkap: indeks ganjil = istilah yang cocok
         const parts = p.split(termRe);
         return (
           <p key={pi}>

@@ -13,7 +13,6 @@ interface Props {
   onYear: (y: number) => void;
   onTogglePlay: () => void;
   onSpeed: (speed: number) => void;
-  /** Hanya era yang punya data wilayah kerajaan yang menampilkan tombol ini. */
   wilayahTersedia?: boolean;
   tampilkanWilayah?: boolean;
   onToggleWilayah?: () => void;

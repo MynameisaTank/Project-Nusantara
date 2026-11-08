@@ -1,9 +1,4 @@
 "use client";
-/**
- * Note: Use position fixed according to your needs
- * Desktop navbar is better positioned at the bottom
- * Mobile navbar is better positioned at bottom right.
- **/
 
 import { cn } from "../../lib/utils";
 import { IconLayoutNavbarCollapse } from "@tabler/icons-react";
@@ -19,7 +14,7 @@ import {
 
 import { useRef, useState, type MouseEvent, type ReactNode } from "react";
 
-/** Perubahan dari sumber: `onSelect` untuk item yang berupa tombol, dan `aktif` untuk menandai pilihan. */
+/** Diubah: `onSelect` untuk item berupa tombol, dan `aktif` untuk pilihan yang sedang dipakai. */
 export interface DockItem {
   title: string;
   icon: ReactNode;
@@ -37,7 +32,6 @@ export const FloatingDock = ({
   desktopClassName?: string;
   mobileClassName?: string;
 }) => {
-  // Perubahan dari sumber: menghormati prefers-reduced-motion lewat konfigurasi Motion.
   return (
     <MotionConfig reducedMotion="user">
       <FloatingDockDesktop items={items} className={desktopClassName} />
@@ -46,7 +40,6 @@ export const FloatingDock = ({
   );
 };
 
-/** Jika item punya onSelect, klik tidak berpindah halaman melainkan menjalankan onSelect. */
 const pilih = (event: MouseEvent<HTMLAnchorElement>, item: DockItem) => {
   if (!item.onSelect) return;
   event.preventDefault();

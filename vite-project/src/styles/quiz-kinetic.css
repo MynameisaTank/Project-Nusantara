@@ -1,4 +1,4 @@
-/* Efek Kinetic Typography untuk pilih era (diadaptasi dari Codrops KineticTypePageTransition) */
+/* Diadaptasi dari Codrops KineticTypePageTransition */
 .qk {
   position: fixed;
   inset: 0;
@@ -11,7 +11,6 @@
   opacity: 0;
 }
 
-/* wadah baris huruf: diperbesar dan diputar saat transisi */
 .qk-type {
   display: flex;
   flex-direction: column;

@@ -1,9 +1,4 @@
-/*
- * Latar menu: marquee gambar sejarah dibuat redup sehingga hanya sekitar 15% yang terlihat.
- * Wadahnya fixed sebesar layar. Sebelumnya marquee dipasang di dalam wadah setinggi seluruh halaman menu,
- * sehingga di ponsel hanya sebagian atas layar yang terisi dan tepinya terlihat memotong.
- * Skala dan putaran wadah dihitung di lib/marquee.ts supaya gambar menutupi layar berukuran apa pun.
- */
+/* Latar menu, diredupkan sampai sekitar 15% terlihat. */
 .menu-marquee {
   position: fixed;
   inset: 0;
@@ -18,7 +13,7 @@
   transform-origin: 50% 50%;
 }
 
-/* Layar potret (khusus tingkat Tinggi): wadah dibuat selebar tinggi layar dan setinggi lebar layar, lalu diputar 90 derajat. */
+/* Layar tegak: wadah diputar 90 derajat supaya pita marquee menutupi layar. */
 .menu-marquee__isi.is-putar {
   inset: auto;
   top: 50%;

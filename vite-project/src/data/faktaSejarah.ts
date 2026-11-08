@@ -1,4 +1,3 @@
-/** Fakta singkat seputar sejarah Nusantara, ditampilkan bergilir di layar memuat. */
 export const FAKTA_SEJARAH: string[] = [
   "Candi Borobudur dibangun pada abad ke-8 oleh Wangsa Syailendra tanpa menggunakan semen; batunya disusun seperti kepingan puzzle raksasa.",
   "Kerajaan Sriwijaya di Sumatra menjadi pusat pembelajaran Buddha, dikunjungi biksu Tiongkok I-Tsing pada abad ke-7.",

@@ -1,7 +1,4 @@
-/**
- * Pemasangan aplikasi (PWA): mendaftarkan service worker, menangkap tombol "pasang", dan mendeteksi pembaruan.
- * Service worker hanya didaftarkan pada build produksi, karena di mode dev ia mengganggu hot reload.
- */
+/** Service worker, tombol pasang aplikasi, dan deteksi versi baru. Hanya aktif di build produksi. */
 import { useSyncExternalStore } from "react";
 import { saatSenggang } from "./senggang";
 
@@ -11,13 +8,10 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export interface StatusPwa {
-  /** versi baru sudah diunduh dan menunggu dipakai */
   pembaruanSiap: boolean;
-  /** browser menawarkan pemasangan (Chrome dan Edge di Android dan desktop) */
   bisaDipasang: boolean;
-  /** aplikasi sedang berjalan sebagai aplikasi terpasang */
   terpasang: boolean;
-  /** service worker sudah aktif, artinya aplikasi sudah tersimpan di perangkat */
+  /** service worker sudah aktif */
   tersimpan: boolean;
 }
 
@@ -38,7 +32,6 @@ let promptTertunda: BeforeInstallPromptEvent | null = null;
 let registrasi: ServiceWorkerRegistration | null = null;
 let muatUlangSetelahGanti = false;
 
-/** Panggil sekali saat aplikasi dimulai. */
 export function mulaiPwa(): void {
   if (typeof window === "undefined") return;
 
@@ -54,19 +47,16 @@ export function mulaiPwa(): void {
 
   if (!import.meta.env.PROD || !("serviceWorker" in navigator)) return;
 
-  // Muat ulang hanya jika pengguna memilih menerapkan pembaruan. Pada kunjungan pertama, service worker
-  // juga mengambil alih halaman, dan saat itu halaman tidak boleh dimuat ulang.
+  // Hanya muat ulang kalau pengguna memilih menerapkan pembaruan, bukan saat kunjungan pertama.
   navigator.serviceWorker.addEventListener("controllerchange", () => {
     if (muatUlangSetelahGanti) window.location.reload();
   });
 
-  // Pemasangan mengunduh seluruh kode aplikasi di muka (sekitar 1 MB terkompresi). Pengguna yang meminta
-  // hemat data atau berada di koneksi 2G tidak dibebani; aplikasi tetap berjalan seperti situs biasa.
+  // Hemat data dan koneksi 2G tidak ikut mengunduh seluruh aplikasi di muka.
   const koneksi = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
   if (koneksi?.saveData || koneksi?.effectiveType === "slow-2g" || koneksi?.effectiveType === "2g") return;
 
-  // Didaftarkan saat browser menganggur setelah halaman selesai dimuat: unduhan puluhan berkas di latar tidak boleh
-  // berebut bandwidth dan CPU dengan menu pertama, terutama di ponsel lama.
+  // Daftar saat browser sudah senggang supaya tidak berebut jaringan dengan menu pertama.
   const daftar = () => {
     navigator.serviceWorker
       .register(`${import.meta.env.BASE_URL}sw.js`)
@@ -82,7 +72,6 @@ export function mulaiPwa(): void {
             if (baru.state === "installed") cek();
           });
         });
-        // Aplikasi yang dibiarkan terbuka lama tetap memeriksa pembaruan setiap jam.
         window.setInterval(() => void reg.update().catch(() => undefined), 60 * 60 * 1000);
         void navigator.serviceWorker.ready.then(() => ubah({ tersimpan: true }));
       })
@@ -91,7 +80,6 @@ export function mulaiPwa(): void {
   window.addEventListener("load", () => saatSenggang(daftar, 4000));
 }
 
-/** Terapkan versi baru yang sudah menunggu: halaman dimuat ulang setelah service worker baru aktif. */
 export function terapkanPembaruan(): void {
   const menunggu = registrasi?.waiting;
   if (!menunggu) return;
@@ -99,7 +87,6 @@ export function terapkanPembaruan(): void {
   menunggu.postMessage({ type: "SKIP_WAITING" });
 }
 
-/** Tampilkan dialog pemasangan bawaan browser. Mengembalikan true bila pengguna menyetujui. */
 export async function pasangAplikasi(): Promise<boolean> {
   if (!promptTertunda) return false;
   await promptTertunda.prompt();
@@ -109,7 +96,7 @@ export async function pasangAplikasi(): Promise<boolean> {
   return outcome === "accepted";
 }
 
-/** iPhone dan iPad tidak punya dialog pemasangan; pengguna harus memakai menu Bagikan di Safari. */
+// iPhone tidak punya dialog pasang; harus lewat menu Bagikan di Safari.
 export function perluPetunjukIos(): boolean {
   if (typeof navigator === "undefined") return false;
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);

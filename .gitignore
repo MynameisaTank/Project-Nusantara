@@ -432,3 +432,7 @@ FodyWeavers.xsd
 
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
+
+# musik lokal di vite-project, tidak boleh ikut ke repo
+vite-project/src/audio-lokal/
+vite-project/public/audio/

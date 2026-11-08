@@ -19,7 +19,7 @@
   transition: background 0.2s, transform 0.2s, opacity 0.2s;
 }
 
-/* Label yang bertabrakan dengan label kerajaan yang lebih kuat (lihat tipiskanLabel di MapView) */
+/* label yang menabrak label kerajaan lebih kuat (lihat MapView) */
 .wilayah-label-shell.is-tersembunyi .wilayah-label {
   opacity: 0;
   pointer-events: none;

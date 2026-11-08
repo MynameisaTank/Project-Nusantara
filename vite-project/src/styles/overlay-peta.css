@@ -1,9 +1,4 @@
-/*
- * Overlay di atas peta: pemilih tingkat bahasa (floating dock) dan legenda negara Eropa.
- *
- * Peta mengisi seluruh area (kartu indeks peristiwa melayang di kiri atas), jadi posisi dihitung dari tepi peta.
- * Keduanya dinaikkan 52px supaya berada di atas pegangan laci linimasa (tinggi sekitar 38px) di tengah bawah.
- */
+/* Dock tingkat bahasa dan legenda negara Eropa di atas peta. */
 
 .level-dock {
   position: absolute;
@@ -29,6 +24,21 @@ html.ui-dark .level-dock__label {
   color: #f2f2f2;
 }
 
+/* Mode gelap peta (kelas ui-dark), bukan mode gelap sistem yang dipakai varian dark: Tailwind */
+html.ui-dark .level-dock :is(.bg-gray-50, .bg-gray-100) {
+  background: #000;
+  border-color: #1c1c1c;
+}
+
+html.ui-dark .level-dock .bg-gray-200 {
+  background: #141414;
+  box-shadow: inset 0 0 0 1px #2a2a2a;
+}
+
+html.ui-dark .level-dock :is(.text-neutral-500, .text-neutral-700) {
+  color: #e6e6e6;
+}
+
 .legenda-eropa {
   position: absolute;
   z-index: 1100;
@@ -44,7 +54,6 @@ html.ui-dark .level-dock__label {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
-/* tertutup: kapsul kecil yang lebarnya mengikuti isinya */
 .legenda-eropa:not(:has(.legenda-eropa__isi)) {
   width: auto;
 }
@@ -64,7 +73,6 @@ html.ui-dark .level-dock__label {
   cursor: pointer;
 }
 
-/* deretan titik warna di kapsul tertutup: warna tiap negara terlihat tanpa harus membuka legenda */
 .legenda-eropa__titik {
   display: inline-flex;
   gap: 4px;
@@ -149,13 +157,13 @@ html.ui-dark .legenda-eropa__catatan {
   border-top-color: #2a2a2a;
 }
 
-/* Laci linimasa yang terbuka menutupi bagian bawah peta; dock dan legenda disembunyikan agar tidak menimpanya. */
+/* Laci linimasa yang terbuka menutupi bawah peta, jadi dock dan legenda disembunyikan. */
 .stage:has(.timeline-drawer-panel) .legenda-eropa,
 .stage:has(.timeline-drawer-panel) .level-dock {
   display: none;
 }
 
-/* Ponsel dan tablet kecil: titik pindah sama dengan tata letak peta di style.css (860px). */
+/* Ponsel (titik pindah sama dengan style.css) */
 @media (max-width: 860px) {
   .level-dock {
     left: auto;
@@ -194,7 +202,7 @@ html.ui-dark .legenda-eropa__catatan {
     max-height: min(46svh, 380px);
   }
 
-  /* Saat panel peristiwa atau kerajaan terbuka (lembar bawah), lapisan lain disembunyikan agar tidak menumpuk. */
+  /* Saat panel terbuka, lapisan lain disembunyikan supaya tidak menumpuk. */
   .stage--panel .legenda-eropa,
   .stage--panel .level-dock,
   .stage--panel .event-explorer,

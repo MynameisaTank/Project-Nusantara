@@ -1,4 +1,3 @@
-/* Latar menu yang mengalir vertikal (lihat components/ui/vertical-flow.tsx). Hanya transform, tanpa 3D. */
 .vflow {
   position: absolute;
   inset: 0;
@@ -55,7 +54,6 @@
   to { transform: translate3d(0, 0, 0); }
 }
 
-/* Tanpa gerak: perangkat lemah (tingkat Ringan) atau pengaturan "kurangi gerakan" di sistem */
 .vflow--beku .vflow__track {
   animation: none;
 }

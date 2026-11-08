@@ -7,7 +7,6 @@ interface Entri {
   keterangan: string;
 }
 
-/** Warna negara Eropa seperti yang dipakai di data wilayah (lihat wilayahEra2.ts dan wilayahEra3.ts). */
 const LEGENDA: Entri[] = [
   { nama: "Portugis", warna: "#4a90c8", keterangan: "Melaka dan pos-pos di Nusa Tenggara seperti Solor dan Larantuka." },
   { nama: "Spanyol", warna: "#c0392b", keterangan: "Ternate pada abad ke-16 dan 17, bersaing dengan Portugis dan VOC." },
@@ -17,10 +16,8 @@ const LEGENDA: Entri[] = [
   { nama: "Inggris", warna: "#7d5fb8", keterangan: "Kekuasaan Inggris di Jawa, Melaka, Singapura, dan Sarawak." },
 ];
 
-/** Legenda yang bisa diciutkan di pojok kiri bawah peta. Entri yang dipakai di era ini ditebalkan. */
 export function LegendaEropa({ wilayah }: { wilayah: Kerajaan[] }) {
-  // Dimulai tertutup di semua ukuran layar: terbuka, legenda menimpa kartu indeks peristiwa di kiri atas.
-  // Warna negara tetap terlihat sekilas lewat deretan titik di kapsul tertutup.
+  // Tertutup dulu, karena kalau terbuka menimpa kartu indeks peristiwa.
   const [terbuka, setTerbuka] = useState(false);
   const warnaEra = new Set(wilayah.map((k) => k.warna));
   return (

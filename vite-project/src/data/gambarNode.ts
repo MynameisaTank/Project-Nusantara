@@ -1,11 +1,6 @@
-/*
- * Satu gambar berbeda untuk setiap peristiwa pada halaman Materi Evaluasi (tidak ada gambar yang dipakai dua kali).
- * Sumber: Wikimedia Commons (thumbnail 480px). Gambar dipilih berdasarkan tokoh, tempat, atau benda yang
- * berkaitan dengan peristiwanya, jadi sebagian berupa foto lokasi atau peninggalan, bukan gambar kejadian itu sendiri.
- */
+/* Satu gambar berbeda untuk tiap peristiwa di Materi Evaluasi. Sebagian berupa tempat atau peninggalan, bukan kejadiannya. */
 export interface GambarNode {
   url: string;
-  /** nama berkas di Wikimedia Commons, dipakai sebagai keterangan sumber */
   judul: string;
 }
 

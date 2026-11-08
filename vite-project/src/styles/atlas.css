@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Instrument+Sans:wght@400;500;600&display=swap");
 
-/* One serif (Newsreader) for names, dates and prose; one sans (Instrument Sans) for interface. */
 :root {
   --bg: #f6f0e1; --paper: #f6f0e1; --ink: #30251d; --muted: #7a6b5a;
   --line: #ddd2bb; --accent: #a96f36; --olive: #6b7352; --good: #5d6b3f; --bad: #9a4a35;
@@ -13,7 +12,6 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 button { font-family: inherit; }
 
-/* Header: one quiet line */
 .topbar { padding: 10px var(--gap); background: var(--ink); color: #efe6d0; border: 0; gap: 4px 24px; }
 .brand { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
 .brand h1 { font: 500 1.2rem var(--serif); letter-spacing: 0; text-transform: none; }
@@ -24,14 +22,12 @@ button { font-family: inherit; }
 .lvl:hover { background: none; color: #efe6d0; }
 .lvl.active { background: none; color: #efe6d0; border-bottom-color: var(--accent); }
 
-/* Layout: event index and map sit side by side on one plane */
 .stage { display: grid; grid-template-columns: 300px minmax(0, 1fr); background: var(--bg); }
 .map-wrap { position: relative; grid-column: 2; grid-row: 1; min-height: 0; }
 #map { position: absolute; inset: 0; background: #d8dccb; }
 .now { position: static; grid-column: 1; grid-row: 1; width: auto; overflow: auto; border: 0; border-right: 1px solid var(--line);
   border-radius: 0; box-shadow: none; background: var(--bg); padding: var(--gap) var(--gap) 0; }
 
-/* Map: neutral, higher contrast, no vignette or texture */
 .leaflet-tile-pane { filter: grayscale(.55) sepia(.25) contrast(1.08) brightness(1); }
 #map::after { display: none; }
 .leaflet-container { font-family: var(--sans); background: #d8dccb; }
@@ -41,7 +37,7 @@ button { font-family: inherit; }
 .peta-label span { font: italic 400 .95rem var(--serif); letter-spacing: 0; text-transform: none; color: #4a3c30; text-shadow: 0 0 3px rgba(246,240,225,.9), 0 0 6px rgba(246,240,225,.9); }
 .peta-label.laut span { color: #6a7a78; font-size: .85rem; }
 
-/* Markers: a single small dot, colour = category. Hollow = completed. */
+/* penanda: titik kecil, warnanya kategori; kosong = selesai */
 .pin { display: grid; place-items: center; }
 .pin-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--c, var(--accent)); border: 1.5px solid var(--bg); box-shadow: 0 0 0 1px rgba(48,37,29,.45); transition: transform .15s; }
 .pin:hover .pin-dot { transform: scale(1.35); }
@@ -51,7 +47,6 @@ button { font-family: inherit; }
 .pin.selesai::before { display: none; }
 @keyframes pulse { to { transform: scale(2.4); opacity: 0; } }
 
-/* Event index: a list, not a card */
 .now summary { padding: 0 0 12px; font: 500 .8rem var(--sans); color: var(--muted); border-bottom: 1px solid var(--ink); pointer-events: none; }
 .now summary::before { display: none; }
 .now summary span { font: 500 .8rem var(--sans); color: var(--ink); }
@@ -66,7 +61,6 @@ button { font-family: inherit; }
 .now li.done .t::after { content: "selesai"; width: auto; height: auto; margin-left: 8px; background: none; font: .7rem var(--sans); color: var(--good); vertical-align: 1px; }
 .now .empty { padding: 12px 0; font-size: .85rem; }
 
-/* Detail panel: a flat sheet over the map's right edge */
 .panel { top: 0; right: 0; bottom: 0; width: min(420px, 100%); border: 0; border-left: 1px solid var(--line); border-radius: 0; box-shadow: none; background: var(--bg); animation: fade .2s ease-out; }
 .panel-head { padding: 20px 24px 14px; border-bottom: 1px solid var(--line); }
 .chip { padding: 0; border: 0; border-radius: 0; font: 500 .78rem var(--sans); color: var(--c, var(--accent)); }
@@ -98,7 +92,6 @@ button { font-family: inherit; }
 .again { border: 0; border-radius: 0; padding: 0; color: var(--accent); text-decoration: underline; background: none; }
 .banner { background: var(--ink); border-radius: 0; box-shadow: none; }
 
-/* Timebar: year, play, one hairline with quiet event ticks */
 .timebar { display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 0 20px; padding: 12px var(--gap) 10px; background: var(--bg); border-top: 1px solid var(--line); color: var(--ink); }
 .tb-year { display: flex; align-items: baseline; gap: 4px; }
 .year { min-width: 0; font: 500 1.75rem/1 var(--serif); color: var(--ink); font-variant-numeric: tabular-nums; }
@@ -148,7 +141,6 @@ button { font-family: inherit; }
 .now li button { transition: color .15s, padding-left .2s; }
 .pin.dipilih::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; border: 1px solid var(--c, var(--accent)); animation: pulse 2.4s ease-out infinite; pointer-events: none; }
 .rute { stroke-linecap: round; }
-/* panel: fade + slide muncul setelah kamera mulai bergerak; wilayah sekitar menyusul */
 .panel { animation: panel-in .45s ease-out .35s both; }
 .sekitar { animation: fade .4s ease-out 1s both; }
 .sekitar ul { list-style: none; margin: 8px 0 0; padding: 0; }

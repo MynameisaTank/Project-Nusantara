@@ -1,11 +1,7 @@
-/*
- * Tailwind hanya untuk utilitas yang dipakai komponen di components/ui (noise background).
- * Tanpa preflight dan tanpa pemindaian seluruh proyek, supaya gaya global yang sudah ada tidak berubah.
- */
+/* Tailwind hanya untuk komponen di components/ui. Tanpa preflight supaya gaya global tidak berubah. */
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities) source(none);
 @source "../components/ui";
-/* kelas bingkai (containerClassName) ditulis di dua komponen ini */
 @source "../components/MainMenu.tsx";
 @source "../components/EraSelect.tsx";
 @source "../components/QuizCover.tsx";

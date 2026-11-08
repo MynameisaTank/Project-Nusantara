@@ -1,11 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import "../styles/card3d.css";
 
-/*
- * Kartu 3D (diadaptasi dari "3d Card" Aceternity UI): kartu miring mengikuti kursor dan
- * isinya melayang di sumbu Z saat kursor masuk. Perilaku sama dengan sumbernya, tetapi gayanya
- * memakai CSS biasa (card3d.css) karena proyek ini tidak memakai Tailwind.
- */
+// Diadaptasi dari "3d Card" Aceternity UI, gayanya pakai CSS biasa (card3d.css).
 
 const MouseEnterContext = createContext<[boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined>(undefined);
 

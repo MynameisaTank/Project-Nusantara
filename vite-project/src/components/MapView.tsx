@@ -15,7 +15,6 @@ import "../styles/wilayah.css";
 
 const DURASI_PERJALANAN_MS = 9000;
 const BAGIAN_JALAN = 0.85;
-/** Label wilayah hanya tampil kalau kekuatan kerajaan di tahun itu cukup berarti. */
 const AMBANG_LABEL_WILAYAH = 0.12;
 
 interface Props {
@@ -28,24 +27,19 @@ interface Props {
   wilayah: Kerajaan[];
   tampilkanWilayah: boolean;
   onKingdomSelect: (id: string) => void;
-  /** mode gelap: warna putih pada lapisan peta dibalik menjadi gelap */
   darkMap?: boolean;
-  /** perangkat lemah (tingkat Ringan): tanpa lapisan relief, tanpa transisi pudar ubin, bentuk wilayah disederhanakan */
+  /** perangkat lemah: tanpa relief dan animasi ubin, bentuk wilayah lebih sederhana */
   ringan?: boolean;
 }
 
-/** Leaflet menggambar kanvas wilayah dua kali lebih rapat (4x piksel) di layar retina; perangkat lemah memakai 1x. */
 const RETINA_ASLI = L.Browser.retina;
 
-/** Perkiraan ukuran label wilayah (px) untuk mendeteksi tabrakan tanpa mengukur DOM (huruf 10–11px, padding 2×8). */
+// Lebar label diperkirakan dari jumlah huruf supaya tidak perlu mengukur DOM.
 const LEBAR_HURUF_LABEL = 6.4;
 const PADDING_LABEL = 20;
 const TINGGI_LABEL = 20;
 
-/**
- * Di layar sempit label wilayah saling menimpa. Label diurutkan dari kerajaan terkuat; label yang menabrak
- * label yang sudah dipilih disembunyikan (kelas is-tersembunyi), jadi nama yang tampil selalu terbaca.
- */
+/** Di layar sempit, sembunyikan label yang menabrak label kerajaan yang lebih kuat. */
 function tipiskanLabel(
   map: L.Map,
   layer: L.LayerGroup,
@@ -80,11 +74,6 @@ function centroid(ring: [number, number][]): [number, number] {
   return [lat / ring.length, lng / ring.length];
 }
 
-/**
- * Category-specific inline SVG emblems.
- * Keep this lookup independent from the KATEGORI type so existing event data
- * and category definitions do not need to change.
- */
 const EVENT_SYMBOLS: Record<string, string> = {
   politik: `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 13 16 6l11 7H5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 26h18M9 14v10m5-10v10m4-10v10m5-10v10M6 27h20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
   perang: `<svg viewBox="0 0 32 32" aria-hidden="true"><path d="m8 5 3 1 13 17-2 3L6 9l2-4Zm16 0-3 1L8 23l2 3L26 9l-2-4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m5 7 3-3 3 3M21 25l3 3 3-3M24 7l3-3 3 3M5 25l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
@@ -117,14 +106,13 @@ export function MapView({ active, events, year, done, selectedId, onSelect, wila
   const wilayahLayerRef = useRef<L.LayerGroup | null>(null);
   const wilayahPolyRef = useRef<Map<string, L.Polygon>>(new Map());
   const wilayahLabelRef = useRef<Map<string, L.Marker>>(new Map());
-  /** kekuatan dan nama kerajaan yang labelnya sedang tampil, dipakai untuk menipiskan label yang bertabrakan */
   const kekuatanLabelRef = useRef<Map<string, number>>(new Map());
   const namaLabelRef = useRef<Map<string, string>>(new Map());
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
   const onKingdomRef = useRef(onKingdomSelect);
   onKingdomRef.current = onKingdomSelect;
-  // Dibaca saat peta dibuat; perubahan tingkat grafis berlaku pada peta berikutnya.
+  // Dibaca saat peta dibuat.
   const ringanRef = useRef(ringan);
   ringanRef.current = ringan;
 
@@ -133,7 +121,7 @@ export function MapView({ active, events, year, done, selectedId, onSelect, wila
     if (!el || mapRef.current) return;
 
     const hemat = ringanRef.current;
-    // Dibaca Leaflet saat kanvas wilayah dibuat; garis wilayah sedikit lebih lembut, tetapi gambar ulang jauh lebih murah.
+    // Kanvas 1x di perangkat lemah: garis sedikit lebih lembut, tapi jauh lebih ringan.
     (L.Browser as { retina: boolean }).retina = hemat ? false : RETINA_ASLI;
     const map = L.map(el, {
       zoomControl: false,
@@ -143,33 +131,28 @@ export function MapView({ active, events, year, done, selectedId, onSelect, wila
       maxBoundsViscosity: 0.72,
       scrollWheelZoom: true,
       preferCanvas: true,
-      // Perangkat lemah: pudar ubin dan animasi penanda saat zoom hanya menambah beban gambar ulang.
       fadeAnimation: !hemat,
       markerZoomAnimation: !hemat
     });
 
-    // Store the instance immediately so cleanup still works if tile setup fails.
     mapRef.current = map;
 
     L.control.zoom({ position: "bottomright" }).addTo(map);
     map.fitBounds([[-10.5, 95], [6, 141]]);
 
-    // A single labeled, full-color basemap. Do not stack a separate
-    // Reference/World_Reference_Overlay: World_Topo_Map already has labels.
+    // World_Topo_Map sudah punya label, jadi tidak perlu lapisan referensi lagi.
     L.tileLayer(
       "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
       {
         maxZoom: 13,
         opacity: 1,
-        // Perangkat lemah menyimpan lebih sedikit ubin di sekeliling layar dan tidak memuat ulang selama zoom.
         ...(hemat ? { keepBuffer: 1, updateWhenZooming: false } : {}),
         attribution:
           "Tiles &copy; Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, and the GIS user community"
       }
     ).addTo(map);
 
-    // Subtle hillshade gives mountain relief while preserving land colors. Lapisan ini hanya 12% terlihat,
-    // tetapi menggandakan permintaan ubin dan pencampuran lapisan, jadi dilewati di ponsel dan perangkat lemah.
+    // Relief tipis; dilewati di ponsel karena menggandakan permintaan ubin.
     if (!hemat && !layarKecil()) {
       L.tileLayer(
         "https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}",
@@ -185,7 +168,6 @@ export function MapView({ active, events, year, done, selectedId, onSelect, wila
     const markers = new Map<string, L.Marker>();
 
     for (const ev of events) {
-      // Fallback for an event whose category is not defined in KATEGORI.
       const category = KATEGORI[ev.kategori] ?? KATEGORI.politik;
       const icon = makeEventIcon(String(ev.kategori), category.warna, isUtama(ev) ? "utama" : "sampingan");
 
@@ -243,8 +225,7 @@ export function MapView({ active, events, year, done, selectedId, onSelect, wila
       }
     }
 
-    // Satu callback frame untuk semua penanda (bukan satu per penanda): saat tahun berjalan otomatis,
-    // efek ini berjalan berkali-kali per detik.
+    // Satu frame untuk semua penanda, karena efek ini sering jalan saat autoplay.
     const bingkai = requestAnimationFrame(() => {
       for (const { event, marker } of terlihat) {
         const visual = marker.getElement()?.querySelector(".atlas-marker");
@@ -279,7 +260,6 @@ export function MapView({ active, events, year, done, selectedId, onSelect, wila
         fillColor: k.warna,
         fillOpacity: 0,
         interactive: true,
-        // Perangkat lemah menggambar bentuk dengan lebih sedikit titik (bawaan Leaflet 1).
         smoothFactor: ringanRef.current ? 2.5 : 1
       });
       polys.set(k.id, poly);
@@ -346,12 +326,10 @@ export function MapView({ active, events, year, done, selectedId, onSelect, wila
         kekuatanLabelRef.current.set(k.id, kekuatan);
       }
     }
-    // Layar sempit: sembunyikan label yang saling menimpa (yang terkuat didahulukan).
     if (layarKecil()) tipiskanLabel(map, layer, wilayahLabelRef.current, kekuatanLabelRef.current, namaLabelRef.current);
   }, [year, tampilkanWilayah, wilayah]);
 
-  // Label lebih longgar saat di-zoom, jadi penipisan dihitung ulang setiap zoom selesai. Menggeser peta tidak
-  // mengubah tabrakan antarlabel, jadi tidak perlu dihitung.
+  // Tabrakan label hanya berubah saat zoom, bukan saat digeser.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !tampilkanWilayah || !layarKecil()) return;

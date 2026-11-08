@@ -1,8 +1,6 @@
 /*
- * Hubungan sebab-akibat antar peristiwa untuk halaman Materi Evaluasi.
- * `dari` = penyebab/pendahulu, `ke` = akibat/kelanjutan. Keterangan merangkum hubungan yang umum
- * dibahas dalam buku sejarah; sebagian bersifat tafsiran, jadi bacalah sebagai bahan belajar, bukan
- * satu-satunya penjelasan. Peristiwa kembar (mis. dua versi "Portugis merebut Melaka") hanya dipakai satu kali.
+ * Hubungan sebab-akibat untuk Materi Evaluasi: `dari` penyebab, `ke` akibat.
+ * Sebagian berupa tafsiran, jadi anggap sebagai bahan belajar, bukan satu-satunya penjelasan.
  */
 export interface Relasi {
   dari: string;
@@ -93,7 +91,9 @@ export const RELASI: Relasi[] = [
   { dari: "evt2-066", ke: "evt2-067", label: "VOC memperkuat posisinya di kawasan (tafsiran)" },
   { dari: "evt2-066", ke: "evt2-034", label: "Biaya perang menekan keuangan VOC" },
   { dari: "evt2-051", ke: "evt2-034", label: "Biaya perang menekan keuangan VOC" },
-  { dari: "evt2-034", ke: "evt2-035", label: "VOC bubar, negara Belanda mengambil alih" },  // Suksesi Singhasari, catatan asing tentang Sumatra, dan Islam di Jawa
+  { dari: "evt2-034", ke: "evt2-035", label: "VOC bubar, negara Belanda mengambil alih" },
+
+  // Suksesi Singhasari, catatan asing tentang Sumatra, dan Islam di Jawa
   { dari: "evt-001", ke: "evt-109", label: "Pembunuhan pendiri dinasti membuka rangkaian perebutan takhta" },
   { dari: "evt-109", ke: "evt-003", label: "Kestabilan yang pulih menyiapkan ekspansi Kertanagara" },
   { dari: "evt-108", ke: "evt-005", label: "Muslim di pesisir utara Sumatra, seperti dicatat Polo, berlanjut menjadi kerajaan Pasai" },
@@ -134,6 +134,14 @@ export const RELASI: Relasi[] = [
   { dari: "evt2-017", ke: "evt2-082", label: "Gowa yang menguat menimbulkan perlawanan Bone (tafsiran)" },
   { dari: "evt2-082", ke: "evt2-006", label: "Sekutu Bone memperkuat posisi VOC dalam Perjanjian Bongaya" },
   { dari: "evt-011", ke: "evt2-083", label: "Tradisi kekuasaan Bali sejak masa Majapahit ikut membentuk ekspansi Karangasem ke Lombok (tafsiran)" },
+
+  // Dari VOC ke Hindia Belanda (penghubung era 2 dan era 3)
+  { dari: "evt2-035", ke: "evt3-002", label: "Pemerintah Belanda mengirim Daendels untuk memperkuat pertahanan Jawa dari Inggris" },
+  { dari: "evt2-039", ke: "evt3-003", label: "Perang Eropa yang sama berlanjut sampai Inggris merebut Jawa pada 1811" },
+  { dari: "evt2-031", ke: "evt3-004", label: "Kesultanan Yogyakarta yang lahir dari Giyanti diserbu Inggris pada 1812" },
+  { dari: "evt2-031", ke: "evt3-010", label: "Diponegoro, pangeran Yogyakarta, melawan dari konflik di istana yang dibentuk sejak Giyanti (tafsiran)" },
+  { dari: "evt2-067", ke: "evt3-012", label: "Kontrak dengan VOC membuka jalan bagi campur tangan Belanda dalam suksesi Banjar (tafsiran)" },
+
   // Era 3 (1800–2026)
   { dari: "evt3-001", ke: "evt3-010", label: "Gencatan senjata dengan kaum Padri memungkinkan Belanda memusatkan pasukan untuk Perang Jawa" },
   { dari: "evt3-001", ke: "evt3-016", label: "Perang Padri dan Perang Aceh sama-sama memperluas kekuasaan kolonial di Sumatra" },

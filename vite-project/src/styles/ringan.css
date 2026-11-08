@@ -1,14 +1,9 @@
 /*
- * Tingkat grafis Ringan dan Dasar (kelas "grafis-ringan" pada <html>; lihat App.tsx dan lib/perangkat.ts).
- *
- * Untuk ponsel lama (mis. Android 9 kelas bawah). Animasi dekoratif yang berjalan terus-menerus dimatikan karena
- * membuat browser tidak pernah menganggur (setiap frame tetap harus disusun ulang), dan efek yang mahal bagi GPU
- * (blur latar belakang, bayangan besar) diganti tampilan datar yang nyaris sama. Fungsi dan tata letak tidak berubah.
- *
- * Memakai !important karena CSS layar yang dimuat malas (peta, pemilihan era) tiba sesudah berkas ini.
+ * Tingkat grafis Ringan dan Dasar (kelas grafis-ringan di <html>).
+ * Animasi yang jalan terus dan efek GPU berat dimatikan untuk ponsel lemah.
+ * Pakai !important karena CSS layar lain dimuat belakangan.
  */
 
-/* Penanda peristiwa baru: cincin statis, bukan denyut */
 :root.grafis-ringan .atlas-marker.is-new::before {
   animation: none !important;
   opacity: 0.45;
@@ -20,7 +15,7 @@
   animation: none !important;
 }
 
-/* Efek blur latar belakang dilepas; permukaannya dibuat lebih pekat supaya teks tetap terbaca di atas peta */
+/* tanpa blur; latarnya dibuat lebih pekat supaya tetap terbaca */
 :root.grafis-ringan :is(.levels, .menu-return, .event-explorer, .jelly-button, .menu-settings-panel, .qc-preview-back) {
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
@@ -39,23 +34,20 @@
   background: #0a1514dd;
 }
 
-/* Bayangan lebar pada kartu besar diganti bayangan tipis */
 :root.grafis-ringan .event-explorer {
   box-shadow: 0 2px 10px rgba(35, 51, 44, 0.16) !important;
 }
 
-/* Tanpa transisi pada label wilayah dan kontrol peta: tidak ada yang perlu dianimasikan saat peta digeser */
 :root.grafis-ringan .wilayah-label,
 :root.grafis-ringan .atlas-marker {
   transition: none !important;
 }
 
-/* Butiran film di latar menu: SVG feTurbulence seukuran seluruh halaman yang harus digambar CPU saat pertama kali */
+/* SVG feTurbulence seukuran halaman, berat digambar */
 :root.grafis-ringan .landing-grain {
   display: none;
 }
 
-/* Awan penutup saat masuk ke peta dilewati (lihat App.tsx), jaga-jaga bila masih ada yang dirender */
 :root.grafis-ringan .cloud-puff {
   will-change: auto !important;
 }

@@ -1,38 +1,31 @@
-/**
- * Biografi dan foto penguasa untuk panel detail di peta. Kunci: "<id kerajaan>|<nama penguasa>" (sama dengan data di
- * kerajaanDetail.ts). Penguasa yang belum tercantum di sini tetap tampil dengan tanggal dan kerajaannya saja.
- *
- * Catatan:
- * - Teks ditulis dari pengetahuan umum, belum diverifikasi satu per satu dengan sumber dan belum ditinjau sejarawan.
- *   Kisah dari babad, hikayat, Sejarah Melayu, atau Pararaton ditandai "menurut tradisi" atau "menurut babad".
- * - Foto hanya diisi jika berkasnya sudah dicek lisensinya di Wikimedia Commons. Foto yang berupa dugaan, lukisan
- *   modern, atau makam diberi keterangan jenisnya. Penguasa tanpa foto tampil dengan placeholder.
+/*
+ * Biografi dan foto penguasa. Kunci: "<id kerajaan>|<nama penguasa>".
+ * Belum ditinjau sejarawan; kisah dari babad atau hikayat ditandai "menurut tradisi".
+ * Foto hanya diisi kalau lisensinya sudah dicek di Wikimedia Commons.
  */
 
-/** Foto dari Wikimedia Commons, lengkap dengan keterangan lisensi. */
+import { PENGUASA_MODERN } from "./penguasaModern";
+import { PENGUASA_KOLONIAL } from "./penguasaKolonial";
+import { PENGUASA_JAWA_BALI } from "./penguasaJawaBali";
+import { PENGUASA_SUMATRA_SEMENANJUNG } from "./penguasaSumatraSemenanjung";
+import { PENGUASA_TIMUR } from "./penguasaTimur";
+import { FOTO_PENGUASA } from "./fotoPenguasa";
+
 export interface FotoPenguasa {
-  /** alamat langsung file gambar (upload.wikimedia.org) */
   src: string;
-  /** halaman berkas di Commons, untuk sumber dan lisensi */
+  /** halaman berkas, untuk sumber dan lisensi */
   halaman: string;
-  /** apa yang tampak di gambar, termasuk jika itu hanya dugaan */
   keterangan: string;
-  /** jenis gambar: membantu pembaca tahu ini potret, patung, lukisan, atau makam */
+  /** potret, patung, lukisan, atau makam */
   jenis: "potret" | "patung" | "lukisan" | "makam";
-  /** nama lisensi, misalnya CC BY-SA 4.0 */
   lisensi: string;
-  /** nama pembuat atau pengunggah sesuai halaman berkas */
   penulis: string;
 }
 
 export interface DetailPenguasa {
-  /** gelar atau nama lain yang umum dipakai */
   gelar?: string;
-  /** dua sampai empat paragraf tentang tokoh dan masa pemerintahannya */
   tentang: string[];
-  /** hal-hal penting yang dikaitkan dengan masa pemerintahannya */
   sorotan: string[];
-  /** foto jika tersedia */
   foto?: FotoPenguasa;
 }
 
@@ -611,12 +604,26 @@ export const DETAIL_PENGUASA: Record<string, DetailPenguasa> = {
   },
 };
 
-/** Detail untuk satu penguasa, atau undefined jika belum ditulis. */
+// Biografi di file ini diutamakan; file per wilayah melengkapi yang belum ada.
+const SEMUA_PENGUASA: Record<string, DetailPenguasa> = {
+  ...PENGUASA_MODERN,
+  ...PENGUASA_KOLONIAL,
+  ...PENGUASA_JAWA_BALI,
+  ...PENGUASA_SUMATRA_SEMENANJUNG,
+  ...PENGUASA_TIMUR,
+  ...DETAIL_PENGUASA,
+};
+
+/** Foto pilihan manual diutamakan; kalau tidak ada, dipakai foto dari Wikipedia (fotoPenguasa.ts). */
 export function detailPenguasa(kerajaanId: string, nama: string): DetailPenguasa | undefined {
-  return DETAIL_PENGUASA[`${kerajaanId}|${nama}`];
+  const kunci = `${kerajaanId}|${nama}`;
+  const detail = SEMUA_PENGUASA[kunci];
+  const foto = detail?.foto ?? FOTO_PENGUASA[kunci];
+  if (!detail) return foto ? { tentang: [], sorotan: [], foto } : undefined;
+  return foto && !detail.foto ? { ...detail, foto } : detail;
 }
 
-/** Inisial nama untuk placeholder foto, misalnya "Sultan Agung" menjadi "SA". */
+/** mis. "Sultan Agung" jadi "SA" */
 export function inisialNama(nama: string): string {
   return nama
     .split(/[\s()-]+/)

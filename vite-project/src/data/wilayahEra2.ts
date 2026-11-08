@@ -2,12 +2,7 @@ import { KERAJAAN_ERA1, KOLONIAL_ERA1, type Kerajaan } from "./kerajaan";
 import { TIMOR_LESTE_RINGS } from "./wilayahGeo";
 import { KERAJAAN_BARU } from "./kerajaanBaru";
 
-/*
- * Wilayah era 2 (1600-1800 M).
- * Bentuk wilayah dipakai ulang dari era 1 (kerajaan dan pos dagang yang sama), dengan timeline
- * kekuatan baru untuk rentang 1600-1800. Kerajaan yang hilang atau berubah pusat diberi nilai 0
- * setelah tahun runtuhnya. Ini gambaran kasar, bukan batas historis presisi.
- */
+/* Wilayah era 2 (1600–1800). Bentuknya dipakai ulang dari era 1; hanya perkiraan kasar. */
 type Timeline = [number, number][];
 
 const TIMELINE: Record<string, Timeline> = {
@@ -45,7 +40,6 @@ const fromEra1 = (id: string, timeline: Timeline): Kerajaan[] => {
   return base ? [{ ...base, kekuatan: timeline }] : [];
 };
 
-// pos VOC baru di era 2 (kotak kecil di sekitar kota, bukan klaim wilayah luas)
 const POS_BARU: Kerajaan[] = [
   {
     id: "melaka-voc",
@@ -82,14 +76,12 @@ const POS_BARU: Kerajaan[] = [
     wilayah: [[[-7.2, 107.4], [-7.2, 107.8], [-6.85, 107.8], [-6.85, 107.4]]],
     kekuatan: [[1720, 0.5], [1800, 0.5]],
   },
-  // pos Portugis, Spanyol, dan Inggris (gambar kasar di sekitar kota, bukan klaim wilayah luas)
   {
     id: "timor-portugis",
     nama: "Timor Portugis (Portugal)",
     warna: "#4a90c8",
     jenis: "kolonial",
     labelPoint: [-8.8, 126.0],
-    // bagian timur Pulau Timor (Timor Leste) + enklave Oecusse; bentuk kasar, bukan batas presisi
     wilayah: TIMOR_LESTE_RINGS,
     kekuatan: [[1640, 0.4], [1800, 0.6]],
   },
@@ -131,8 +123,7 @@ const POS_BARU: Kerajaan[] = [
   },
 ];
 
-// Warna sesuai negara kolonial: Belanda (VOC) oranye, Portugis biru, Spanyol merah, Inggris ungu.
-// Kerajaan yang menjadi negara boneka/bawahan VOC diberi warna oranye muda, mirip Belanda.
+// Belanda oranye, Portugis biru, Spanyol merah, Inggris ungu. Bawahan VOC oranye muda.
 const WARNA_PER_ID: Record<string, string> = {
   "melaka-voc": "#e8803a",
   "batavia-voc": "#e8803a",

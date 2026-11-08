@@ -11,7 +11,6 @@ const timing = (variant: CurtainVariant) => {
   return variant === "pixel" ? { cover: 1350, reveal: 1350 } : { cover: 320, reveal: 480 };
 };
 
-/** Ganti layar lewat "tirai" yang menutup lalu membuka, supaya pergantian tidak terasa mendadak. */
 export function useScreenTransition(initial: Screen) {
   const [screen, setScreen] = useState<Screen>(initial);
   const [phase, setPhase] = useState<CurtainPhase>("idle");
@@ -25,7 +24,7 @@ export function useScreenTransition(initial: Screen) {
     setPhase("covering");
   };
 
-  /** Ganti layar langsung tanpa tirai; dipakai transisi yang punya animasi sendiri (mis. clip ke mode kuis). */
+  /** Ganti layar tanpa tirai, untuk transisi yang punya animasi sendiri. */
   const cut = (next: Screen) => {
     pendingRef.current = null;
     setPhase("idle");

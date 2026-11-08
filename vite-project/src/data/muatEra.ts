@@ -1,8 +1,4 @@
-/**
- * Pemuat data per era. Data peristiwa, keputusan, dan wilayah sangat besar (sekitar 2 MB sebelum dikompres),
- * jadi tidak ikut dimuat saat aplikasi dibuka: data satu era baru diunduh ketika era itu dipilih.
- * Hasilnya disimpan sehingga memilih era yang sama lagi tidak mengunduh ulang.
- */
+/** Data tiap era cukup besar, jadi baru diunduh saat era dipilih lalu disimpan. */
 import type { Era, SejarahEvent } from "../types";
 import type { Kerajaan } from "./kerajaan";
 
@@ -34,14 +30,13 @@ const PEMUAT: Record<string, () => Promise<DataEra>> = {
 
 const tersimpan = new Map<string, Promise<DataEra>>();
 
-/** Muat data satu era. Mengembalikan undefined bila id era tidak dikenal. */
 export function muatEra(id: string): Promise<DataEra> | undefined {
   const pemuat = PEMUAT[id];
   if (!pemuat) return undefined;
   let janji = tersimpan.get(id);
   if (!janji) {
     janji = pemuat().catch((galat) => {
-      // gagal mengunduh (jaringan putus): jangan simpan kegagalan, supaya pilihan berikutnya mencoba lagi
+      // jangan simpan kegagalan supaya percobaan berikutnya mengunduh lagi
       tersimpan.delete(id);
       throw galat;
     });

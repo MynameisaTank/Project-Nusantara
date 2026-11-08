@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { loadStore, saveStore } from "../lib/store";
 import type { Level } from "../types";
 
-/** Level bahasa, kuis yang benar, dan keputusan pemain; otomatis disimpan di localStorage. */
+/** Level bahasa, kuis, dan keputusan pemain, tersimpan di localStorage. */
 export function useProgress() {
   const [saved] = useState(loadStore);
   const [level, setLevel] = useState<Level>(saved.level);

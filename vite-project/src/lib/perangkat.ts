@@ -1,15 +1,6 @@
 /**
- * Deteksi kemampuan perangkat dan penentuan tingkat grafik.
- *
- * Tingkat:
- * - tinggi: WebGPU dan WebGL2 tersedia (efek kaca menu utama + galeri 3D + shader latar)
- * - sedang: hanya WebGL2 (galeri 3D + shader latar; efek kaca menu diganti latar CSS)
- * - ringan: WebGL2 ada tetapi perangkat lemah (RAM kecil atau CPU lambat, mis. ponsel Android 9 kelas bawah):
- *           galeri 3D tanpa antialias dan resolusi 1x, tanpa shader latar, tanpa animasi dekoratif
- * - dasar:  WebGL2 tidak tersedia (galeri gambar biasa, tanpa 3D)
- *
- * Android 9 tidak pernah mendapat WebGPU (butuh Android 12 ke atas), jadi batas tertingginya sedang. Versi Android
- * tidak dipakai untuk memilih tingkat karena Chrome membekukan nilainya di user agent; yang diukur adalah kemampuan nyata.
+ * Deteksi kemampuan perangkat untuk memilih tingkat grafik:
+ * tinggi (WebGPU), sedang (WebGL2), ringan (WebGL2 tapi perangkat lemah), dasar (tanpa WebGL2).
  */
 
 export type Tingkat = "tinggi" | "sedang" | "ringan" | "dasar";
@@ -18,13 +9,12 @@ export type ModeGrafis = "otomatis" | Tingkat;
 export interface Deteksi {
   webgpu: boolean;
   webgl2: boolean;
-  /** perangkat dengan memori ≤ 2 GB menurut navigator.deviceMemory (nilai 2 mencakup ponsel 2–3 GB) */
+  /** deviceMemory ≤ 2 GB */
   memoriRendah: boolean;
-  /** pengguna meminta penghematan data (navigator.connection.saveData) atau koneksinya sangat lambat (2G) */
+  /** saveData aktif atau koneksi 2G */
   hemat: boolean;
-  /** CPU lambat menurut uji singkat saat aplikasi dibuka */
   cpuLambat: boolean;
-  /** hasil uji CPU (ribuan iterasi per milidetik), dicatat untuk diagnosis */
+  /** ribuan iterasi per milidetik */
   skorCpu: number;
 }
 
@@ -33,17 +23,9 @@ export const LABEL_TINGKAT: Record<Tingkat, string> = { tinggi: "Tinggi", sedang
 const KUNCI_MODE = "nusantara.grafis";
 const RANK: Record<Tingkat, number> = { dasar: 0, ringan: 1, sedang: 2, tinggi: 3 };
 
-/**
- * Skor uji CPU di bawah angka ini dianggap lambat. Laptop biasa mencetak sekitar 20 (setelah pemanasan JIT), jadi
- * ambang 5 berarti perangkat yang sekitar 4x lebih lambat: kira-kira ponsel Android 9 kelas bawah (Snapdragon 4xx/625,
- * Helio P22/P35, Exynos 78xx) ke bawah. Ponsel kelas menengah ke atas (Snapdragon 636/660 dan yang lebih baru) mencetak
- * di atasnya. Angkanya perkiraan dari perbandingan kecepatan inti, bukan hasil ukur di ponsel sungguhan; skor perangkat
- * ditampilkan di pengaturan menu supaya ambangnya bisa disesuaikan. Throttle CPU di DevTools tidak linear, jadi tidak
- * cocok untuk mengkalibrasi angka ini; ia hanya dipakai untuk menguji bahwa jalur "ringan" terpilih.
- */
+// Laptop biasa skornya sekitar 20, jadi 5 kira-kira ponsel kelas bawah. Ini perkiraan, belum diukur di ponsel asli.
 const AMBANG_CPU_LAMBAT = 5;
 
-/** Tingkat yang memakai efek paling hemat: tanpa animasi dekoratif dan tanpa efek GPU yang mahal. */
 export const tingkatHemat = (t: Tingkat): boolean => t === "ringan" || t === "dasar";
 
 function adaWebgl2(): boolean {
@@ -54,7 +36,7 @@ function adaWebgl2(): boolean {
   }
 }
 
-/** WebGPU dianggap ada hanya jika adapter benar-benar bisa diminta, bukan sekadar objek navigator.gpu. */
+/** Cek adapternya benar-benar bisa diminta, bukan cuma ada navigator.gpu. */
 async function adaWebgpu(): Promise<boolean> {
   try {
     const gpu = (navigator as Navigator & { gpu?: { requestAdapter: () => Promise<unknown> } }).gpu;
@@ -69,11 +51,7 @@ async function adaWebgpu(): Promise<boolean> {
   }
 }
 
-/**
- * Uji CPU singkat: berapa ribu iterasi hitungan desimal selesai per milidetik. Satu putaran pemanasan (dibuang) lalu
- * 3 putaran masing-masing 20 ms, diambil yang terbaik, supaya pemanasan JIT dan inti ponsel yang belum naik
- * frekuensi tidak menjatuhkan skor. Total sekitar 70 ms, dijalankan di layar pemuatan.
- */
+/** Uji CPU singkat (sekitar 70 ms). Putaran pertama untuk pemanasan JIT dan tidak dihitung. */
 export function ujiCpu(): number {
   let terbaik = 0;
   for (let putaran = 0; putaran < 4; putaran++) {
@@ -85,13 +63,12 @@ export function ujiCpu(): number {
       for (let i = 0; i < 1000; i++) jumlah += Math.sqrt(n + i) * Math.sin(i);
       n += 1000;
     }
-    if (jumlah === Infinity) console.debug(jumlah); // mencegah hitungan dibuang oleh optimasi
+    if (jumlah === Infinity) console.debug(jumlah); // supaya hitungannya tidak dibuang optimizer
     if (putaran > 0) terbaik = Math.max(terbaik, n / 1000 / (performance.now() - mulai));
   }
   return terbaik;
 }
 
-/** Ringkasan hasil deteksi untuk ditampilkan di pengaturan menu (membantu menyetel ambang dan menjelaskan pilihan Otomatis). */
 export function ringkasanDeteksi(d: Deteksi): string {
   const ya = (v: boolean) => (v ? "ya" : "tidak");
   return `WebGL2 ${ya(d.webgl2)} · WebGPU ${ya(d.webgpu)} · RAM ≤2 GB ${ya(d.memoriRendah)} · skor CPU ${d.skorCpu.toFixed(1)} (ambang ${AMBANG_CPU_LAMBAT})`;
@@ -99,7 +76,6 @@ export function ringkasanDeteksi(d: Deteksi): string {
 
 let hasilDeteksi: Promise<Deteksi> | null = null;
 
-/** Dihitung sekali per halaman. Pemanggilan berikutnya memakai hasil yang sama. */
 export function deteksiPerangkat(): Promise<Deteksi> {
   if (!hasilDeteksi) {
     hasilDeteksi = (async () => {
@@ -122,13 +98,12 @@ export function deteksiPerangkat(): Promise<Deteksi> {
   return hasilDeteksi;
 }
 
-/** Tingkat tertinggi yang didukung perangkat, tanpa mempertimbangkan RAM dan kecepatan CPU. */
+/** Tingkat tertinggi menurut fitur browser saja, tanpa melihat RAM dan CPU. */
 export function batasPerangkat(d: Deteksi): Tingkat {
   if (!d.webgl2) return "dasar";
   return d.webgpu ? "tinggi" : "sedang";
 }
 
-/** Tingkat yang dipakai dalam mode Otomatis: perangkat lemah mendapat Ringan walau WebGL2 atau WebGPU tersedia. */
 export function tingkatOtomatis(d: Deteksi): Tingkat {
   const batas = batasPerangkat(d);
   if (batas === "dasar") return "dasar";
@@ -136,7 +111,7 @@ export function tingkatOtomatis(d: Deteksi): Tingkat {
   return batas;
 }
 
-/** Tingkat yang benar-benar dipakai: pilihan pengguna, tetapi tidak pernah melebihi kemampuan perangkat. */
+/** Pilihan pengguna, tapi tidak boleh melebihi kemampuan perangkat. */
 export function tingkatAktif(mode: ModeGrafis, d: Deteksi): Tingkat {
   if (mode === "otomatis") return tingkatOtomatis(d);
   const batas = batasPerangkat(d);

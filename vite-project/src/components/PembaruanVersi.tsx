@@ -1,6 +1,5 @@
 import { terapkanPembaruan, usePwa } from "../lib/pwa";
 
-/** Spanduk kecil di bawah layar saat versi baru aplikasi sudah diunduh dan menunggu dipakai. */
 export function PembaruanVersi() {
   const { pembaruanSiap } = usePwa();
   if (!pembaruanSiap) return null;
