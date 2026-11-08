@@ -1,0 +1,78 @@
+.foto-utuh {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #1d2422;
+  isolation: isolate;
+}
+
+/* latar buram dari versi kecil foto yang sama, mengisi sisi kosong tanpa memotong foto */
+.foto-utuh::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  z-index: -1;
+  background: var(--latar) center / cover no-repeat;
+  filter: blur(14px) brightness(0.62);
+  transform: translateZ(0);
+}
+
+.grafis-ringan .foto-utuh::before {
+  filter: none;
+  opacity: 0.35;
+}
+
+.foto-utuh__bingkai {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 240px;
+}
+
+.foto-utuh__bingkai img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+
+/* mode utuh: foto selebar panel dengan tinggi aslinya; foto yang tinggi bisa digulir */
+.foto-utuh--penuh .foto-utuh__bingkai {
+  display: block;
+  height: auto;
+  max-height: min(72vh, 640px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.foto-utuh--penuh .foto-utuh__bingkai img {
+  width: 100%;
+  max-height: none;
+  cursor: zoom-out;
+}
+
+.foto-utuh__tombol {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(10, 16, 14, 0.72);
+  color: #fff;
+  font: 600 11px/1.2 var(--sans, system-ui, sans-serif);
+  cursor: pointer;
+}
+
+.foto-utuh__tombol:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (max-width: 860px) {
+  .foto-utuh__bingkai {
+    height: 210px;
+  }
+}

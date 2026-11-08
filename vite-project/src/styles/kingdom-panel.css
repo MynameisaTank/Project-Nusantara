@@ -178,15 +178,6 @@
   margin: 0 0 14px;
 }
 
-.kingdom-foto img {
-  display: block;
-  width: 100%;
-  max-height: 220px;
-  object-fit: cover;
-  border-radius: 8px;
-  background: var(--surface-soft);
-}
-
 .kingdom-foto figcaption {
   margin-top: 6px;
   color: var(--muted);

@@ -1,5 +1,5 @@
 import { useState, type CSSProperties } from "react";
-import { cadanganGambar, gambarResponsif } from "../lib/gambar";
+import { FotoUtuh } from "./FotoUtuh";
 import { GLOSARIUM, KATEGORI } from "../data/era";
 import type { Level, SejarahEvent } from "../types";
 import { Decision } from "./Decision";
@@ -53,7 +53,7 @@ export function StoryPanel({
         <div className="panel-body">
           {ev.gambar && (
             <figure className="panel-image">
-              <img src={gambarResponsif(ev.gambar.url, 420)} alt={ev.gambar.alt} loading="lazy" decoding="async" onError={cadanganGambar(ev.gambar.url)} />
+              <FotoUtuh src={ev.gambar.url} alt={ev.gambar.alt} lebar={420} />
               <figcaption>{ev.gambar.alt} · {ev.gambar.sumber}</figcaption>
             </figure>
           )}
