@@ -42,6 +42,7 @@ import { isActive } from "./lib/events";
 
 export default function App() {
   const { screen, goTo, cut, curtainPhase, curtainVariant } = useScreenTransition("menu");
+  const { muted, toggleMute } = useMusic(`${import.meta.env.BASE_URL}musik/latar.mp3`);
   // musik peta saat peta tampil, musik menu di layar lain (menu, pilih era, kuis, materi)
   useEffect(() => {
     aturSuasana(screen === "game" ? "peta" : "menu");
@@ -350,6 +351,9 @@ export default function App() {
     <GrafisHematContext.Provider value={hemat}>
       <ScreenCurtain phase={curtainPhase} variant={curtainVariant} />
       <PembaruanVersi />
+      <button type="button" onClick={toggleMute} aria-label="Musik" className="music-toggle">
+        {muted ? "🔇" : "🔊"}
+      </button>
       {klip && <QuizClipTransition asal={klip.asal} kata={klip.kata} onCover={() => cut(klip.tujuan)} onDone={() => setKlip(null)} />}
       {screen === "eras" && !(eraReady && eraMinDone) && <LoadingScreen />}
       <Suspense fallback={<div style={{ position: "fixed", inset: 0, background: "#050606" }} />}>
