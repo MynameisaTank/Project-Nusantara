@@ -37,6 +37,7 @@ const TANPA_WILAYAH: Kerajaan[] = [];
 const DATA_KOSONG: DataEra = { era: ERA, events: [], wilayah: TANPA_WILAYAH };
 import { useAutoplay } from "./hooks/useAutoplay";
 import { useProgress } from "./hooks/useProgress";
+import { useMusic } from "./hooks/useMusic";
 import { isActive } from "./lib/events";
 
 export default function App() {
