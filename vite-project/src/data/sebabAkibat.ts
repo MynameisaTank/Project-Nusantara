@@ -286,4 +286,15 @@ export const RELASI: Relasi[] = [
   { dari: "evt3-107", ke: "evt3-073", label: "Kegagalan jalan militer dan tsunami mendorong perundingan damai Helsinki" },
   { dari: "evt3-054", ke: "evt3-108", label: "Munir dan KontraS membongkar penculikan aktivis menjelang jatuhnya Soeharto" },
   { dari: "evt3-108", ke: "evt3-071", label: "Pemerintahan SBY membentuk Tim Pencari Fakta kasus Munir (tafsiran)" },
+  // Era 3 tambahan (1970–1975)
+  { dari: "evt3-048", ke: "evt3-109", label: "Orde Baru yang berdiri setelah Supersemar menggelar pemilu pertamanya pada 1971" },
+  { dari: "evt3-041", ke: "evt3-109", label: "Pemilu 1955 yang diikuti banyak partai menjadi pembanding bagi pemilu 1971 yang dikendalikan (tafsiran)" },
+  { dari: "evt3-109", ke: "evt3-050", label: "Kekecewaan terhadap dominasi politik Orde Baru setelah 1971 ikut melatarbelakangi protes Malari (tafsiran)" },
+  { dari: "evt3-109", ke: "evt3-103", label: "Fusi partai 1973 melahirkan PDI, yang kelak menjadi arena konflik Kudatuli 1996" },
+  { dari: "evt3-109", ke: "evt3-056", label: "Sistem tiga peserta pemilu hasil penyederhanaan bertahan sampai pemilu multipartai 1999" },
+  { dari: "evt3-048", ke: "evt3-110", label: "Kontrak bagi hasil minyak di masa Orde Baru menjamin bagian negara ketika harga melonjak (tafsiran)" },
+  { dari: "evt3-110", ke: "evt3-052", label: "Belanja negara dari pendapatan minyak membiayai irigasi, pupuk, dan program swasembada beras" },
+  { dari: "evt3-110", ke: "evt3-111", label: "Pendapatan minyak mendorong pinjaman dan proyek besar Pertamina yang kemudian gagal dibayar" },
+  { dari: "evt3-111", ke: "evt3-053", label: "Utang jangka pendek dan lemahnya pengawasan di Pertamina terulang dalam krisis 1997 (tafsiran)" },
+  { dari: "evt3-111", ke: "evt3-054", label: "Penyalahgunaan kekuasaan di perusahaan negara menambah kritik terhadap Orde Baru (tafsiran)" },
 ];

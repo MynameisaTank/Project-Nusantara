@@ -206,4 +206,6 @@ export const GAMBAR_NODE: Record<string, GambarNode> = {
   "evt3-106": { url: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Sampit_Peace_Monument.jpg", judul: "Sampit Peace Monument" },
   "evt3-107": { url: "https://upload.wikimedia.org/wikipedia/commons/a/a6/Free_Aceh_Movement_women_soldiers.jpg", judul: "Free Aceh Movement women soldiers" },
   "evt3-108": { url: "https://upload.wikimedia.org/wikipedia/commons/0/02/Munir_Said_Thalib_and_Friends.jpg", judul: "Munir Said Thalib and Friends" },
+  "evt3-109": { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Logo_Golkar.svg/500px-Logo_Golkar.svg.png", judul: "Logo Golkar" },
+  "evt3-110": { url: "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Oil_price_1900_int.png/500px-Oil_price_1900_int.png", judul: "Oil price 1900 int" },
 };

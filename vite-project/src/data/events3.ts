@@ -3203,4 +3203,91 @@ export const EVENTS3: SejarahEvent[] = [
       hasilHistoris: "Laporan Tim Pencari Fakta tidak pernah diumumkan. Pollycarpus dihukum, Muchdi Purwoprandjono dibebaskan, dan pada 2016 pemerintah menyatakan dokumen asli laporan itu tidak ditemukan.",
     },
   },
+    {
+    id: "evt3-109", judul: "Pemilu 1971 dan kemenangan Golkar", tahun: "1971",
+    mulai: 1971, akhir: 1977, lokasi: { nama: "Jakarta (pemilu nasional)", lat: -6.2, lng: 106.82, presisi: "kota" },
+    kategori: "politik", penting: true,
+    ringkas: "Pemilu pertama masa Orde Baru dimenangkan Golkar dengan dukungan besar dari birokrasi dan aparat.",
+    cerita: {
+      L1: "Pada 3 Juli 1971 Indonesia menyelenggarakan pemilihan umum pertama masa Orde Baru. Golkar, yang didukung birokrasi dan aparat, memenangkan sebagian besar kursi DPR. Partai-partai yang sebelumnya berpengaruh mendapat perolehan jauh lebih kecil, dan sejak itu pola politik Orde Baru mulai terlihat jelas.",
+      L2: "Golkar berakar pada kumpulan organisasi fungsional yang dibentuk sejak pertengahan 1960-an, dan pada masa kampanye pegawai negeri diarahkan untuk mendukungnya. Pemerintah juga membatasi ruang gerak partai-partai lama, mengatur jadwal kampanye, dan mengawasi jalannya kegiatan politik di daerah. Di DPR sebagian kursi juga disediakan untuk ABRI dan diisi lewat pengangkatan, bukan pemilihan. Hasilnya, Golkar memperoleh lebih dari 60 persen suara secara nasional. Partai-partai Islam kemudian digabungkan menjadi PPP pada 1973, dan partai-partai nasionalis serta Kristen menjadi PDI pada tahun yang sama. Penyederhanaan ini membuat jumlah peserta pemilu berkurang dan mempersempit pilihan politik rakyat dalam pemilu berikutnya.",
+      L3: "Sejarawan menilai pemilu 1971 bukan semata cerminan pilihan rakyat yang bebas, tetapi juga bagian dari upaya membangun dominasi politik yang stabil. Angka perolehan suara dan tuduhan tekanan terhadap pemilih, terutama pegawai negeri, dicatat dalam berbagai kajian, tetapi rinciannya tidak selalu bisa diverifikasi karena dokumen lapangan tidak lengkap. Perbandingan dengan pemilu 1955 sering dipakai untuk menunjukkan perbedaan besar: pemilu 1955 diikuti banyak partai dengan pengaruh yang relatif seimbang, sedangkan pemilu 1971 berlangsung dalam kerangka yang sudah diatur sebelumnya. Sebagian peneliti menyebut pemilu ini sebagai awal dari sistem yang kemudian dikenal dengan istilah pembangunan dan stabilitas. Yang lebih disepakati adalah bahwa struktur politik yang dibentuk setelahnya, termasuk peran birokrasi dan penyederhanaan partai, bertahan hingga 1998. Dengan membaca laporan pemerintah, catatan partai, dan kesaksian pelaku di daerah, pemilu 1971 dapat dipahami sebagai titik awal konsolidasi kekuasaan, bukan sekadar hasil satu hari pemungutan suara.",
+    },
+    catatan: "Angka perolehan dan rincian tekanan kepada pemilih berbeda antar-sumber. Gunakan persentase sebagai perkiraan.",
+    sumber: ["M.C. Ricklefs, A History of Modern Indonesia since c.1200", "Robert Elson, Suharto: A Political Biography"],
+    kuis: {
+      tanya: "Apa ciri utama pemilu 1971 di masa Orde Baru?",
+      pilihan: ["Semua partai mendapat kursi yang sama banyak", "Golkar memenangkan sebagian besar kursi dengan dukungan birokrasi", "Pemilu dibatalkan karena tidak ada peserta", "Rakyat memilih presiden secara langsung"],
+      benar: 1,
+      penjelasan: "Golkar memenangkan mayoritas suara dengan dukungan birokrasi dan aparat, dan struktur politik yang dibentuk setelahnya bertahan lama."
+    },
+    keputusan: {
+      peran: "Pegawai negeri di daerah, 1971",
+      situasi: "Pemerintah meminta pegawai negeri mendukung Golkar selama kampanye. Partai-partai lama sudah dibatasi ruang geraknya.",
+      pilihan: [
+        { id: "a", teks: "Menolak arahan dan tetap netral sebagai pegawai negeri.", konsekuensi: "Ini skenario alternatif. Netralitas bisa menjaga integritas, tetapi berisiko kehilangan pekerjaan dan jabatan." },
+        { id: "b", teks: "Mengikuti arahan dan mendukung Golkar selama kampanye.", konsekuensi: "Pilihan ini sesuai dengan yang banyak terjadi. Dukungan birokrasi menjadi salah satu kunci kemenangan Golkar.", historis: true },
+        { id: "c", teks: "Mendukung partai lama secara terbuka.", konsekuensi: "Ini skenario alternatif. Pilihan ini berisiko menghadapi tekanan dari atasan." },
+      ],
+      hasilHistoris: "Pada 3 Juli 1971 Golkar memenangkan mayoritas suara dan kursi DPR. Partai-partai lama kemudian difusikan menjadi PPP dan PDI pada 1973."
+    },
+  },
+  {
+    id: "evt3-110", judul: "Boom minyak dan ledakan belanja negara", tahun: "1973–1974",
+    mulai: 1973, akhir: 1980, lokasi: { nama: "Jakarta (pusat kebijakan ekonomi)", lat: -6.2, lng: 106.82, presisi: "kota" },
+    kategori: "perdagangan",
+    ringkas: "Kenaikan harga minyak dunia membawa pendapatan besar bagi negara, tetapi juga memicu protes dan ketergantungan.",
+    cerita: {
+      L1: "Pada Oktober 1973 negara-negara Arab membatasi ekspor minyak sebagai respons atas perang Arab-Israel. Harga minyak dunia melonjak tajam dalam waktu singkat. Indonesia sebagai pengekspor minyak mendapat pemasukan yang jauh lebih besar, dan uang itu segera masuk ke anggaran pembangunan.",
+      L2: "Pendapatan minyak membuat anggaran negara membesar dalam beberapa tahun. Pemerintah menggunakannya untuk membangun jalan, pelabuhan, pabrik pupuk, dan berbagai proyek industri. Sebagian besar produksi dan penjualan minyak berada di tangan perusahaan negara Pertamina bersama perusahaan asing yang bekerja dengan kontrak bagi hasil. Kontrak seperti ini membuat negara menerima bagian yang jelas dari setiap barel yang dijual, sehingga pemasukan bisa dihitung. Namun ketika uang masuk dengan cepat, pengawasan anggaran sering tertinggal, dan proyek bernilai besar kadang dibahas tanpa pemeriksaan terbuka. Kritik mulai muncul dari mahasiswa dan sebagian ekonom yang khawatir akan pemborosan, ketimpangan antara kota dan desa, serta dominasi perusahaan asing. Pada Januari 1974 kritik itu memuncak dalam peristiwa Malari, ketika demonstrasi di Jakarta berakhir dengan kerusuhan.",
+      L3: "Para sejarawan menilai boom minyak sebagai titik balik ekonomi Indonesia, tetapi penilaiannya terbelah. Ada yang melihatnya sebagai dasar pertumbuhan dan pembangunan infrastruktur yang kelak berguna. Ada juga yang menekankan bahwa ekonomi menjadi sangat bergantung pada satu komoditas dan pada belanja pemerintah, sehingga rentan ketika harga turun. Hal yang sering dibahas adalah konsentrasi keuntungan pada kalangan dekat kekuasaan, pengusaha besar, dan pejabat yang mengatur izin serta kontrak. Istilah 'kapitalisme kroni' kerap dipakai untuk menggambarkannya, tetapi sebagian peneliti memilih istilah yang lebih hati-hati karena hubungan antara bisnis dan politik tidak sama di setiap sektor. Data pendapatan dan rincian proyek juga berbeda antar-sumber, sebagian karena laporan pemerintah dan data perusahaan tidak selalu dapat dicocokkan. Dampaknya bagi masyarakat pedesaan pun diperdebatkan. Peningkatan belanja untuk pertanian dan irigasi dinilai membantu produksi pangan, tetapi tidak semua daerah mendapat manfaat yang sama. Dengan demikian, boom minyak sebaiknya dibaca sebagai kombinasi peluang pembangunan, masalah tata kelola, dan persoalan distribusi, bukan sebagai kisah keberhasilan atau kegagalan tunggal.",
+    },
+    catatan: "Dampak boom minyak terhadap pembangunan dan ketimpangan diperdebatkan. Jangan menggambarkannya sebagai hasil tunggal kebijakan tertentu.",
+    sumber: ["M.C. Ricklefs, A History of Modern Indonesia since c.1200", "Hal Hill, The Indonesian Economy"],
+    kuis: {
+      tanya: "Mengapa pendapatan Indonesia dari minyak naik pada 1973?",
+      pilihan: ["Indonesia menemukan ladang minyak baru di Jawa Tengah", "Harga minyak dunia naik tajam setelah pembatasan ekspor oleh negara-negara Arab", "Pemerintah menurunkan pajak ekspor", "Belanda membayar ganti rugi minyak"],
+      benar: 1,
+      penjelasan: "Pembatasan ekspor minyak pada akhir 1973 mendorong kenaikan harga dunia. Indonesia sebagai pengekspor mendapat pemasukan lebih besar."
+    },
+    keputusan: {
+      peran: "Pejabat perencana anggaran negara, 1974",
+      situasi: "Pendapatan minyak meningkat pesat. Ada usulan proyek besar, tetapi kapasitas pengelolaan dan pengawasan belum siap.",
+      pilihan: [
+        { id: "a", teks: "Menabung sebagian pendapatan minyak sebagai cadangan jangka panjang.", konsekuensi: "Ini skenario alternatif. Cadangan bisa menjaga stabilitas ketika harga turun, tetapi pembangunan bisa melambat." },
+        { id: "b", teks: "Memakai seluruh pendapatan untuk proyek besar dengan cepat.", konsekuensi: "Pilihan ini sebagian besar terjadi. Proyek berjalan cepat, tetapi pengawasan yang lemah membuka ruang penyalahgunaan.", historis: true },
+        { id: "c", teks: "Membatasi produksi minyak untuk mencegah ketergantungan.", konsekuensi: "Ini skenario alternatif. Kebijakan ini bisa mengurangi ketergantungan, tetapi pemasukan negara turun." },
+      ],
+      hasilHistoris: "Pendapatan minyak mendorong belanja pemerintah dan proyek pembangunan. Protes Malari 1974 menunjukkan ketidakpuasan atas arah pembangunan dan kekuasaan modal asing."
+    },
+  },
+  {
+    id: "evt3-111", judul: "Krisis utang Pertamina", tahun: "1975",
+    mulai: 1975, akhir: 1976, lokasi: { nama: "Jakarta (kantor pusat Pertamina)", lat: -6.23, lng: 106.82, presisi: "kota" },
+    kategori: "perdagangan", penting: true,
+    ringkas: "Perusahaan minyak negara tidak mampu membayar utang jangka pendek yang sangat besar, dan pemerintah harus turun tangan.",
+    cerita: {
+      L1: "Pada 1975 Pertamina, perusahaan minyak milik negara, tidak sanggup membayar utang jangka pendek yang jatuh tempo dalam waktu berdekatan. Utang itu berasal dari berbagai proyek besar yang dibiayai dengan pinjaman yang harus segera dilunasi. Pemerintah kemudian turun tangan untuk mencegah kebangkrutan dan menanggung sebagian beban utang.",
+      L2: "Pertamina pada masa itu dipimpin Ibnu Sutowo, yang memiliki kewenangan luas di bidang minyak dan berbagai usaha lain yang berada di bawah naungannya. Banyak pinjaman diambil dari bank dan pemasok luar negeri, sebagian dengan jangka waktu pendek dan bunga tinggi. Ketika pemasukan minyak tidak lagi cukup untuk menutup kewajiban, Pertamina gagal membayar. Kreditor di luar negeri mulai menagih, dan proyek yang belum selesai terancam berhenti. Pemerintah membentuk tim untuk memeriksa kondisi keuangan Pertamina dan menata ulang pengelolaannya. Ibnu Sutowo kemudian diberhentikan dari jabatannya, dan sejumlah usaha Pertamina diawasi lebih ketat. Peristiwa ini juga menjadi pelajaran bahwa perusahaan negara sebesar itu memerlukan pengawasan yang jelas dari pemerintah dan lembaga keuangan.",
+      L3: "Sejarawan membaca krisis Pertamina sebagai contoh bagaimana kekuasaan yang terpusat pada satu tokoh bisa membuat pengelolaan perusahaan lepas dari pengawasan. Angka utang yang disebut dalam berbagai tulisan berbeda, dan sebagian rinciannya sulit dicocokkan karena data internal perusahaan tidak sepenuhnya terbuka. Ada juga perbedaan pendapat tentang siapa yang bertanggung jawab. Sebagian penilaian menyoroti keputusan Ibnu Sutowo mengambil pinjaman besar untuk proyek yang ambisius, sementara penilaian lain menekankan bahwa pemerintah pusat ikut menyetujui dan mengawasi proyek-proyek itu. Hubungan antara kekuasaan politik dan bisnis menjadi pusat perdebatan. Pada masa Orde Baru, perusahaan negara sering berfungsi sebagai sumber dana dan proyek bagi lingkaran dekat penguasa. Karena itu, krisis ini kerap dibandingkan dengan kasus lain yang memperlihatkan lemahnya akuntabilitas. Namun sejarawan juga mengingatkan agar tidak menyederhanakan semua masalah menjadi kesalahan satu orang. Penyelamatan oleh pemerintah juga memperlihatkan kemampuan negara mengambil alih risiko, walaupun biayanya ditanggung publik. Dengan membaca beberapa sumber sekaligus, krisis ini dapat dipahami sebagai hasil struktur pengambilan keputusan, bukan semata-mata tindakan satu tokoh.",
+    },
+    catatan: "Besar utang dan detail penyelamatan berbeda antar-sumber. Gunakan frasa umum seperti utang miliaran dolar AS jika angka pasti tidak tersedia.",
+    sumber: ["Robert Elson, Suharto: A Political Biography", "M.C. Ricklefs, A History of Modern Indonesia since c.1200"],
+    kuis: {
+      tanya: "Apa penyebab utama krisis Pertamina 1975?",
+      pilihan: ["Harga minyak dunia turun sangat rendah", "Utang jangka pendek yang besar dari banyak proyek tidak dapat dibayar", "Pertamina dilarang mengekspor minyak", "Perang di Jawa menghancurkan kilang"],
+      benar: 1,
+      penjelasan: "Pertamina meminjam banyak dana jangka pendek untuk proyek besar. Ketika kewajiban jatuh tempo, perusahaan tidak mampu membayarnya."
+    },
+    keputusan: {
+      peran: "Anggota tim penyelamatan keuangan negara, 1975",
+      situasi: "Pertamina gagal membayar utang. Ada tekanan dari kreditor, dan proyek-proyek yang belum selesai terancam berhenti.",
+      pilihan: [
+        { id: "a", teks: "Membiarkan Pertamina bangkrut agar pihak yang bertanggung jawab terbuka dijatuhi sanksi.", konsekuensi: "Ini skenario alternatif. Akuntabilitas bisa terjaga, tetapi risiko bagi ekonomi dan kepercayaan internasional sangat besar." },
+        { id: "b", teks: "Pemerintah mengambil alih sebagian utang dan menata ulang pengelolaan Pertamina.", konsekuensi: "Pilihan ini paling dekat dengan yang terjadi. Pemerintah menyelamatkan perusahaan, lalu mengganti pimpinan dan memperketat pengawasan.", historis: true },
+        { id: "c", teks: "Meminta bantuan pinjaman baru tanpa memeriksa pengelolaan.", konsekuensi: "Ini skenario alternatif. Utang baru bisa menunda masalah, tetapi akar persoalan tidak tersentuh." },
+      ],
+      hasilHistoris: "Pemerintah turun tangan menyelamatkan Pertamina dan mengambil alih sebagian beban utang. Ibnu Sutowo kemudian diberhentikan, dan krisis ini menjadi contoh risiko pengelolaan perusahaan negara yang tidak diawasi."
+    },
+  },
 ];
